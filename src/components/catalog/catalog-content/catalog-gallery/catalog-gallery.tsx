@@ -1,9 +1,11 @@
-import { useAppSelector } from '../../../../hooks';
-import { selectCameras } from '../../../../store/app-data/selectors';
+import { Camera } from '../../../../types/camera';
 import CatalogCard from '../catalog-card/catalog-card';
 
-function CatalogGallery(): JSX.Element {
-  const cameras = useAppSelector(selectCameras);
+type CatalogGalleryProps = {
+  cameras: Camera[],
+}
+
+function CatalogGallery({ cameras }: CatalogGalleryProps): JSX.Element {
 
   return (
     <div className="cards catalog__cards">

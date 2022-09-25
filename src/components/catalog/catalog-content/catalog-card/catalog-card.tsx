@@ -10,9 +10,9 @@ function CatalogCard({ camera }: CatalogCardProps): JSX.Element {
     <div className="product-card">
       <div className="product-card__img">
         <picture>
-          <source type="image/webp" srcSet={`${previewImgWebp}, ${previewImgWebp2x} 2x`} />
+          <source type="image/webp" srcSet={`../${previewImgWebp}, ../${previewImgWebp2x} 2x`} />
 
-          <img src={previewImg} srcSet={`${previewImg2x} 2x`} width="280" height="240" alt={name} />
+          <img src={`../${previewImg}`} srcSet={`../${previewImg2x} 2x`} width="280" height="240" alt={name} />
         </picture>
       </div>
       <div className="product-card__info">

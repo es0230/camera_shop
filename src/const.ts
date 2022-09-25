@@ -1,6 +1,6 @@
 enum AppRoute {
   Basket = '/basket',
-  Catalog = '/catalog',
+  Catalog = '/catalog/:page',
   Product = '/product',
   Unknown = '*',
 }
