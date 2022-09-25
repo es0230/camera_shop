@@ -1,10 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { NameSpace } from '../../const';
 import { AppData } from '../../types/app-data';
-import { fetchCamerasAction } from '../api-actions';
+import { fetchCamerasAction, fetchPromoAction } from '../api-actions';
 
 const initialState: AppData = {
   cameras: [],
+  promo: null,
   isDataLoaded: false,
 };
 
@@ -25,6 +26,9 @@ export const appData = createSlice({
       .addCase(fetchCamerasAction.fulfilled, (state, action) => {
         state.cameras = action.payload;
         state.isDataLoaded = false;
+      })
+      .addCase(fetchPromoAction.fulfilled, (state, action) => {
+        state.promo = action.payload;
       });
   }
 });

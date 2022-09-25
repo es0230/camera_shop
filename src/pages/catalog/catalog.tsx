@@ -6,12 +6,16 @@ import CatalogSort from '../../components/catalog/catalog-content/catalog-sort/c
 import CatalogFilter from '../../components/catalog/catalog-filter/catalog-filter';
 import Footer from '../../components/footer/footer';
 import Header from '../../components/header/header';
+import { useAppSelector } from '../../hooks';
+import { selectPromo } from '../../store/app-data/selectors';
 
 function Catalog(): JSX.Element {
+  const ad = useAppSelector(selectPromo);
+
   return (
     <>
       <Header />
-      <Ad />
+      <Ad ad={ad} />
       <div className="page-content">
         <Breadcrumbs />
         <section className="catalog">
