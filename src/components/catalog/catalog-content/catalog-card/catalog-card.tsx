@@ -1,9 +1,11 @@
 import { Camera } from '../../../../types/camera';
-import StarIcon from './star-icon/star-icon';
+//import StarIcon from './star-icon/star-icon';
 
 type CatalogCardProps = {
   camera: Camera
 }
+
+const MAXRATING = 5;
 
 function CatalogCard({ camera }: CatalogCardProps): JSX.Element {
   const { name, rating, price, reviewCount, previewImg, previewImg2x, previewImgWebp, previewImgWebp2x } = camera;
@@ -17,8 +19,14 @@ function CatalogCard({ camera }: CatalogCardProps): JSX.Element {
       </div>
       <div className="product-card__info">
         <div className="rate product-card__rate">
-          {Array.from({ length: rating }, ((el, i) => (
-            <StarIcon key={i} />
+          {Array.from({ length: MAXRATING }, ((el, i) => (
+            i <= rating ?
+              <svg width="17" height="16" aria-hidden="true">
+                <use xlinkHref="#icon-full-star" />
+              </svg> :
+              <svg width="17" height="16" aria-hidden="true">
+                <use xlinkHref="#icon-star" />
+              </svg>
           ))
           ).map((el) => el)}
           <p className="visually-hidden">Рейтинг: {rating}</p>
