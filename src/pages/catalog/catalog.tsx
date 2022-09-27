@@ -1,6 +1,5 @@
 //import { useState } from 'react';
 import Ad from '../../components/ad/ad';
-import Breadcrumbs from '../../components/breadcrumbs/breadcrumbs';
 import CatalogGallery from '../../components/catalog/catalog-content/catalog-gallery/catalog-gallery';
 import CatalogPagination from '../../components/catalog/catalog-content/catalog-pagination/catalog-pagination';
 import CatalogSort from '../../components/catalog/catalog-content/catalog-sort/catalog-sort';
@@ -26,7 +25,22 @@ function Catalog(): JSX.Element {
         <Header />
         <Ad ad={ad} />
         <div className="page-content">
-          <Breadcrumbs />
+          <div className="breadcrumbs">
+            <div className="container">
+              <ul className="breadcrumbs__list">
+                <li className="breadcrumbs__item">
+                  <a className="breadcrumbs__link" href="index.html">Главная
+                    <svg width="5" height="8" aria-hidden="true">
+                      <use xlinkHref="#icon-arrow-mini"></use>
+                    </svg>
+                  </a>
+                </li>
+                <li className="breadcrumbs__item">
+                  <span className="breadcrumbs__link breadcrumbs__link--active">Каталог</span>
+                </li>
+              </ul>
+            </div>
+          </div>
           <section className="catalog">
             <div className="container">
               <h1 className="title title--h2">Каталог фото- и видеотехники</h1>

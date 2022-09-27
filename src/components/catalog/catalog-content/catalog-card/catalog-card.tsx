@@ -1,13 +1,14 @@
 import { Camera } from '../../../../types/camera';
 //import StarIcon from './star-icon/star-icon';
 import { MAX_RATING } from '../../../../const';
+import { Link } from 'react-router-dom';
 
 type CatalogCardProps = {
   camera: Camera
 }
 
 function CatalogCard({ camera }: CatalogCardProps): JSX.Element {
-  const { name, rating, price, reviewCount, previewImg, previewImg2x, previewImgWebp, previewImgWebp2x } = camera;
+  const { id, name, rating, price, reviewCount, previewImg, previewImg2x, previewImgWebp, previewImgWebp2x } = camera;
   return (
     <div className="product-card">
       <div className="product-card__img">
@@ -40,7 +41,7 @@ function CatalogCard({ camera }: CatalogCardProps): JSX.Element {
       </div>
       <div className="product-card__buttons">
         <button className="btn btn--purple product-card__btn" type="button">Купить</button>
-        <a className="btn btn--transparent" href="#">Подробнее</a>
+        <Link className="btn btn--transparent" to={`/product/${id}&perks`}>Подробнее</Link>
       </div>
     </div>
   );
