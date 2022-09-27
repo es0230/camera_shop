@@ -1,7 +1,7 @@
 enum AppRoute {
   Basket = '/basket',
   Catalog = '/catalog/:page',
-  Product = '/product',
+  Product = '/product/:id&:tabType',
   Unknown = '*',
 }
 
@@ -17,4 +17,6 @@ enum NameSpace {
   Data = 'DATA',
 }
 
-export { AppRoute, APIRoute, NameSpace };
+const MAX_RATING = 5;
+
+export { AppRoute, APIRoute, NameSpace, MAX_RATING };

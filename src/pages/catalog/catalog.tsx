@@ -16,9 +16,6 @@ const CARDSONPAGE = 9;
 function Catalog(): JSX.Element {
   const ad = useAppSelector(selectPromo);
   const currentPage = usePageNumber();
-  // eslint-disable-next-line no-console
-  //console.log(page);
-  //const [currentPage,] = useState(1);
   const cameras = useAppSelector(selectCameras);
   const totalPageAmount = Math.ceil(cameras.length / CARDSONPAGE);
   if (currentPage) {
