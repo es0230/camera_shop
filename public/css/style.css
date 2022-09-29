@@ -3207,6 +3207,7 @@ button,
 .review-card {
   padding-top: 24px;
   border-top: 2px solid #f4f4fc;
+  list-style: none;
 }
 
 .review-card__head {

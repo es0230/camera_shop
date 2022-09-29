@@ -1,5 +1,4 @@
 import { Camera } from '../../types/camera';
-//import StarIcon from './star-icon/star-icon';
 import { MAX_RATING } from '../../const';
 import { Link } from 'react-router-dom';
 
