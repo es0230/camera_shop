@@ -1,16 +1,17 @@
-import { Camera } from '../../../../types/camera';
+import { Camera } from '../../types/camera';
 //import StarIcon from './star-icon/star-icon';
-import { MAX_RATING } from '../../../../const';
+import { MAX_RATING } from '../../const';
 import { Link } from 'react-router-dom';
 
-type CatalogCardProps = {
-  camera: Camera
+type CameraCardProps = {
+  camera: Camera,
+  isActive?: boolean,
 }
 
-function CatalogCard({ camera }: CatalogCardProps): JSX.Element {
+function CameraCard({ camera, isActive }: CameraCardProps): JSX.Element {
   const { id, name, rating, price, reviewCount, previewImg, previewImg2x, previewImgWebp, previewImgWebp2x } = camera;
   return (
-    <div className="product-card">
+    <div className={`product-card ${isActive ? 'is-active' : ''}`}>
       <div className="product-card__img">
         <picture>
           <source type="image/webp" srcSet={`../${previewImgWebp}, ../${previewImgWebp2x} 2x`} />
@@ -47,4 +48,4 @@ function CatalogCard({ camera }: CatalogCardProps): JSX.Element {
   );
 }
 
-export default CatalogCard;
+export default CameraCard;

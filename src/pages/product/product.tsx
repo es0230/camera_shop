@@ -57,7 +57,7 @@ function Product(): JSX.Element {
             <ProductCard currentProduct={currentProduct} />
           </div>
           <div className="page-content__section">
-            <SimilarProducts />
+            <SimilarProducts id={Number(id)} />
           </div>
           <div className="page-content__section">
             <ProductReviews />
