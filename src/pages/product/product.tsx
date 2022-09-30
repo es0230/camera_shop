@@ -12,6 +12,7 @@ import { APIRoute, AppRoute } from '../../const';
 import { api } from '../../store';
 import { Camera } from '../../types/camera';
 import { Review } from '../../types/review';
+import ReviewModal from '../../components/product/review-modal/review-modal';
 
 function Product(): JSX.Element {
   const [currentProduct, setCurrentProduct] = useState<Camera>();
@@ -73,6 +74,7 @@ function Product(): JSX.Element {
           </div>
         </div>
       </main>
+      <ReviewModal isActive />
       <ScrollLink
         className='up-btn'
         to="top"
