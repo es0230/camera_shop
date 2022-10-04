@@ -4,10 +4,13 @@ import ReviewCard from '../review-card/review-card';
 
 type ProductReviewsProps = {
   reviews: Review[] | undefined,
+  setModalOpened: React.Dispatch<React.SetStateAction<boolean>>,
 }
 
-function ProductReviews({ reviews }: ProductReviewsProps): JSX.Element {
-  const [reviewsToShow, setReviewsToShow] = useState(3);
+const INITIAL_REVIEWS = 3;
+
+function ProductReviews({ reviews, setModalOpened }: ProductReviewsProps): JSX.Element {
+  const [reviewsToShow, setReviewsToShow] = useState(INITIAL_REVIEWS);
 
   useEffect(() => {
     setReviewsToShow(3);
@@ -18,7 +21,7 @@ function ProductReviews({ reviews }: ProductReviewsProps): JSX.Element {
       <div className="container">
         <div className="page-content__headed">
           <h2 className="title title--h3">Отзывы</h2>
-          <button className="btn" type="button">Оставить свой отзыв</button>
+          <button className="btn" type="button" onClick={() => setModalOpened(true)} >Оставить свой отзыв</button>
         </div>
         {reviews?.map((el, i) => i < reviewsToShow && <ReviewCard reviewData={el} key={el.id} />)}
         {reviewsToShow < (reviews?.length || 0) &&
@@ -27,6 +30,7 @@ function ProductReviews({ reviews }: ProductReviewsProps): JSX.Element {
           </div>}
       </div>
     </section>
+
   );
 }
 

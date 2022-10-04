@@ -14,9 +14,12 @@ import { Camera } from '../../types/camera';
 import { Review } from '../../types/review';
 import ReviewModal from '../../components/product/review-modal/review-modal';
 
+
 function Product(): JSX.Element {
   const [currentProduct, setCurrentProduct] = useState<Camera>();
   const [currentReviews, setCurrentReviews] = useState<Review[]>();
+  const [modalOpened, setModalOpened] = useState(false);
+
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -30,6 +33,11 @@ function Product(): JSX.Element {
         return setCurrentReviews(data);
       });
   }, [id, navigate]);
+
+  useEffect(() => {
+    const sortedReviews = currentReviews?.sort((a, b) => (dayjs(a.createAt).isAfter(b.createAt) ? -1 : 1));
+    setCurrentReviews(sortedReviews);
+  }, [currentReviews]);
 
   if (currentProduct === undefined) {
     return <LoadingScreen />;
@@ -70,11 +78,11 @@ function Product(): JSX.Element {
             <SimilarProducts id={Number(id)} />
           </div>
           <div className="page-content__section">
-            <ProductReviews reviews={currentReviews} />
+            <ProductReviews reviews={currentReviews} setModalOpened={setModalOpened} />
           </div>
         </div>
+        <ReviewModal isActive={modalOpened} setIsActive={setModalOpened} currentReviews={currentReviews} setCurrentReviews={setCurrentReviews} />
       </main>
-      <ReviewModal isActive />
       <ScrollLink
         className='up-btn'
         to="top"
