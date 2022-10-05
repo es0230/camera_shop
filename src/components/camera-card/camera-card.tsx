@@ -1,5 +1,5 @@
 import { Camera } from '../../types/camera';
-import { MAX_RATING } from '../../const';
+import { AppRoute, MAX_RATING, TabType } from '../../const';
 import { Link } from 'react-router-dom';
 
 type CameraCardProps = {
@@ -41,7 +41,7 @@ function CameraCard({ camera, isActive }: CameraCardProps): JSX.Element {
       </div>
       <div className="product-card__buttons">
         <button className="btn btn--purple product-card__btn" type="button">Купить</button>
-        <Link className="btn btn--transparent" to={`/product/${id}&perks`}>Подробнее</Link>
+        <Link className="btn btn--transparent" to={AppRoute.Product(id, TabType.Perks)}>Подробнее</Link>
       </div>
     </div>
   );

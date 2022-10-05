@@ -8,7 +8,7 @@ import LoadingScreen from '../../components/loading-screen/loading-screen';
 import ProductCard from '../../components/product/product-card/product-card';
 import ProductReviews from '../../components/product/product-reviews/product-reviews';
 import SimilarProducts from '../../components/product/similar-products/similar-products';
-import { APIRoute, AppRoute } from '../../const';
+import { APIRoute, AppRoute, INITIAL_PAGE } from '../../const';
 import { api } from '../../store';
 import { Camera } from '../../types/camera';
 import { Review } from '../../types/review';
@@ -26,7 +26,7 @@ function Product(): JSX.Element {
   useEffect(() => {
     api.get<Camera>(`${APIRoute.Cameras}/${id}`)
       .then(({ data }) => setCurrentProduct(data))
-      .catch(() => navigate(AppRoute.Unknown));
+      .catch(() => navigate(AppRoute.Unknown()));
     api.get<Review[]>(`${APIRoute.Cameras}/${id}/reviews`)
       .then(({ data }) => {
         data.sort((a, b) => (dayjs(a.createAt).isAfter(b.createAt) ? -1 : 1));
@@ -52,14 +52,14 @@ function Product(): JSX.Element {
             <div className="container">
               <ul className="breadcrumbs__list">
                 <li className="breadcrumbs__item">
-                  <a className="breadcrumbs__link" href="index.html">Главная
+                  <Link className="breadcrumbs__link" to={AppRoute.Catalog(INITIAL_PAGE)}>Главная
                     <svg width="5" height="8" aria-hidden="true">
                       <use xlinkHref="#icon-arrow-mini"></use>
                     </svg>
-                  </a>
+                  </Link>
                 </li>
                 <li className="breadcrumbs__item">
-                  <Link className="breadcrumbs__link" to={'/catalog/1'}>Каталог
+                  <Link className="breadcrumbs__link" to={AppRoute.Catalog(INITIAL_PAGE)}>Каталог
                     <svg width="5" height="8" aria-hidden="true">
                       <use xlinkHref="#icon-arrow-mini"></use>
                     </svg>

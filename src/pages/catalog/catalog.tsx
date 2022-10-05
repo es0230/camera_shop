@@ -1,4 +1,5 @@
 //import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import Ad from '../../components/ad/ad';
 import CatalogGallery from '../../components/catalog/catalog-content/catalog-gallery/catalog-gallery';
 import CatalogPagination from '../../components/catalog/catalog-content/catalog-pagination/catalog-pagination';
@@ -6,6 +7,7 @@ import CatalogSort from '../../components/catalog/catalog-content/catalog-sort/c
 import CatalogFilter from '../../components/catalog/catalog-filter/catalog-filter';
 import Footer from '../../components/footer/footer';
 import Header from '../../components/header/header';
+import { AppRoute, INITIAL_PAGE } from '../../const';
 import { useAppSelector } from '../../hooks';
 import { usePageNumber } from '../../hooks/use-page-number';
 import { selectCameras, selectPromo } from '../../store/app-data/selectors';
@@ -16,9 +18,14 @@ function Catalog(): JSX.Element {
   const ad = useAppSelector(selectPromo);
   const currentPage = usePageNumber();
   const cameras = useAppSelector(selectCameras);
+  const navigate = useNavigate();
+
   const totalPageAmount = Math.ceil(cameras.length / CARDSONPAGE);
   if (currentPage) {
     const camerasToRender = cameras.slice((currentPage - 1) * CARDSONPAGE, currentPage * CARDSONPAGE);
+    if (camerasToRender.length === 0 && cameras.length !== 0) {
+      navigate(AppRoute.Unknown());
+    }
 
     return (
       <>
@@ -29,11 +36,11 @@ function Catalog(): JSX.Element {
             <div className="container">
               <ul className="breadcrumbs__list">
                 <li className="breadcrumbs__item">
-                  <a className="breadcrumbs__link" href="index.html">Главная
+                  <Link className="breadcrumbs__link" to={AppRoute.Catalog(INITIAL_PAGE)}>Главная
                     <svg width="5" height="8" aria-hidden="true">
                       <use xlinkHref="#icon-arrow-mini"></use>
                     </svg>
-                  </a>
+                  </Link>
                 </li>
                 <li className="breadcrumbs__item">
                   <span className="breadcrumbs__link breadcrumbs__link--active">Каталог</span>
@@ -60,7 +67,8 @@ function Catalog(): JSX.Element {
     );
   }
 
-  return (<h1>Не удалось загрузить предложения. Вернитесь позже.</h1>);
+  navigate(AppRoute.Unknown());
+  return (<> </>);
 }
 
 export default Catalog;

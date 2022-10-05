@@ -1,20 +1,19 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import { MAX_RATING } from '../../../const';
+import { AppRoute, MAX_RATING, TabType } from '../../../const';
 import { Camera } from '../../../types/camera';
 
 type ProductCardProps = {
   currentProduct: Camera,
 }
 
-enum TabType {
-  Perks = 'perks',
-  Description = 'description'
-}
-
 function ProductCard({ currentProduct }: ProductCardProps): JSX.Element {
   const { name, previewImg, previewImg2x, previewImgWebp, previewImgWebp2x, rating, price, vendorCode, type, category, description, level, reviewCount } = currentProduct;
   const { id, tabType } = useParams();
   const navigate = useNavigate();
+
+  if (tabType !== TabType.Description && tabType !== TabType.Perks) {
+    navigate(AppRoute.Unknown());
+  }
 
   return (
     <section className="product">
@@ -53,8 +52,8 @@ function ProductCard({ currentProduct }: ProductCardProps): JSX.Element {
           </button>
           <div className="tabs product__tabs">
             <div className="tabs__controls product__tabs-controls">
-              <button className={`tabs__control ${tabType === TabType.Perks ? 'is-active' : ''}`} type="button" onClick={() => navigate(`/product/${id}&${TabType.Perks}`)}>Характеристики</button>
-              <button className={`tabs__control ${tabType === TabType.Description ? 'is-active' : ''}`} type="button" onClick={() => navigate(`/product/${id}&${TabType.Description}`)}>Описание</button>
+              <button className={`tabs__control ${tabType === TabType.Perks ? 'is-active' : ''}`} type="button" onClick={() => navigate(AppRoute.Product(id, TabType.Perks))}>Характеристики</button>
+              <button className={`tabs__control ${tabType === TabType.Description ? 'is-active' : ''}`} type="button" onClick={() => navigate(AppRoute.Product(id, TabType.Description))}>Описание</button>
             </div>
             <div className="tabs__content">
               <div className={`tabs__element ${tabType === TabType.Perks ? 'is-active' : ''}`}>

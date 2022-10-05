@@ -1,16 +1,16 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { AppRoute } from '../../const';
-import Basket from '../../pages/basket/basket';
 import Catalog from '../../pages/catalog/catalog';
+import PageNotFound from '../../pages/page-not-found/page-not-found';
 import Product from '../../pages/product/product';
 
 function App(): JSX.Element {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path={AppRoute.Basket} element={<Basket />} />
-        <Route path={AppRoute.Catalog} element={<Catalog />} />
-        <Route path={AppRoute.Product} element={<Product />} />
+        <Route path={AppRoute.Catalog()} element={<Catalog />} />
+        <Route path={AppRoute.Product()} element={<Product />} />
+        <Route path={AppRoute.Unknown()} element={<PageNotFound />} />
       </Routes>
     </BrowserRouter>
 

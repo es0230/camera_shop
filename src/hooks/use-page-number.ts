@@ -1,8 +1,14 @@
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { AppRoute } from '../const';
 
 export const usePageNumber = () => {
   const { page } = useParams();
-  if (page) {
-    return Number(page[page.length - 1]);
+  const navigate = useNavigate();
+
+  if (typeof Number(page) === 'number') {
+    return Number(page);
   }
+
+  navigate(AppRoute.Unknown());
+
 };
