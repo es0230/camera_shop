@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Testing Footer component should render correctly 1`] = `
+<div>
+  <h1>
+    Загрузка...
+  </h1>
+</div>
+`;

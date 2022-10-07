@@ -1,0 +1,169 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Testing Footer component should render correctly 1`] = `
+<div>
+  <header
+    class="header"
+    id="header"
+  >
+    <div
+      class="container"
+    >
+      <a
+        aria-label="Переход на главную"
+        class="header__logo"
+        href="index.html"
+      >
+        <svg
+          aria-hidden="true"
+          height="36"
+          width="100"
+        >
+          <use
+            xlink:href="#icon-logo"
+          />
+        </svg>
+      </a>
+      <nav
+        class="main-nav header__main-nav"
+      >
+        <ul
+          class="main-nav__list"
+        >
+          <li
+            class="main-nav__item"
+          >
+            <a
+              class="main-nav__link"
+              href="catalog.html"
+            >
+              Каталог
+            </a>
+          </li>
+          <li
+            class="main-nav__item"
+          >
+            <a
+              class="main-nav__link"
+              href="#"
+            >
+              Гарантии
+            </a>
+          </li>
+          <li
+            class="main-nav__item"
+          >
+            <a
+              class="main-nav__link"
+              href="#"
+            >
+              Доставка
+            </a>
+          </li>
+          <li
+            class="main-nav__item"
+          >
+            <a
+              class="main-nav__link"
+              href="#"
+            >
+              О компании
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <div
+        class="form-search"
+      >
+        <form>
+          <label>
+            <svg
+              aria-hidden="true"
+              class="form-search__icon"
+              height="16"
+              width="16"
+            >
+              <use
+                xlink:href="#icon-lens"
+              />
+            </svg>
+            <input
+              autocomplete="off"
+              class="form-search__input"
+              placeholder="Поиск по сайту"
+              type="text"
+            />
+          </label>
+          <ul
+            class="form-search__select-list"
+          >
+            <li
+              class="form-search__select-item"
+              tabindex="0"
+            >
+              Cannonball Pro MX 8i
+            </li>
+            <li
+              class="form-search__select-item"
+              tabindex="0"
+            >
+              Cannonball Pro MX 7i
+            </li>
+            <li
+              class="form-search__select-item"
+              tabindex="0"
+            >
+              Cannonball Pro MX 6i
+            </li>
+            <li
+              class="form-search__select-item"
+              tabindex="0"
+            >
+              Cannonball Pro MX 5i
+            </li>
+            <li
+              class="form-search__select-item"
+              tabindex="0"
+            >
+              Cannonball Pro MX 4i
+            </li>
+          </ul>
+        </form>
+        <button
+          class="form-search__reset"
+          type="reset"
+        >
+          <svg
+            aria-hidden="true"
+            height="10"
+            width="10"
+          >
+            <use
+              xlink:href="#icon-close"
+            />
+          </svg>
+          <span
+            class="visually-hidden"
+          >
+            Сбросить поиск
+          </span>
+        </button>
+      </div>
+      <a
+        class="header__basket-link"
+        href="#"
+      >
+        <svg
+          aria-hidden="true"
+          height="16"
+          width="16"
+        >
+          <use
+            xlink:href="#icon-basket"
+          />
+        </svg>
+      </a>
+    </div>
+  </header>
+</div>
+`;

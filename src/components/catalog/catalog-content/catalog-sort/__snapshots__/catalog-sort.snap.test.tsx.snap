@@ -1,0 +1,107 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Testing Footer component should render correctly 1`] = `
+<div>
+  <div
+    class="catalog-sort"
+  >
+    <form
+      action="#"
+    >
+      <div
+        class="catalog-sort__inner"
+      >
+        <p
+          class="title title--h5"
+        >
+          Сортировать:
+        </p>
+        <div
+          class="catalog-sort__type"
+        >
+          <div
+            class="catalog-sort__btn-text"
+          >
+            <input
+              checked=""
+              id="sortPrice"
+              name="sort"
+              type="radio"
+            />
+            <label
+              for="sortPrice"
+            >
+              по цене
+            </label>
+          </div>
+          <div
+            class="catalog-sort__btn-text"
+          >
+            <input
+              id="sortPopular"
+              name="sort"
+              type="radio"
+            />
+            <label
+              for="sortPopular"
+            >
+              по популярности
+            </label>
+          </div>
+        </div>
+        <div
+          class="catalog-sort__order"
+        >
+          <div
+            class="catalog-sort__btn catalog-sort__btn--up"
+          >
+            <input
+              aria-label="По возрастанию"
+              checked=""
+              id="up"
+              name="sort-icon"
+              type="radio"
+            />
+            <label
+              for="up"
+            >
+              <svg
+                aria-hidden="true"
+                height="14"
+                width="16"
+              >
+                <use
+                  xlink:href="#icon-sort"
+                />
+              </svg>
+            </label>
+          </div>
+          <div
+            class="catalog-sort__btn catalog-sort__btn--down"
+          >
+            <input
+              aria-label="По убыванию"
+              id="down"
+              name="sort-icon"
+              type="radio"
+            />
+            <label
+              for="down"
+            >
+              <svg
+                aria-hidden="true"
+                height="14"
+                width="16"
+              >
+                <use
+                  xlink:href="#icon-sort"
+                />
+              </svg>
+            </label>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+`;
