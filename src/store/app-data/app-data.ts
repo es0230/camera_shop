@@ -1,12 +1,15 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { NameSpace } from '../../const';
 import { AppData } from '../../types/app-data';
-import { fetchCamerasAction, fetchPromoAction } from '../api-actions';
+import { fetchCameraAction, fetchCamerasAction, fetchPromoAction, fetchReviewsAction, fetchSimilarProductsAction } from '../api-actions';
 
 const initialState: AppData = {
   cameras: [],
   promo: null,
   isDataLoaded: false,
+  currentProduct: null,
+  currentReviews: null,
+  currentSimilarProducts: null,
 };
 
 export const appData = createSlice({
@@ -29,6 +32,15 @@ export const appData = createSlice({
       })
       .addCase(fetchPromoAction.fulfilled, (state, action) => {
         state.promo = action.payload;
+      })
+      .addCase(fetchCameraAction.fulfilled, (state, action) => {
+        state.currentProduct = action.payload;
+      })
+      .addCase(fetchReviewsAction.fulfilled, (state, action) => {
+        state.currentReviews = action.payload;
+      })
+      .addCase(fetchSimilarProductsAction.fulfilled, (state, action) => {
+        state.currentSimilarProducts = action.payload;
       });
   }
 });
