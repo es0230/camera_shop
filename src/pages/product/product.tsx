@@ -1,43 +1,38 @@
-import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { Link as ScrollLink } from 'react-scroll';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import Footer from '../../components/footer/footer';
 import Header from '../../components/header/header';
 import LoadingScreen from '../../components/loading-screen/loading-screen';
 import ProductCard from '../../components/product/product-card/product-card';
 import ProductReviews from '../../components/product/product-reviews/product-reviews';
 import SimilarProducts from '../../components/product/similar-products/similar-products';
-import { APIRoute, AppRoute, INITIAL_PAGE } from '../../const';
-import { api } from '../../store';
-import { Camera } from '../../types/camera';
-import { Review } from '../../types/review';
+import { AppRoute, INITIAL_PAGE } from '../../const';
+import PageNotFound from '../page-not-found/page-not-found';
 import ReviewModal from '../../components/product/review-modal/review-modal';
-
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { fetchCameraAction, fetchReviewsAction } from '../../store/api-actions';
+import { selectCurrentProduct, selectCurrentReviews } from '../../store/app-data/selectors';
 
 function Product(): JSX.Element {
-  const [currentProduct, setCurrentProduct] = useState<Camera>();
-  const [currentReviews, setCurrentReviews] = useState<Review[]>();
-  const [modalOpened, setModalOpened] = useState(false);
-
   const { id } = useParams();
-  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
+  const [modalOpened, setModalOpened] = useState(false);
+  const [isNeededUpdate, setIsNeededUpdate] = useState(true);
 
   useEffect(() => {
-    api.get<Camera>(`${APIRoute.Cameras}/${id}`)
-      .then(({ data }) => setCurrentProduct(data))
-      .catch(() => navigate(AppRoute.Unknown()));
-    api.get<Review[]>(`${APIRoute.Cameras}/${id}/reviews`)
-      .then(({ data }) => {
-        data.sort((a, b) => (dayjs(a.createAt).isAfter(b.createAt) ? -1 : 1));
-        return setCurrentReviews(data);
-      });
-  }, [id, navigate]);
+    dispatch(fetchCameraAction(id));
+    dispatch(fetchReviewsAction(id));
+    setIsNeededUpdate(false);
+  }, [dispatch, id, isNeededUpdate]);
 
-  useEffect(() => {
-    const sortedReviews = currentReviews?.sort((a, b) => (dayjs(a.createAt).isAfter(b.createAt) ? -1 : 1));
-    setCurrentReviews(sortedReviews);
-  }, [currentReviews]);
+  const currentProduct = useAppSelector(selectCurrentProduct);
+  const currentReviews = useAppSelector(selectCurrentReviews);
+
+  if (currentProduct === null) {
+    return <PageNotFound />;
+  }
 
   if (currentProduct === undefined) {
     return <LoadingScreen />;
@@ -81,7 +76,7 @@ function Product(): JSX.Element {
             <ProductReviews reviews={currentReviews} setModalOpened={setModalOpened} />
           </div>
         </div>
-        <ReviewModal isActive={modalOpened} setIsActive={setModalOpened} currentReviews={currentReviews} setCurrentReviews={setCurrentReviews} />
+        <ReviewModal isActive={modalOpened} setIsActive={setModalOpened} setIsNeededUpdate={setIsNeededUpdate} />
       </main>
       <ScrollLink
         className='up-btn'

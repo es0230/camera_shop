@@ -1,18 +1,16 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { APIRoute } from '../../../const';
-import { api } from '../../../store';
-import { Review } from '../../../types/review';
 import { ReviewPost } from '../../../types/review-post';
 import Modal from 'react-modal';
+import { useAppDispatch } from '../../../hooks';
+import { sendReviewAction } from '../../../store/api-actions';
 
 const MIN_REVIEW_LENGTH = 5;
 
 type ReviewModalProps = {
   isActive: boolean,
   setIsActive: React.Dispatch<React.SetStateAction<boolean>>,
-  currentReviews: Review[] | undefined,
-  setCurrentReviews: React.Dispatch<React.SetStateAction<Review[] | undefined>>,
+  setIsNeededUpdate: React.Dispatch<React.SetStateAction<boolean>>,
 }
 
 enum ReviewInputMap {
@@ -28,8 +26,8 @@ const KEY_EVENT_TYPE = 'keyup';
 
 Modal.defaultStyles = {};
 
-function ReviewModal({ isActive, setIsActive, currentReviews, setCurrentReviews }: ReviewModalProps): JSX.Element {
-
+function ReviewModal({ isActive, setIsActive, setIsNeededUpdate }: ReviewModalProps): JSX.Element {
+  const dispatch = useAppDispatch();
   const { id } = useParams();
 
   const initialFieldsChanged = useMemo(() => ({
@@ -71,20 +69,11 @@ function ReviewModal({ isActive, setIsActive, currentReviews, setCurrentReviews 
 
   useEffect(() => {
     if (sendReview) {
-      api.post<Review>(APIRoute.Reviews, review)
-        .then(({ data }) => {
-          if (currentReviews === undefined) {
-            setCurrentReviews([data]);
-          } else {
-            setCurrentReviews([...currentReviews, data]);
-          }
-          setReview(initialFormState);
-          setFieldChanged(initialFieldsChanged);
-          setReviewSucceed(true);
-        });
+      dispatch(sendReviewAction(review));
       setSendReview(false);
+      setReviewSucceed(true);
     }
-  }, [sendReview, review, setCurrentReviews, currentReviews, initialFormState, initialFieldsChanged]);
+  }, [dispatch, review, sendReview]);
 
   useEffect(() => {
     if (isActive) {
@@ -129,6 +118,7 @@ function ReviewModal({ isActive, setIsActive, currentReviews, setCurrentReviews 
       review.review.length >= 5
     ) {
       setSendReview(true);
+      setIsNeededUpdate(true);
     } else {
       setFieldChanged({
         userName: true,
@@ -238,7 +228,7 @@ function ReviewModal({ isActive, setIsActive, currentReviews, setCurrentReviews 
                       <div className="custom-textarea__error">Нужно добавить комментарий</div>
                     </div>
                   </div>
-                  <button className="btn btn--purple form-review__btn" type="button" onClick={(evt) => handleReviewSending(evt)} >Отправить отзыв</button>
+                  <button className="btn btn--purple form-review__btn" type="button" onClick={(evt) => handleReviewSending(evt)}>Отправить отзыв</button>
                 </form>
               </div>
               <button className="cross-btn" type="button" aria-label="Закрыть попап" onClick={handleModalClosing}>

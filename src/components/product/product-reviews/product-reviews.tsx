@@ -3,7 +3,7 @@ import { Review } from '../../../types/review';
 import ReviewCard from '../review-card/review-card';
 
 type ProductReviewsProps = {
-  reviews: Review[] | undefined,
+  reviews: Review[],
   setModalOpened: React.Dispatch<React.SetStateAction<boolean>>,
 }
 

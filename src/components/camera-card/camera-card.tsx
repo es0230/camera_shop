@@ -21,10 +21,10 @@ function CameraCard({ camera, isActive }: CameraCardProps): JSX.Element {
         <div className="rate product-card__rate">
           {Array.from({ length: MAX_RATING }, ((el, i) => (
             i <= rating ?
-              <svg width="17" height="16" aria-hidden="true">
+              <svg width="17" height="16" aria-hidden="true" key={i}>
                 <use xlinkHref="#icon-full-star" />
               </svg> :
-              <svg width="17" height="16" aria-hidden="true">
+              <svg width="17" height="16" aria-hidden="true" key={i}>
                 <use xlinkHref="#icon-star" />
               </svg>
           ))

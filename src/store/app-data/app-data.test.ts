@@ -9,8 +9,8 @@ const initialState: AppData = {
   promo: null,
   isDataLoaded: false,
   currentProduct: null,
-  currentReviews: null,
-  currentSimilarProducts: null,
+  currentReviews: [],
+  currentSimilarProducts: [],
 };
 
 describe('Testing appData', () => {

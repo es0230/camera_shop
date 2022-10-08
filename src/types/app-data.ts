@@ -7,6 +7,6 @@ export type AppData = {
   promo: Promo | null,
   isDataLoaded: boolean,
   currentProduct: Camera | null,
-  currentReviews: Review[] | null,
-  currentSimilarProducts: Camera[] | null,
+  currentReviews: Review[],
+  currentSimilarProducts: Camera[],
 };

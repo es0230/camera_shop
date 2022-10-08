@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import { NameSpace } from '../../const';
 import { Camera } from '../../types/camera';
 import { Promo } from '../../types/promo';
@@ -10,6 +11,6 @@ export const selectPromo = (state: State): Promo | null => state[NameSpace.Data]
 
 export const selectCurrentProduct = (state: State): Camera | null => state[NameSpace.Data].currentProduct;
 
-export const selectCurrentReviews = (state: State): Review[] | null => state[NameSpace.Data].currentReviews;
+export const selectCurrentReviews = (state: State): Review[] => state[NameSpace.Data].currentReviews.slice().sort((a, b) => (dayjs(a.createAt).isAfter(b.createAt) ? -1 : 1));
 
 export const selectCurrentSimilarProducts = (state: State): Camera[] | null => state[NameSpace.Data].currentSimilarProducts;
