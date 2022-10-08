@@ -3,6 +3,7 @@ import { name, random } from 'faker';
 import { Promo } from '../types/promo';
 import { Review } from '../types/review';
 import { MAX_RATING } from '../const';
+import { ReviewPost } from '../types/review-post';
 
 const BIG_ENOUGH_NUMBER = 1000;
 
@@ -43,3 +44,11 @@ export const makeFakeReview = (): Review => ({
   cameraId: Math.floor(Math.random() * BIG_ENOUGH_NUMBER),
 });
 
+export const makeFakeReviewPost = (): ReviewPost => ({
+  userName: random.word(),
+  advantage: random.word(),
+  disadvantage: random.word(),
+  review: random.word(),
+  rating: Math.floor(Math.random() * MAX_RATING),
+  cameraId: Math.floor(Math.random() * BIG_ENOUGH_NUMBER),
+});

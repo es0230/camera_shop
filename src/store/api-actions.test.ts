@@ -5,8 +5,12 @@ import { State } from '../types/state';
 import { configureMockStore } from '@jedmao/redux-mock-store';
 import thunk from 'redux-thunk';
 import { APIRoute } from '../const';
-import { fetchCamerasAction, fetchPromoAction } from './api-actions';
-import { makeFakeCamera, makeFakePromo } from '../mocks/mocks';
+import { fetchCameraAction, fetchCamerasAction, fetchPromoAction, fetchReviewsAction, fetchSimilarProductsAction, sendReviewAction } from './api-actions';
+import { makeFakeCamera, makeFakePromo, makeFakeReview, makeFakeReviewPost } from '../mocks/mocks';
+import { datatype, date, random } from 'faker';
+import { ReviewPost } from '../types/review-post';
+import { Review } from '../types/review';
+import dayjs from 'dayjs';
 
 describe('Testing async actions', () => {
   const api = createAPI();
@@ -63,4 +67,94 @@ describe('Testing async actions', () => {
     });
   });
 
+  describe('Testing fetchCameraAction', () => {
+    it('should trigger .pending and .fulfilled types of fetchCameraAction when server returns 200', async () => {
+      const store = mockStore();
+      const mockCameraResponse = makeFakeCamera();
+
+      mockAPI
+        .onGet(`${APIRoute.Cameras}/${mockCameraResponse.id}`)
+        .reply(200, mockCameraResponse);
+
+      expect(store.getActions()).toEqual([]);
+
+      await store.dispatch(fetchCameraAction(String(mockCameraResponse.id)));
+
+      const actions = store.getActions().map(({ type }) => type);
+
+      expect(actions).toEqual([
+        fetchCameraAction.pending.type,
+        fetchCameraAction.fulfilled.type
+      ]);
+    });
+  });
+
+  describe('Testing fetchReviewsAction', () => {
+    it('should trigger .pending and .fulfilled types of fetchReviewsAction when server returns 200', async () => {
+      const store = mockStore();
+      const mockCamera = makeFakeCamera();
+      const mockReviewsResponse = Array.from({ length: 10 }, () => makeFakeReview());
+
+      mockAPI
+        .onGet(`${APIRoute.Cameras}/${mockCamera.id}/reviews`)
+        .reply(200, mockReviewsResponse);
+
+      expect(store.getActions()).toEqual([]);
+
+      await store.dispatch(fetchReviewsAction(String(mockCamera.id)));
+
+      const actions = store.getActions().map(({ type }) => type);
+
+      expect(actions).toEqual([
+        fetchReviewsAction.pending.type,
+        fetchReviewsAction.fulfilled.type
+      ]);
+    });
+
+    describe('Testing fetchSimilarProductsAction', () => {
+      it('should trigger .pending and .fulfilled types of fetchReviewsAction when server returns 200', async () => {
+        const store = mockStore();
+        const mockCamera = makeFakeCamera();
+        const mockCamerasResponse = Array.from({ length: 10 }, () => makeFakeCamera());
+
+        mockAPI
+          .onGet(`${APIRoute.Cameras}/${mockCamera.id}/similar`)
+          .reply(200, mockCamerasResponse);
+
+        expect(store.getActions()).toEqual([]);
+
+        await store.dispatch(fetchSimilarProductsAction(String(mockCamera.id)));
+
+        const actions = store.getActions().map(({ type }) => type);
+
+        expect(actions).toEqual([
+          fetchSimilarProductsAction.pending.type,
+          fetchSimilarProductsAction.fulfilled.type
+        ]);
+      });
+    });
+
+    describe('Testing sendReviewAction', () => {
+      it('should trigger .pending and .fulfilled types of fetchReviewsAction when server returns 200', async () => {
+        const store = mockStore();
+        const mockReviewPost = makeFakeReviewPost();
+        const mockReviewResponse: Review = { ...mockReviewPost, createAt: String(datatype.datetime()), id: String(datatype.number()) }
+
+        mockAPI
+          .onPost(APIRoute.Reviews, mockReviewPost)
+          .reply(200, mockReviewResponse);
+
+        expect(store.getActions()).toEqual([]);
+
+        await store.dispatch(sendReviewAction(mockReviewPost));
+
+        const actions = store.getActions().map(({ type }) => type);
+
+        expect(actions).toEqual([
+          sendReviewAction.pending.type,
+          sendReviewAction.fulfilled.type
+        ]);
+      });
+    });
+  });
 });
