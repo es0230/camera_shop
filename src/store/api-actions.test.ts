@@ -7,10 +7,8 @@ import thunk from 'redux-thunk';
 import { APIRoute } from '../const';
 import { fetchCameraAction, fetchCamerasAction, fetchPromoAction, fetchReviewsAction, fetchSimilarProductsAction, sendReviewAction } from './api-actions';
 import { makeFakeCamera, makeFakePromo, makeFakeReview, makeFakeReviewPost } from '../mocks/mocks';
-import { datatype, date, random } from 'faker';
-import { ReviewPost } from '../types/review-post';
+import { datatype } from 'faker';
 import { Review } from '../types/review';
-import dayjs from 'dayjs';
 
 describe('Testing async actions', () => {
   const api = createAPI();
@@ -138,7 +136,7 @@ describe('Testing async actions', () => {
       it('should trigger .pending and .fulfilled types of fetchReviewsAction when server returns 200', async () => {
         const store = mockStore();
         const mockReviewPost = makeFakeReviewPost();
-        const mockReviewResponse: Review = { ...mockReviewPost, createAt: String(datatype.datetime()), id: String(datatype.number()) }
+        const mockReviewResponse: Review = { ...mockReviewPost, createAt: String(datatype.datetime()), id: String(datatype.number()) };
 
         mockAPI
           .onPost(APIRoute.Reviews, mockReviewPost)
