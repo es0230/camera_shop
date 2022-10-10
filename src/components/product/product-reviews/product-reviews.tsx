@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { INITIAL_REVIEWS } from '../../../const';
 import { Review } from '../../../types/review';
 import ReviewCard from '../review-card/review-card';
 
@@ -6,8 +7,6 @@ type ProductReviewsProps = {
   reviews: Review[],
   setModalOpened: React.Dispatch<React.SetStateAction<boolean>>,
 }
-
-const INITIAL_REVIEWS = 3;
 
 function ProductReviews({ reviews, setModalOpened }: ProductReviewsProps): JSX.Element {
   const [reviewsToShow, setReviewsToShow] = useState(INITIAL_REVIEWS);
