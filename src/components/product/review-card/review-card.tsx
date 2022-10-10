@@ -17,11 +17,11 @@ function ReviewCard({ reviewData }: ReviewCardProps): JSX.Element {
       </div>
       <div className="rate review-card__rate">
         {Array.from({ length: MAX_RATING }, ((el, i) => (
-          i <= rating ?
-            <svg width="17" height="16" aria-hidden="true" key={i}>
+          i < rating ?
+            <svg width="17" height="16" aria-hidden="true" key={i} data-testid="full_star">
               <use xlinkHref="#icon-full-star" />
             </svg> :
-            <svg width="17" height="16" aria-hidden="true" key={i}>
+            <svg width="17" height="16" aria-hidden="true" key={i} data-testid="star">
               <use xlinkHref="#icon-star" />
             </svg>
         ))
