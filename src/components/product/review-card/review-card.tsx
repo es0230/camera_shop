@@ -10,7 +10,7 @@ type ReviewCardProps = {
 function ReviewCard({ reviewData }: ReviewCardProps): JSX.Element {
   const { rating, userName, advantage, disadvantage, review, createAt } = reviewData;
   return (
-    <li className="review-card">
+    <li className="review-card" data-testid="review_card">
       <div className="review-card__head">
         <p className="title title--h4">{userName}</p>
         <time className="review-card__data" dateTime={dayjs(createAt).format('YYYY-MM-DD')}>{dayjs(createAt).locale('ru').format('DD MMMM')}</time>

@@ -23,5 +23,6 @@ enum TabType {
 
 const MAX_RATING = 5;
 const INITIAL_PAGE = 1;
+const INITIAL_REVIEWS = 3;
 
-export { AppRoute, APIRoute, NameSpace, TabType, MAX_RATING, INITIAL_PAGE };
+export { AppRoute, APIRoute, NameSpace, TabType, INITIAL_REVIEWS, MAX_RATING, INITIAL_PAGE };

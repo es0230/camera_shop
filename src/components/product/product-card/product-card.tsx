@@ -7,13 +7,9 @@ type ProductCardProps = {
 }
 
 function ProductCard({ currentProduct }: ProductCardProps): JSX.Element {
-  const { name, previewImg, previewImg2x, previewImgWebp, previewImgWebp2x, rating, price, vendorCode, type, category, description, level, reviewCount } = currentProduct;
-  const { id, tabType } = useParams();
+  const { name, previewImg, previewImg2x, previewImgWebp, previewImgWebp2x, rating, price, vendorCode, type, category, description, level, reviewCount, id } = currentProduct;
+  const { tabType } = useParams();
   const navigate = useNavigate();
-
-  if (tabType !== TabType.Description && tabType !== TabType.Perks) {
-    navigate(AppRoute.Unknown());
-  }
 
   return (
     <section className="product">
@@ -56,7 +52,7 @@ function ProductCard({ currentProduct }: ProductCardProps): JSX.Element {
               <button className={`tabs__control ${tabType === TabType.Description ? 'is-active' : ''}`} type="button" onClick={() => navigate(AppRoute.Product(id, TabType.Description))}>Описание</button>
             </div>
             <div className="tabs__content">
-              <div className={`tabs__element ${tabType === TabType.Perks ? 'is-active' : ''}`}>
+              <div data-testid="perks-tab" className={`tabs__element ${tabType === TabType.Perks ? 'is-active' : ''}`}>
                 <ul className="product__tabs-list">
                   <li className="item-list">
                     <span className="item-list__title">Артикул:</span>
@@ -76,7 +72,7 @@ function ProductCard({ currentProduct }: ProductCardProps): JSX.Element {
                   </li>
                 </ul>
               </div>
-              <div className={`tabs__element ${tabType === TabType.Description ? 'is-active' : ''}`}>
+              <div data-testid="description-tab" className={`tabs__element ${tabType === TabType.Description ? 'is-active' : ''}`}>
                 <div className="product__tabs-text">
                   {description}
                 </div>
