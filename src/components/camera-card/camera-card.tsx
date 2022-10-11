@@ -10,7 +10,7 @@ type CameraCardProps = {
 function CameraCard({ camera, isActive }: CameraCardProps): JSX.Element {
   const { id, name, rating, price, reviewCount, previewImg, previewImg2x, previewImgWebp, previewImgWebp2x } = camera;
   return (
-    <div className={`product-card ${isActive ? 'is-active' : ''}`}>
+    <div data-testid="camera-card" className={`product-card ${isActive ? 'is-active' : ''}`}>
       <div className="product-card__img">
         <picture>
           <source type="image/webp" srcSet={`../${previewImgWebp}, ../${previewImgWebp2x} 2x`} />
