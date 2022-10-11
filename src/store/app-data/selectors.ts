@@ -13,4 +13,4 @@ export const selectCurrentProduct = (state: State): Camera | null => state[NameS
 
 export const selectCurrentReviews = (state: State): Review[] => state[NameSpace.Data].currentReviews.slice().sort((a, b) => (dayjs(a.createAt).isAfter(b.createAt) ? -1 : 1));
 
-export const selectCurrentSimilarProducts = (state: State): Camera[] | null => state[NameSpace.Data].currentSimilarProducts;
+export const selectCurrentSimilarProducts = (state: State): Camera[] => state[NameSpace.Data].currentSimilarProducts;

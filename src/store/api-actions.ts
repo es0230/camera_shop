@@ -55,7 +55,7 @@ export const fetchReviewsAction = createAsyncThunk<Review[], string | undefined,
   },
 );
 
-export const fetchSimilarProductsAction = createAsyncThunk<Camera[], string, {
+export const fetchSimilarProductsAction = createAsyncThunk<Camera[], string | undefined, {
   dispatch: AppDispatch,
   state: State,
   extra: AxiosInstance
