@@ -13,7 +13,6 @@ import SimilarProducts from './similar-products';
 
 describe('Testing SimilarProducts component', () => {
   const { id } = makeFakeCamera();
-  //const mockCamerasResponse = Array.from({ length: 10 }, () => makeFakeCamera());
   describe('on render', () => {
     it('should not render when there is no similar products', () => {
       const mockCamerasResponse: Camera[] = [];

@@ -4,6 +4,9 @@ import { ReviewPost } from '../../../types/review-post';
 import Modal from 'react-modal';
 import { useAppDispatch } from '../../../hooks';
 import { sendReviewAction } from '../../../store/api-actions';
+import SnowflakeIcon from '../../svg/snowflake-icon/snowflake-icon';
+import CloseIcon from '../../svg/close-icon/close-icon';
+import ReviewSuccessIcon from '../../svg/review-success-icon/review-success-icon';
 
 const MIN_REVIEW_LENGTH = 5;
 
@@ -132,23 +135,18 @@ function ReviewModal({ isActive, setIsActive, setIsNeededUpdate }: ReviewModalPr
 
   return (
     <Modal isOpen={isActive} style={{ overlay: { backgroundColor: 'transparent' } }}>
-      <div className={`modal ${isActive ? 'is-active' : ''} ${reviewSucceed ? 'modal--narrow' : ''}`}>
+      <div data-testid="review-modal" className={`modal ${isActive ? 'is-active' : ''} ${reviewSucceed ? 'modal--narrow' : ''}`}>
         <div className="modal__wrapper">
-          <div className="modal__overlay" onClick={handleModalClosing}></div>
+          <div data-testid="modal-overlay" className="modal__overlay" onClick={handleModalClosing}></div>
           {reviewSucceed ?
             <div className="modal__content">
               <p className="title title--h4">Спасибо за отзыв</p>
-              <svg className="modal__icon" width="80" height="78" aria-hidden="true">
-                <use xlinkHref="#icon-review-success"></use>
-              </svg>
+              <ReviewSuccessIcon />
               <div className="modal__buttons">
-                <button className="btn btn--purple modal__btn modal__btn--fit-width" type="button" onClick={handleModalClosing}>Вернуться к покупкам
-                </button>
+                <button data-testid="return-to-catalog-button" className="btn btn--purple modal__btn modal__btn--fit-width" type="button" onClick={handleModalClosing}>Вернуться к покупкам</button>
               </div>
               <button className="cross-btn" type="button" aria-label="Закрыть попап" onClick={handleModalClosing}>
-                <svg width="10" height="10" aria-hidden="true">
-                  <use xlinkHref="#icon-close"></use>
-                </svg>
+                <CloseIcon />
               </button>
             </div>
             :
@@ -156,13 +154,10 @@ function ReviewModal({ isActive, setIsActive, setIsNeededUpdate }: ReviewModalPr
               <p className="title title--h4">Оставить отзыв</p>
               <div className="form-review">
                 <form method="post">
-
                   <div className="form-review__rate">
-                    <fieldset className={`rate form-review__item ${review.rating === 0 && fieldChanged.rating ? 'is-invalid' : ''}`}>
+                    <fieldset data-testid="form-rate" className={`rate form-review__item ${review.rating === 0 && fieldChanged.rating ? 'is-invalid' : ''}`}>
                       <legend className="rate__caption">Рейтинг
-                        <svg width="9" height="9" aria-hidden="true">
-                          <use xlinkHref="#icon-snowflake"></use>
-                        </svg>
+                        <SnowflakeIcon />
                       </legend>
                       <div className="rate__bar">
                         <div className="rate__group">
@@ -183,58 +178,48 @@ function ReviewModal({ isActive, setIsActive, setIsNeededUpdate }: ReviewModalPr
                       </div>
                       <p className="rate__message">Нужно оценить товар</p>
                     </fieldset>
-                    <div className={`custom-input form-review__item ${review.userName.length === 0 && fieldChanged.userName ? 'is-invalid' : ''}`}>
+                    <div data-testid="form-name" className={`custom-input form-review__item ${review.userName.length === 0 && fieldChanged.userName ? 'is-invalid' : ''}`}>
                       <label>
                         <span className="custom-input__label">Ваше имя
-                          <svg width="9" height="9" aria-hidden="true">
-                            <use xlinkHref="#icon-snowflake"></use>
-                          </svg>
+                          <SnowflakeIcon />
                         </span>
                         <input type="text" name="user-name" placeholder="Введите ваше имя" onInput={handleReviewWriting} value={review.userName} />
                       </label>
                       <p className="custom-input__error">Нужно указать имя</p>
                     </div>
-                    <div className={`custom-input form-review__item ${review.advantage.length === 0 && fieldChanged.advantage ? 'is-invalid' : ''}`}>
+                    <div data-testid="form-advantage" className={`custom-input form-review__item ${review.advantage.length === 0 && fieldChanged.advantage ? 'is-invalid' : ''}`}>
                       <label>
                         <span className="custom-input__label">Достоинства
-                          <svg width="9" height="9" aria-hidden="true">
-                            <use xlinkHref="#icon-snowflake"></use>
-                          </svg>
+                          <SnowflakeIcon />
                         </span>
                         <input type="text" name="user-plus" placeholder="Основные преимущества товара" onInput={handleReviewWriting} value={review.advantage} />
                       </label>
                       <p className="custom-input__error">Нужно указать достоинства</p>
                     </div>
-                    <div className={`custom-input form-review__item ${review.disadvantage.length === 0 && fieldChanged.disadvantage ? 'is-invalid' : ''}`}>
+                    <div data-testid="form-disadvantage" className={`custom-input form-review__item ${review.disadvantage.length === 0 && fieldChanged.disadvantage ? 'is-invalid' : ''}`}>
                       <label>
                         <span className="custom-input__label">Недостатки
-                          <svg width="9" height="9" aria-hidden="true">
-                            <use xlinkHref="#icon-snowflake"></use>
-                          </svg>
+                          <SnowflakeIcon />
                         </span>
                         <input type="text" name="user-minus" placeholder="Главные недостатки товара" onInput={handleReviewWriting} value={review.disadvantage} />
                       </label>
                       <p className="custom-input__error">Нужно указать недостатки</p>
                     </div>
-                    <div className={`custom-textarea form-review__item ${review.review.length < MIN_REVIEW_LENGTH && fieldChanged.review ? 'is-invalid' : ''}`}>
+                    <div data-testid="form-comment" className={`custom-textarea form-review__item ${review.review.length < MIN_REVIEW_LENGTH && fieldChanged.review ? 'is-invalid' : ''}`}>
                       <label>
                         <span className="custom-textarea__label">Комментарий
-                          <svg width="9" height="9" aria-hidden="true">
-                            <use xlinkHref="#icon-snowflake"></use>
-                          </svg>
+                          <SnowflakeIcon />
                         </span>
                         <textarea name="user-comment" minLength={MIN_REVIEW_LENGTH} placeholder="Поделитесь своим опытом покупки" onInput={handleReviewWriting} value={review.review}></textarea>
                       </label>
                       <div className="custom-textarea__error">Нужно добавить комментарий</div>
                     </div>
                   </div>
-                  <button className="btn btn--purple form-review__btn" type="button" onClick={(evt) => handleReviewSending(evt)}>Отправить отзыв</button>
+                  <button data-testid="send-button" className="btn btn--purple form-review__btn" type="button" onClick={(evt) => handleReviewSending(evt)}>Отправить отзыв</button>
                 </form>
               </div>
               <button className="cross-btn" type="button" aria-label="Закрыть попап" onClick={handleModalClosing}>
-                <svg width="10" height="10" aria-hidden="true">
-                  <use xlinkHref="#icon-close"></use>
-                </svg>
+                <CloseIcon />
               </button>
             </div>}
         </div>
