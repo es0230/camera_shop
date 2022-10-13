@@ -32,7 +32,7 @@ function Catalog(): JSX.Element {
         <Header />
         <Ad ad={ad} />
         <div data-testid="catalog-page" className="page-content">
-          <div className="breadcrumbs">
+          <div data-testid="breadcrumbs" className="breadcrumbs">
             <div className="container">
               <ul className="breadcrumbs__list">
                 <li className="breadcrumbs__item">
@@ -65,10 +65,10 @@ function Catalog(): JSX.Element {
         <Footer />
       </>
     );
+  } else {
+    navigate(AppRoute.Unknown());
+    return (<> </>);
   }
-
-  navigate(AppRoute.Unknown());
-  return (<> </>);
 }
 
 export default Catalog;

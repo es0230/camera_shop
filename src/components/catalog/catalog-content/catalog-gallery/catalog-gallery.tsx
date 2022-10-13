@@ -8,7 +8,7 @@ type CatalogGalleryProps = {
 function CatalogGallery({ cameras }: CatalogGalleryProps): JSX.Element {
 
   return (
-    <div className="cards catalog__cards">
+    <div data-testid="catalog-gallery-component" className="cards catalog__cards">
       {cameras.map((el) => <CameraCard camera={el} key={el.id} />)}
     </div>
   );

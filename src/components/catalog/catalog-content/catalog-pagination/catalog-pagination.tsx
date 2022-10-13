@@ -9,7 +9,7 @@ function CatalogPagination({ currentPage, totalPageAmount }: CatalogPaginationPr
   switch (currentPage) {
     case 1:
       return (
-        <div className="pagination">
+        <div data-testid="catalog-pagination-component" className="pagination">
           <ul className="pagination__list">
             <li className="pagination__item">
               <Link className="pagination__link pagination__link--active" to={AppRoute.Catalog(currentPage)}>1</Link>
@@ -28,7 +28,7 @@ function CatalogPagination({ currentPage, totalPageAmount }: CatalogPaginationPr
       );
     case totalPageAmount:
       return (
-        <div className="pagination">
+        <div data-testid="catalog-pagination-component" className="pagination">
           <ul className="pagination__list">
             <li className="pagination__item">
               <Link className="pagination__link pagination__link--text" to={AppRoute.Catalog(currentPage - 1)}>Назад</Link>
@@ -47,7 +47,7 @@ function CatalogPagination({ currentPage, totalPageAmount }: CatalogPaginationPr
       );
     default:
       return (
-        <div className="pagination">
+        <div data-testid="catalog-pagination-component" className="pagination">
           <ul className="pagination__list">
             <li className="pagination__item">
               <Link className="pagination__link pagination__link--text" to={AppRoute.Catalog(currentPage - 1)}>Назад</Link>

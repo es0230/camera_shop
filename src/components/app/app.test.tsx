@@ -25,8 +25,6 @@ const mockStore = configureMockStore<
   ThunkDispatch<State, typeof api, Action>
 >(middlewares);
 
-//const mockStore = configureMockStore();
-
 const store = mockStore({
   DATA: {
     cameras: [makeFakeCamera()],
@@ -49,7 +47,7 @@ const fakeApp = (
 );
 
 describe('Testing App component', () => {
-  it('should render Catalog when user navigate to "/catalog/1"', async () => {
+  it('should render Catalog when user navigate to "/catalog/1"', () => {
     history.push(AppRoute.Catalog(1));
 
     render(fakeApp);

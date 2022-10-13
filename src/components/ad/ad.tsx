@@ -11,7 +11,7 @@ function Ad({ ad }: AdProps): JSX.Element {
     const { name, previewImg, previewImg2x, previewImgWebp, previewImgWebp2x, id } = ad;
 
     return (
-      <div className="banner">
+      <div data-testid="ad-component" className="banner">
         <picture>
           <source type="image/webp" srcSet={`../${previewImgWebp}, ../${previewImgWebp2x} 2x`} />
           <img src={`../${previewImg}`} srcSet={`../${previewImg2x} 2x`} width="1280" height="280" alt="баннер" />
