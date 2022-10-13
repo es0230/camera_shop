@@ -12,7 +12,7 @@ function ProductCard({ currentProduct }: ProductCardProps): JSX.Element {
   const navigate = useNavigate();
 
   return (
-    <section className="product">
+    <section data-testid="product-card-component" className="product">
       <div className="container">
         <div className="product__img">
           <picture>

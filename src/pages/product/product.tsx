@@ -3,7 +3,6 @@ import { Link as ScrollLink } from 'react-scroll';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import Footer from '../../components/footer/footer';
 import Header from '../../components/header/header';
-import LoadingScreen from '../../components/loading-screen/loading-screen';
 import ProductCard from '../../components/product/product-card/product-card';
 import ProductReviews from '../../components/product/product-reviews/product-reviews';
 import SimilarProducts from '../../components/product/similar-products/similar-products';
@@ -43,16 +42,12 @@ function Product(): JSX.Element {
     return <PageNotFound />;
   }
 
-  if (currentProduct === undefined) {
-    return <LoadingScreen />;
-  }
-
   return (
     <div data-testid="product-page" className="wrapper" id="top">
       <Header />
       <main>
         <div className="page-content">
-          <div className="breadcrumbs">
+          <div data-testid="breadcrumbs" className="breadcrumbs">
             <div className="container">
               <ul className="breadcrumbs__list">
                 <li className="breadcrumbs__item">
@@ -88,6 +83,7 @@ function Product(): JSX.Element {
         <ReviewModal isActive={modalOpened} setIsActive={setModalOpened} setIsNeededUpdate={setIsNeededUpdate} />
       </main>
       <ScrollLink
+        data-testid="up-button"
         className='up-btn'
         to="top"
         smooth

@@ -16,7 +16,7 @@ function ProductReviews({ reviews, setModalOpened }: ProductReviewsProps): JSX.E
   }, [reviews]);
 
   return (
-    <section className="review-block">
+    <section data-testid="product-reviews-component" className="review-block">
       <div className="container">
         <div className="page-content__headed">
           <h2 className="title title--h3">Отзывы</h2>

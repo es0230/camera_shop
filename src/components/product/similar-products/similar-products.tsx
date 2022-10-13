@@ -17,7 +17,7 @@ function SimilarProducts({ id, similarProducts }: SimilarProductsProps): JSX.Ele
 
   return similarProducts.length === 0 ?
     <> </> :
-    <section className="product-similar">
+    <section data-testid="similar-products-component" className="product-similar">
       <div className="container">
         <h2 className="title title--h3">Похожие товары</h2>
         <div className="product-similar__slider">
