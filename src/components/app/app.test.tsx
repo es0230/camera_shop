@@ -6,16 +6,36 @@ import { configureMockStore } from '@jedmao/redux-mock-store';
 import { render, screen } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { Provider } from 'react-redux';
-import { AppRoute } from '../../const';
-import { makeFakeCamera, makeFakePromo } from '../../mocks/mocks';
+import { AppRoute, TabType } from '../../const';
+import { makeFakeCamera, makeFakePromo, makeFakeReview } from '../../mocks/mocks';
 import HistoryRouter from '../history-router/history-router';
 import '@testing-library/jest-dom';
 import App from './app';
+import { createAPI } from '../../services/api';
+import thunk from 'redux-thunk';
+import { State } from '../../types/state';
+import { Action, ThunkDispatch } from '@reduxjs/toolkit';
 
-const mockStore = configureMockStore();
+const api = createAPI();
+const middlewares = [thunk.withExtraArgument(api)];
+
+const mockStore = configureMockStore<
+  State,
+  Action,
+  ThunkDispatch<State, typeof api, Action>
+>(middlewares);
+
+//const mockStore = configureMockStore();
 
 const store = mockStore({
-  DATA: { cameras: [makeFakeCamera()], promo: makeFakePromo(), isDataLoaded: false },
+  DATA: {
+    cameras: [makeFakeCamera()],
+    promo: makeFakePromo(),
+    isDataLoaded: false,
+    currentProduct: makeFakeCamera(),
+    currentReviews: [makeFakeReview()],
+    currentSimilarProducts: [makeFakeCamera()],
+  },
 });
 
 const history = createMemoryHistory();
@@ -36,6 +56,27 @@ describe('Testing App component', () => {
 
     expect(history.location.pathname).toBe(AppRoute.Catalog(1));
 
-    expect(screen.getByText(/Каталог фото- и видеотехники/i)).toBeInTheDocument();
+    expect(screen.getByTestId('catalog-page')).toBeInTheDocument();
+  });
+
+  it('should render Product when user navigate to "/product/1"', () => {
+    history.push(AppRoute.Product(1, TabType.Perks));
+
+    render(fakeApp);
+
+    expect(history.location.pathname).toBe(AppRoute.Product(1, TabType.Perks));
+
+    expect(screen.getByTestId('product-page')).toBeInTheDocument();
+  });
+
+
+  it('should render PageNotFound when user navigate to "/*"', () => {
+    history.push(AppRoute.Unknown());
+
+    render(fakeApp);
+
+    expect(history.location.pathname).toBe(AppRoute.Unknown());
+
+    expect(screen.getByTestId('page-not-found')).toBeInTheDocument();
   });
 });

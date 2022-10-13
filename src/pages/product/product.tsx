@@ -48,7 +48,7 @@ function Product(): JSX.Element {
   }
 
   return (
-    <div className="wrapper" id="top">
+    <div data-testid="product-page" className="wrapper" id="top">
       <Header />
       <main>
         <div className="page-content">

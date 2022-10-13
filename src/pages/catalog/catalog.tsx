@@ -31,7 +31,7 @@ function Catalog(): JSX.Element {
       <>
         <Header />
         <Ad ad={ad} />
-        <div className="page-content">
+        <div data-testid="catalog-page" className="page-content">
           <div className="breadcrumbs">
             <div className="container">
               <ul className="breadcrumbs__list">
