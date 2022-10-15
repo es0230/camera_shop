@@ -11,6 +11,10 @@ function ProductCard({ currentProduct }: ProductCardProps): JSX.Element {
   const { tabType } = useParams();
   const navigate = useNavigate();
 
+  const handlePerksButtonClick = () => navigate(AppRoute.Product(id, TabType.Perks));
+
+  const handleDescriptionButtonClick = () => navigate(AppRoute.Product(id, TabType.Description));
+
   return (
     <section data-testid="product-card-component" className="product">
       <div className="container">
@@ -48,8 +52,8 @@ function ProductCard({ currentProduct }: ProductCardProps): JSX.Element {
           </button>
           <div className="tabs product__tabs">
             <div className="tabs__controls product__tabs-controls">
-              <button className={`tabs__control ${tabType === TabType.Perks ? 'is-active' : ''}`} type="button" onClick={() => navigate(AppRoute.Product(id, TabType.Perks))}>Характеристики</button>
-              <button className={`tabs__control ${tabType === TabType.Description ? 'is-active' : ''}`} type="button" onClick={() => navigate(AppRoute.Product(id, TabType.Description))}>Описание</button>
+              <button className={`tabs__control ${tabType === TabType.Perks ? 'is-active' : ''}`} type="button" onClick={handlePerksButtonClick}>Характеристики</button>
+              <button className={`tabs__control ${tabType === TabType.Description ? 'is-active' : ''}`} type="button" onClick={handleDescriptionButtonClick}>Описание</button>
             </div>
             <div className="tabs__content">
               <div data-testid="perks-tab" className={`tabs__element ${tabType === TabType.Perks ? 'is-active' : ''}`}>

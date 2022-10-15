@@ -15,6 +15,9 @@ function SimilarProducts({ id, similarProducts }: SimilarProductsProps): JSX.Ele
 
   const [activeLeftCard, setActiveLeftCard] = useState(0);
 
+  const handlePrevSlideClick = () => setActiveLeftCard(activeLeftCard - 1);
+  const handleNextSlideClick = () => setActiveLeftCard(activeLeftCard + 1);
+
   return similarProducts.length === 0 ?
     <> </> :
     <section data-testid="similar-products-component" className="product-similar">
@@ -24,12 +27,12 @@ function SimilarProducts({ id, similarProducts }: SimilarProductsProps): JSX.Ele
           <div className="product-similar__slider-list">
             {similarProducts.map((el, i) => <CameraCard camera={el} isActive={i >= activeLeftCard && i <= activeLeftCard + 2} key={el.id} />)}
           </div>
-          <button data-testid="slider-controls--prev" className="slider-controls slider-controls--prev" type="button" aria-label="Предыдущий слайд" onClick={() => setActiveLeftCard(activeLeftCard - 1)} disabled={activeLeftCard === 0}>
+          <button data-testid="slider-controls--prev" className="slider-controls slider-controls--prev" type="button" aria-label="Предыдущий слайд" onClick={handlePrevSlideClick} disabled={activeLeftCard === 0}>
             <svg width="7" height="12" aria-hidden="true">
               <use xlinkHref="#icon-arrow" />
             </svg>
           </button>
-          <button data-testid="slider-controls--next" className="slider-controls slider-controls--next" type="button" aria-label="Следующий слайд" onClick={() => setActiveLeftCard(activeLeftCard + 1)} disabled={activeLeftCard >= similarProducts.length - 3}>
+          <button data-testid="slider-controls--next" className="slider-controls slider-controls--next" type="button" aria-label="Следующий слайд" onClick={handleNextSlideClick} disabled={activeLeftCard >= similarProducts.length - 3}>
             <svg width="7" height="12" aria-hidden="true">
               <use xlinkHref="#icon-arrow" />
             </svg>

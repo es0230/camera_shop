@@ -12,20 +12,23 @@ function ProductReviews({ reviews, setModalOpened }: ProductReviewsProps): JSX.E
   const [reviewsToShow, setReviewsToShow] = useState(INITIAL_REVIEWS);
 
   useEffect(() => {
-    setReviewsToShow(3);
+    setReviewsToShow(INITIAL_REVIEWS);
   }, [reviews]);
+
+  const handleWriteReviewClick = () => setModalOpened(true);
+  const handleShowMoreReviewsClick = () => setReviewsToShow(reviewsToShow + INITIAL_REVIEWS);
 
   return (
     <section data-testid="product-reviews-component" className="review-block">
       <div className="container">
         <div className="page-content__headed">
           <h2 className="title title--h3">Отзывы</h2>
-          <button className="btn" type="button" onClick={() => setModalOpened(true)} >Оставить свой отзыв</button>
+          <button className="btn" type="button" onClick={handleWriteReviewClick} >Оставить свой отзыв</button>
         </div>
         {reviews?.map((el, i) => i < reviewsToShow && <ReviewCard reviewData={el} key={el.id} />)}
         {reviewsToShow < (reviews?.length || 0) &&
           <div className="review-block__buttons">
-            <button className="btn btn--purple" type="button" onClick={() => setReviewsToShow(reviewsToShow + 3)}>Показать больше отзывов</button>
+            <button className="btn btn--purple" type="button" onClick={handleShowMoreReviewsClick}>Показать больше отзывов</button>
           </div>}
       </div>
     </section>

@@ -215,7 +215,7 @@ function ReviewModal({ isActive, setIsActive, setIsNeededUpdate }: ReviewModalPr
                       <div className="custom-textarea__error">Нужно добавить комментарий</div>
                     </div>
                   </div>
-                  <button data-testid="send-button" className="btn btn--purple form-review__btn" type="button" onClick={(evt) => handleReviewSending(evt)}>Отправить отзыв</button>
+                  <button data-testid="send-button" className="btn btn--purple form-review__btn" type="button" onClick={handleReviewSending}>Отправить отзыв</button>
                 </form>
               </div>
               <button className="cross-btn" type="button" aria-label="Закрыть попап" onClick={handleModalClosing}>
