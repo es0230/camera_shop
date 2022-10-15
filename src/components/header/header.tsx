@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+import { AppRoute, INITIAL_PAGE } from '../../const';
 import BasketIcon from '../svg/basket-icon/basket-icon';
 import CloseIcon from '../svg/close-icon/close-icon';
 import LensIcon from '../svg/lens-icon/lens-icon';
@@ -7,22 +9,22 @@ function Header(): JSX.Element {
   return (
     <header data-testid="header-component" className="header" id="header">
       <div className="container">
-        <a className="header__logo" href="index.html" aria-label="Переход на главную">
+        <Link className="header__logo" to={AppRoute.Catalog(INITIAL_PAGE)} aria-label="Переход на главную">
           <LogoIcon />
-        </a>
+        </Link>
         <nav className="main-nav header__main-nav">
           <ul className="main-nav__list">
             <li className="main-nav__item">
-              <a className="main-nav__link" href="catalog.html">Каталог</a>
+              <Link className="main-nav__link" to={AppRoute.Catalog(INITIAL_PAGE)}>Каталог</Link>
             </li>
             <li className="main-nav__item">
-              <a className="main-nav__link" href="#">Гарантии</a>
+              <Link className="main-nav__link" to={AppRoute.Unknown()}>Гарантии</Link>
             </li>
             <li className="main-nav__item">
-              <a className="main-nav__link" href="#">Доставка</a>
+              <Link className="main-nav__link" to={AppRoute.Unknown()}>Доставка</Link>
             </li>
             <li className="main-nav__item">
-              <a className="main-nav__link" href="#">О компании</a>
+              <Link className="main-nav__link" to={AppRoute.Unknown()}>О компании</Link>
             </li>
           </ul>
         </nav>
@@ -45,9 +47,9 @@ function Header(): JSX.Element {
             <span className="visually-hidden">Сбросить поиск</span>
           </button>
         </div>
-        <a className="header__basket-link" href="#">
+        <Link className="header__basket-link" to={AppRoute.Unknown()}>
           <BasketIcon />
-        </a>
+        </Link>
       </div>
     </header>
   );
