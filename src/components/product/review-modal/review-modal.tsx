@@ -122,15 +122,15 @@ function ReviewModal({ isActive, setIsActive, setIsNeededUpdate }: ReviewModalPr
     ) {
       setSendReview(true);
       setIsNeededUpdate(true);
-    } else {
-      setFieldChanged({
-        userName: true,
-        advantage: true,
-        disadvantage: true,
-        review: true,
-        rating: true,
-      });
+      return;
     }
+    setFieldChanged({
+      userName: true,
+      advantage: true,
+      disadvantage: true,
+      review: true,
+      rating: true,
+    });
   };
 
   return (

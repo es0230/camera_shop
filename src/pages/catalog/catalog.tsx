@@ -65,10 +65,10 @@ function Catalog(): JSX.Element {
         <Footer />
       </>
     );
-  } else {
-    navigate(AppRoute.Unknown());
-    return (<> </>);
   }
+
+  navigate(AppRoute.Unknown());
+  return (<> </>);
 }
 
 export default Catalog;
