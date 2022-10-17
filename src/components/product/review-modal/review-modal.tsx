@@ -183,7 +183,7 @@ function ReviewModal({ isActive, setIsActive, setIsNeededUpdate }: ReviewModalPr
                         <span className="custom-input__label">Ваше имя
                           <SnowflakeIcon />
                         </span>
-                        <input type="text" name="user-name" placeholder="Введите ваше имя" onInput={handleReviewWriting} value={review.userName} />
+                        <input autoFocus type="text" name="user-name" placeholder="Введите ваше имя" onInput={handleReviewWriting} value={review.userName} />
                       </label>
                       <p className="custom-input__error">Нужно указать имя</p>
                     </div>
