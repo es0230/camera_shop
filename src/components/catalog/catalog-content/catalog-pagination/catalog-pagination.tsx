@@ -2,26 +2,29 @@ import { Link } from 'react-router-dom';
 import { AppRoute } from '../../../../const';
 
 type CatalogPaginationProps = {
-  currentPage: number,
+  page: number,
+  type: string,
+  order: string,
   totalPageAmount: number,
 }
-function CatalogPagination({ currentPage, totalPageAmount }: CatalogPaginationProps): JSX.Element {
+
+function CatalogPagination({ page, type, order, totalPageAmount }: CatalogPaginationProps): JSX.Element {
   return (
     <div data-testid="catalog-pagination-component" className="pagination">
       <ul className="pagination__list">
-        {currentPage !== 1 ?
+        {page !== 1 ?
           <li className="pagination__item">
-            <Link className="pagination__link pagination__link--text" to={AppRoute.Catalog(currentPage - 1)}>Назад</Link>
+            <Link className="pagination__link pagination__link--text" to={AppRoute.Catalog(page - 1, type, order)}>Назад</Link>
           </li> :
           <> </>}
         {Array.from({ length: totalPageAmount }, (el, i) => (
           <li className="pagination__item" key={i}>
-            <Link className={`pagination__link ${currentPage === i + 1 ? 'pagination__link--active' : ''}`} to={AppRoute.Catalog(i + 1)}>{i + 1}</Link>
+            <Link className={`pagination__link ${page === i + 1 ? 'pagination__link--active' : ''}`} to={AppRoute.Catalog(i + 1, type, order)}>{i + 1}</Link>
           </li>
         ))}
-        {currentPage !== totalPageAmount ?
+        {page !== totalPageAmount ?
           <li className="pagination__item">
-            <Link className="pagination__link pagination__link--text" to={AppRoute.Catalog(currentPage + 1)}>Далее</Link>
+            <Link className="pagination__link pagination__link--text" to={AppRoute.Catalog(page + 1, type, order)}>Далее</Link>
           </li> :
           <> </>}
       </ul>

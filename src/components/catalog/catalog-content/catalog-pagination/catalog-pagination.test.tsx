@@ -6,6 +6,7 @@ import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
 import CatalogPagination from './catalog-pagination';
 import { BrowserRouter } from 'react-router-dom';
+import { SortOrder, SortType } from '../../../../const';
 describe('Testing catalogPagination component', () => {
   describe('should render correctly', () => {
     it('on first page', () => {
@@ -14,7 +15,7 @@ describe('Testing catalogPagination component', () => {
 
       render(
         <BrowserRouter>
-          <CatalogPagination currentPage={mockPageNumber} totalPageAmount={mockPageAmount} />
+          <CatalogPagination page={mockPageNumber} type={SortType.Price} order={SortOrder.Ascending} totalPageAmount={mockPageAmount} />
         </BrowserRouter>
       );
 
@@ -31,7 +32,7 @@ describe('Testing catalogPagination component', () => {
 
       render(
         <BrowserRouter>
-          <CatalogPagination currentPage={mockPageNumber} totalPageAmount={mockPageAmount} />
+          <CatalogPagination page={mockPageNumber} type={SortType.Price} order={SortOrder.Ascending} totalPageAmount={mockPageAmount} />
         </BrowserRouter>
       );
 
@@ -48,7 +49,7 @@ describe('Testing catalogPagination component', () => {
 
       render(
         <BrowserRouter>
-          <CatalogPagination currentPage={mockPageNumber} totalPageAmount={mockPageAmount} />
+          <CatalogPagination page={mockPageNumber} type={SortType.Price} order={SortOrder.Ascending} totalPageAmount={mockPageAmount} />
         </BrowserRouter>
       );
 

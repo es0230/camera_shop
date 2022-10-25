@@ -8,7 +8,7 @@ import { configureMockStore } from '@jedmao/redux-mock-store';
 import { makeFakeCamera, makeFakePromo } from '../../mocks/mocks';
 import HistoryRouter from '../../components/history-router/history-router';
 import { createMemoryHistory } from 'history';
-import { AppRoute } from '../../const';
+import { AppRoute, INITIAL_PAGE, SortOrder, SortType } from '../../const';
 import App from '../../components/app/app';
 
 const mockStore = configureMockStore();
@@ -28,7 +28,7 @@ const history = createMemoryHistory();
 
 describe('Testing Catalog page', () => {
   it('should render correctly', () => {
-    history.push(AppRoute.Catalog(1));
+    history.push(AppRoute.Catalog(INITIAL_PAGE, SortType.Price, SortOrder.Ascending));
 
     render(
       <Provider store={store}>

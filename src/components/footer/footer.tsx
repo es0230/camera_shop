@@ -1,12 +1,12 @@
 import { Link } from 'react-router-dom';
-import { AppRoute, INITIAL_PAGE } from '../../const';
+import { AppRoute, INITIAL_PAGE, SortOrder, SortType } from '../../const';
 
 function Footer(): JSX.Element {
   return (
     <footer data-testid="footer-component" className="footer">
       <div className="container">
         <div className="footer__info">
-          <Link className="footer__logo" to={AppRoute.Catalog(INITIAL_PAGE)} aria-label="Переход на главную">
+          <Link className="footer__logo" to={AppRoute.Catalog(INITIAL_PAGE, SortType.Price, SortOrder.Ascending)} aria-label="Переход на главную">
             <svg width="100" height="36" aria-hidden="true">
               <use xlinkHref="#icon-logo-mono" />
             </svg>
@@ -41,7 +41,7 @@ function Footer(): JSX.Element {
             <p className="footer__title">Навигация</p>
             <ul className="footer__list">
               <li className="footer__item">
-                <Link className="link" to={AppRoute.Catalog(INITIAL_PAGE)}>Каталог</Link>
+                <Link className="link" to={AppRoute.Catalog(INITIAL_PAGE, SortType.Price, SortOrder.Ascending)}>Каталог</Link>
               </li>
               <li className="footer__item">
                 <Link className="link" to={AppRoute.Unknown()}>Гарантии</Link>

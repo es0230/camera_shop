@@ -8,7 +8,7 @@ import PageNotFound from './page-not-found';
 import userEvent from '@testing-library/user-event';
 import HistoryRouter from '../../components/history-router/history-router';
 import { createMemoryHistory } from 'history';
-import { AppRoute } from '../../const';
+import { AppRoute, INITIAL_PAGE, SortOrder, SortType } from '../../const';
 
 describe('Testing PageNotFound component', () => {
   it('should render correctly', () => {
@@ -35,6 +35,6 @@ describe('Testing PageNotFound component', () => {
 
     await userEvent.click(button);
 
-    expect(history.location.pathname).toBe(AppRoute.Catalog(1));
+    expect(history.location.pathname).toBe(AppRoute.Catalog(INITIAL_PAGE, SortType.Price, SortOrder.Ascending));
   });
 });
