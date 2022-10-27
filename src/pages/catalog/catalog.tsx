@@ -7,11 +7,12 @@ import CatalogSort from '../../components/catalog/catalog-content/catalog-sort/c
 import CatalogFilter from '../../components/catalog/catalog-filter/catalog-filter';
 import Footer from '../../components/footer/footer';
 import Header from '../../components/header/header';
-import { AppRoute, INITIAL_PAGE, SortOrder, SortType } from '../../const';
+import { AppRoute, INITIAL_CATALOG_PAGE_URL_PARAMS, SortOrder, SortType } from '../../const';
 import { useAppSelector } from '../../hooks';
 import { usePageParams } from '../../hooks/use-page-params';
 import { selectCameras, selectPromo } from '../../store/app-data/selectors';
 import { Camera } from '../../types/camera';
+//import { URLParams } from '../../types/url-params';
 
 const CARDSONPAGE = 9;
 const sortCameras = (cameras: Camera[], type: SortType.Price | SortType.Rating, order: SortOrder.Ascending | SortOrder.Descending) => {
@@ -28,29 +29,29 @@ function Catalog(): JSX.Element {
   const cameras = useAppSelector(selectCameras);
 
   if (pageParams === undefined ||
-    (pageParams.type !== SortType.Price && pageParams.type !== SortType.Rating) ||
+    (pageParams.sortType !== SortType.Price && pageParams.sortType !== SortType.Rating) ||
     (pageParams.order !== SortOrder.Ascending && pageParams.order !== SortOrder.Descending)) {
     return <Navigate to={AppRoute.Unknown()} />;
   }
 
-  const { page, type, order } = pageParams;
+  const { page, sortType, order } = pageParams;
 
-  const sortedCameras = sortCameras(cameras.slice(), type, order);
+  const sortedCameras = sortCameras(cameras.slice(), sortType, order);
 
   const totalPageAmount = Math.ceil(cameras.length / CARDSONPAGE);
 
-  const handleSortTypeButtonClick = (evt: React.MouseEvent) => {
-    const sortType = evt.currentTarget.id;
-    navigate(AppRoute.Catalog(page, sortType, order));
+  const handleSortTypeButtonClick = (evt: React.ChangeEvent) => {
+    const newSortType = evt.currentTarget.id;
+    navigate(AppRoute.Catalog({ ...pageParams, sortType: newSortType }));
   };
 
-  const handleSortOrderButtonClick = (evt: React.MouseEvent) => {
-    const sortOrderType = evt.currentTarget.id;
-    navigate(AppRoute.Catalog(page, type, sortOrderType));
+  const handleSortOrderButtonClick = (evt: React.ChangeEvent) => {
+    const newSortOrderType = evt.currentTarget.id;
+    navigate(AppRoute.Catalog({ ...pageParams, order: newSortOrderType }));
   };
 
   if (page) {
-    const camerasToRender = sortedCameras.slice((page - 1) * CARDSONPAGE, page * CARDSONPAGE);
+    const camerasToRender = sortedCameras.slice((+page - 1) * CARDSONPAGE, +page * CARDSONPAGE);
     if (camerasToRender.length === 0 && cameras.length !== 0) {
       navigate(AppRoute.Unknown());
     }
@@ -64,7 +65,7 @@ function Catalog(): JSX.Element {
             <div className="container">
               <ul className="breadcrumbs__list">
                 <li className="breadcrumbs__item">
-                  <Link className="breadcrumbs__link" to={AppRoute.Catalog(INITIAL_PAGE, SortType.Price, SortOrder.Ascending)}>Главная
+                  <Link className="breadcrumbs__link" to={AppRoute.Catalog(INITIAL_CATALOG_PAGE_URL_PARAMS)}>Главная
                     <svg width="5" height="8" aria-hidden="true">
                       <use xlinkHref="#icon-arrow-mini"></use>
                     </svg>
@@ -80,11 +81,11 @@ function Catalog(): JSX.Element {
             <div className="container">
               <h1 className="title title--h2">Каталог фото- и видеотехники</h1>
               <div className="page-content__columns">
-                <CatalogFilter />
+                <CatalogFilter params={pageParams} />
                 <div className="catalog__content">
-                  <CatalogSort handleSortTypeButtonClick={handleSortTypeButtonClick} handleSortOrderButtonClick={handleSortOrderButtonClick} type={type} order={order} />
+                  <CatalogSort handleSortTypeButtonClick={handleSortTypeButtonClick} handleSortOrderButtonClick={handleSortOrderButtonClick} params={pageParams} />
                   <CatalogGallery cameras={camerasToRender} />
-                  <CatalogPagination page={page} type={type} order={order} totalPageAmount={totalPageAmount} />
+                  <CatalogPagination params={pageParams} totalPageAmount={totalPageAmount} />
                 </div>
               </div>
             </div>

@@ -6,7 +6,7 @@ import { configureMockStore } from '@jedmao/redux-mock-store';
 import { render, screen } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { Provider } from 'react-redux';
-import { AppRoute, INITIAL_PAGE, SortOrder, SortType, TabType } from '../../const';
+import { AppRoute, INITIAL_CATALOG_PAGE_URL_PARAMS, TabType } from '../../const';
 import { makeFakeCamera, makeFakePromo, makeFakeReview } from '../../mocks/mocks';
 import HistoryRouter from '../history-router/history-router';
 import '@testing-library/jest-dom';
@@ -48,11 +48,11 @@ const fakeApp = (
 
 describe('Testing App component', () => {
   it('should render Catalog when user navigate to "/catalog/1&price&asc"', () => {
-    history.push(AppRoute.Catalog(INITIAL_PAGE, SortType.Price, SortOrder.Ascending));
+    history.push(AppRoute.Catalog(INITIAL_CATALOG_PAGE_URL_PARAMS));
 
     render(fakeApp);
 
-    expect(history.location.pathname).toBe(AppRoute.Catalog(INITIAL_PAGE, SortType.Price, SortOrder.Ascending));
+    expect(history.location.pathname).toBe(AppRoute.Catalog(INITIAL_CATALOG_PAGE_URL_PARAMS));
 
     expect(screen.getByTestId('catalog-page')).toBeInTheDocument();
   });

@@ -6,7 +6,7 @@ import Header from '../../components/header/header';
 import ProductCard from '../../components/product/product-card/product-card';
 import ProductReviews from '../../components/product/product-reviews/product-reviews';
 import SimilarProducts from '../../components/product/similar-products/similar-products';
-import { AppRoute, INITIAL_PAGE, SortOrder, SortType, TabType } from '../../const';
+import { AppRoute, INITIAL_CATALOG_PAGE_URL_PARAMS, TabType } from '../../const';
 import PageNotFound from '../page-not-found/page-not-found';
 import ReviewModal from '../../components/product/review-modal/review-modal';
 import { useAppDispatch, useAppSelector } from '../../hooks';
@@ -51,14 +51,14 @@ function Product(): JSX.Element {
             <div className="container">
               <ul className="breadcrumbs__list">
                 <li className="breadcrumbs__item">
-                  <Link className="breadcrumbs__link" to={AppRoute.Catalog(INITIAL_PAGE, SortType.Price, SortOrder.Ascending)}>Главная
+                  <Link className="breadcrumbs__link" to={AppRoute.Catalog(INITIAL_CATALOG_PAGE_URL_PARAMS)}>Главная
                     <svg width="5" height="8" aria-hidden="true">
                       <use xlinkHref="#icon-arrow-mini"></use>
                     </svg>
                   </Link>
                 </li>
                 <li className="breadcrumbs__item">
-                  <Link className="breadcrumbs__link" to={AppRoute.Catalog(INITIAL_PAGE, SortType.Price, SortOrder.Ascending)}>Каталог
+                  <Link className="breadcrumbs__link" to={AppRoute.Catalog(INITIAL_CATALOG_PAGE_URL_PARAMS)}>Каталог
                     <svg width="5" height="8" aria-hidden="true">
                       <use xlinkHref="#icon-arrow-mini"></use>
                     </svg>

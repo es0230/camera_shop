@@ -6,16 +6,15 @@ import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
 import CatalogPagination from './catalog-pagination';
 import { BrowserRouter } from 'react-router-dom';
-import { SortOrder, SortType } from '../../../../const';
+import { INITIAL_CATALOG_PAGE_URL_PARAMS } from '../../../../const';
 describe('Testing catalogPagination component', () => {
   describe('should render correctly', () => {
     it('on first page', () => {
-      const mockPageNumber = 1;
       const mockPageAmount = 3;
 
       render(
         <BrowserRouter>
-          <CatalogPagination page={mockPageNumber} type={SortType.Price} order={SortOrder.Ascending} totalPageAmount={mockPageAmount} />
+          <CatalogPagination params={INITIAL_CATALOG_PAGE_URL_PARAMS} totalPageAmount={mockPageAmount} />
         </BrowserRouter>
       );
 
@@ -28,11 +27,11 @@ describe('Testing catalogPagination component', () => {
 
     it('on last page', () => {
       const mockPageAmount = 3;
-      const mockPageNumber = 3;
+      const mockPageNumber = '3';
 
       render(
         <BrowserRouter>
-          <CatalogPagination page={mockPageNumber} type={SortType.Price} order={SortOrder.Ascending} totalPageAmount={mockPageAmount} />
+          <CatalogPagination params={{ ...INITIAL_CATALOG_PAGE_URL_PARAMS, page: mockPageNumber }} totalPageAmount={mockPageAmount} />
         </BrowserRouter>
       );
 
@@ -45,11 +44,11 @@ describe('Testing catalogPagination component', () => {
 
     it('on any page but first or last', () => {
       const mockPageAmount = 3;
-      const mockPageNumber = 2;
+      const mockPageNumber = '2';
 
       render(
         <BrowserRouter>
-          <CatalogPagination page={mockPageNumber} type={SortType.Price} order={SortOrder.Ascending} totalPageAmount={mockPageAmount} />
+          <CatalogPagination params={{ ...INITIAL_CATALOG_PAGE_URL_PARAMS, page: mockPageNumber }} totalPageAmount={mockPageAmount} />
         </BrowserRouter>
       );
 

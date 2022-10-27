@@ -1,4 +1,18 @@
-function CatalogFilter(): JSX.Element {
+import { useNavigate } from 'react-router-dom';
+import { AppRoute } from '../../../const';
+import { URLParams } from '../../../types/url-params';
+
+type CatalogFilterProps = {
+  params: URLParams
+}
+
+function CatalogFilter({ params }: CatalogFilterProps): JSX.Element {
+  const navigate = useNavigate();
+
+  const handleClearFiltersButtonClick = () => {
+    navigate(AppRoute.Catalog(params));
+  };
+
   return (
     <div data-testid="catalog-filter-component" className="catalog__aside">
       <div className="catalog-filter">
@@ -23,7 +37,7 @@ function CatalogFilter(): JSX.Element {
             <legend className="title title--h5">Категория</legend>
             <div className="custom-checkbox catalog-filter__item">
               <label>
-                <input type="checkbox" name="photocamera" checked />
+                <input type="checkbox" name="photocamera" />
                 <span className="custom-checkbox__icon" />
                 <span className="custom-checkbox__label">Фотокамера</span>
               </label>
@@ -40,14 +54,14 @@ function CatalogFilter(): JSX.Element {
             <legend className="title title--h5">Тип камеры</legend>
             <div className="custom-checkbox catalog-filter__item">
               <label>
-                <input type="checkbox" name="digital" checked />
+                <input type="checkbox" name="digital" />
                 <span className="custom-checkbox__icon" />
                 <span className="custom-checkbox__label">Цифровая</span>
               </label>
             </div>
             <div className="custom-checkbox catalog-filter__item">
               <label>
-                <input type="checkbox" name="film" disabled />
+                <input type="checkbox" name="film" />
                 <span className="custom-checkbox__icon" />
                 <span className="custom-checkbox__label">Плёночная</span>
               </label>
@@ -61,7 +75,7 @@ function CatalogFilter(): JSX.Element {
             </div>
             <div className="custom-checkbox catalog-filter__item">
               <label>
-                <input type="checkbox" name="collection" checked disabled />
+                <input type="checkbox" name="collection" />
                 <span className="custom-checkbox__icon" />
                 <span className="custom-checkbox__label">Коллекционная</span>
               </label>
@@ -71,7 +85,7 @@ function CatalogFilter(): JSX.Element {
             <legend className="title title--h5">Уровень</legend>
             <div className="custom-checkbox catalog-filter__item">
               <label>
-                <input type="checkbox" name="zero" checked />
+                <input type="checkbox" name="zero" />
                 <span className="custom-checkbox__icon" />
                 <span className="custom-checkbox__label">Нулевой</span>
               </label>
@@ -91,7 +105,7 @@ function CatalogFilter(): JSX.Element {
               </label>
             </div>
           </fieldset>
-          <button className="btn catalog-filter__reset-btn" type="reset">Сбросить фильтры</button>
+          <button className="btn catalog-filter__reset-btn" type="reset" onClick={handleClearFiltersButtonClick}>Сбросить фильтры</button>
         </form>
       </div>
     </div>
