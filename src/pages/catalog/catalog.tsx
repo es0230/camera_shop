@@ -5,8 +5,6 @@ import CatalogGallery from '../../components/catalog/catalog-content/catalog-gal
 import CatalogPagination from '../../components/catalog/catalog-content/catalog-pagination/catalog-pagination';
 import CatalogSort from '../../components/catalog/catalog-content/catalog-sort/catalog-sort';
 import CatalogFilter from '../../components/catalog/catalog-filter/catalog-filter';
-import Footer from '../../components/footer/footer';
-import Header from '../../components/header/header';
 import { AppRoute, INITIAL_CATALOG_PAGE_URL_PARAMS, SortOrder, SortType } from '../../const';
 import { useAppSelector } from '../../hooks';
 import { usePageParams } from '../../hooks/use-page-params';
@@ -58,7 +56,6 @@ function Catalog(): JSX.Element {
 
     return (
       <>
-        <Header />
         <Ad ad={ad} />
         <div data-testid="catalog-page" className="page-content">
           <div data-testid="breadcrumbs" className="breadcrumbs">
@@ -91,7 +88,6 @@ function Catalog(): JSX.Element {
             </div>
           </section>
         </div>
-        <Footer />
       </>
     );
   }

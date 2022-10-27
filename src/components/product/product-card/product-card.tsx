@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from 'react-router-dom';
+import { NavLink, useParams } from 'react-router-dom';
 import { AppRoute, MAX_RATING, TabType } from '../../../const';
 import { Camera } from '../../../types/camera';
 
@@ -9,11 +9,8 @@ type ProductCardProps = {
 function ProductCard({ currentProduct }: ProductCardProps): JSX.Element {
   const { name, previewImg, previewImg2x, previewImgWebp, previewImgWebp2x, rating, price, vendorCode, type, category, description, level, reviewCount, id } = currentProduct;
   const { tabType } = useParams();
-  const navigate = useNavigate();
 
-  const handlePerksButtonClick = () => navigate(AppRoute.Product(id, TabType.Perks));
-
-  const handleDescriptionButtonClick = () => navigate(AppRoute.Product(id, TabType.Description));
+  const setButtonActive = ({ isActive }: { isActive: boolean }) => isActive ? 'tabs__control is-active' : 'tabs__control';
 
   return (
     <section data-testid="product-card-component" className="product">
@@ -52,8 +49,8 @@ function ProductCard({ currentProduct }: ProductCardProps): JSX.Element {
           </button>
           <div className="tabs product__tabs">
             <div className="tabs__controls product__tabs-controls">
-              <button className={`tabs__control ${tabType === TabType.Perks ? 'is-active' : ''}`} type="button" onClick={handlePerksButtonClick}>Характеристики</button>
-              <button className={`tabs__control ${tabType === TabType.Description ? 'is-active' : ''}`} type="button" onClick={handleDescriptionButtonClick}>Описание</button>
+              <NavLink className={setButtonActive} to={AppRoute.Product(id, TabType.Perks)}>Характеристики</NavLink>
+              <NavLink className={setButtonActive} to={AppRoute.Product(id, TabType.Description)}>Описание</NavLink>
             </div>
             <div className="tabs__content">
               <div data-testid="perks-tab" className={`tabs__element ${tabType === TabType.Perks ? 'is-active' : ''}`}>

@@ -1,8 +1,7 @@
+/* eslint-disable no-console */
 import { useEffect, useState } from 'react';
 import { Link as ScrollLink } from 'react-scroll';
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import Footer from '../../components/footer/footer';
-import Header from '../../components/header/header';
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import ProductCard from '../../components/product/product-card/product-card';
 import ProductReviews from '../../components/product/product-reviews/product-reviews';
 import SimilarProducts from '../../components/product/similar-products/similar-products';
@@ -15,24 +14,27 @@ import { selectCurrentProduct, selectCurrentReviews, selectCurrentSimilarProduct
 
 function Product(): JSX.Element {
   const { id, tabType } = useParams();
+  const [searchParams] = useSearchParams();
+  console.log(searchParams.get('tabType'));
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const [modalOpened, setModalOpened] = useState(false);
-  const [isNeededUpdate, setIsNeededUpdate] = useState(true);
-
-  useEffect(() => {
-    if (tabType !== TabType.Description && tabType !== TabType.Perks) {
-      navigate(AppRoute.Unknown());
-    }
-  }, [navigate, tabType]);
+  const [isNeededUpdate, setIsNeededUpdate] = useState(false);
 
   useEffect(() => {
     dispatch(fetchCameraAction(id));
-    dispatch(fetchReviewsAction(id));
     dispatch(fetchSimilarProductsAction(id));
+  }, [dispatch, id]);
+
+  useEffect(() => {
+    dispatch(fetchReviewsAction(id));
     setIsNeededUpdate(false);
   }, [dispatch, id, isNeededUpdate]);
+
+  if (tabType !== TabType.Description && tabType !== TabType.Perks) {
+    navigate(AppRoute.Unknown());
+  }
 
   const currentProduct = useAppSelector(selectCurrentProduct);
   const currentReviews = useAppSelector(selectCurrentReviews);
@@ -44,7 +46,6 @@ function Product(): JSX.Element {
 
   return (
     <div data-testid="product-page" className="wrapper" id="top">
-      <Header />
       <main>
         <div className="page-content">
           <div data-testid="breadcrumbs" className="breadcrumbs">
@@ -93,7 +94,6 @@ function Product(): JSX.Element {
           <use xlinkHref="#icon-arrow2" />
         </svg>
       </ScrollLink>
-      <Footer />
     </div>
   );
 }
