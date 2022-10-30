@@ -1,11 +1,11 @@
 import { URLParams } from './types/url-params';
 
-const DEFAULT_CATALOG_PARAMS: URLParams = { page: ':page', sortType: ':sortType', order: ':order' };
+const DEFAULT_CATALOG_PARAMS: URLParams = { page: ':page', sortType: ':sortType', order: ':order', category: ':category', producttype: ':producttype' };
 
 const AppRoute = {
   Catalog: (params: URLParams = DEFAULT_CATALOG_PARAMS) => {
-    const { page, sortType, order } = params;
-    return `/catalog/${page}/${sortType}&${order}`; // /${createFilterURL(lowerPrice, higherPrice, category, level, productType)}
+    const { page, sortType, order, category, producttype } = params;
+    return `/catalog/${page}/${sortType}&${order}&category=${category}&productType=${producttype}`; // /${createFilterURL(lowerPrice, higherPrice, category, level, productType)}
   },
   Product: (productId: string | number = ':id', tabType = ':tabType') => `/product/${productId}/${tabType}`,
   Unknown: () => '/*',
@@ -41,9 +41,23 @@ enum SortOrder {
   Descending = 'desc',
 }
 
+enum FilterCategories {
+  Any = 'anycategory',
+  Photo = 'photocamera',
+  Video = 'videocamera'
+}
+
+enum FilterTypes {
+  Any = 'anytype',
+  Digital = 'digital',
+  Film = 'film',
+  Snapshot = 'snapshot',
+  Collection = 'collection',
+}
+
 const MAX_RATING = 5;
 const INITIAL_REVIEWS = 3;
 
-const INITIAL_CATALOG_PAGE_URL_PARAMS: URLParams = { page: '1', sortType: SortType.Price, order: SortOrder.Ascending };
+const INITIAL_CATALOG_PAGE_URL_PARAMS: URLParams = { page: '1', sortType: SortType.Price, order: SortOrder.Ascending, category: 'anycategory', producttype: 'anyproducttype' };
 
-export { AppRoute, APIRoute, NameSpace, TabType, SortType, SortOrder, INITIAL_REVIEWS, MAX_RATING, INITIAL_CATALOG_PAGE_URL_PARAMS };
+export { AppRoute, APIRoute, NameSpace, TabType, SortType, SortOrder, FilterCategories, FilterTypes, INITIAL_REVIEWS, MAX_RATING, INITIAL_CATALOG_PAGE_URL_PARAMS };

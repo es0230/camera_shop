@@ -5,14 +5,47 @@ import CatalogGallery from '../../components/catalog/catalog-content/catalog-gal
 import CatalogPagination from '../../components/catalog/catalog-content/catalog-pagination/catalog-pagination';
 import CatalogSort from '../../components/catalog/catalog-content/catalog-sort/catalog-sort';
 import CatalogFilter from '../../components/catalog/catalog-filter/catalog-filter';
-import { AppRoute, INITIAL_CATALOG_PAGE_URL_PARAMS, SortOrder, SortType } from '../../const';
+import { AppRoute, FilterCategories, FilterTypes, INITIAL_CATALOG_PAGE_URL_PARAMS, SortOrder, SortType } from '../../const';
 import { useAppSelector } from '../../hooks';
 import { usePageParams } from '../../hooks/use-page-params';
 import { selectCameras, selectPromo } from '../../store/app-data/selectors';
 import { Camera } from '../../types/camera';
-//import { URLParams } from '../../types/url-params';
+import { URLParams } from '../../types/url-params';
 
 const CARDSONPAGE = 9;
+
+const filterCameras = (cameras: Camera[], params: URLParams) => {
+  const { category, producttype } = params;
+  const filteredByCategory = filterByCategory(cameras, category);
+  const filteredByProductType = filterByProductType(filteredByCategory, producttype);
+
+  return filteredByProductType;
+};
+
+const filterByCategory = (cameras: Camera[], category: string) => {
+  if (category === FilterCategories.Any) {
+    return cameras;
+  }
+  const filteredCameras = [
+    ...(category.includes(FilterCategories.Photo) ? cameras.filter((el) => el.category === 'Фотоаппарат') : []),
+    ...(category.includes(FilterCategories.Video) ? cameras.filter((el) => el.category === 'Видеокамера') : [])
+  ];
+  return filteredCameras;
+};
+
+const filterByProductType = (cameras: Camera[], productType: string) => {
+  if (productType === FilterTypes.Any) {
+    return cameras;
+  }
+  const filteredCameras = [
+    ...(productType.includes(FilterTypes.Collection) ? cameras.filter((el) => el.type === 'Коллекционная') : []),
+    ...(productType.includes(FilterTypes.Digital) ? cameras.filter((el) => el.type === 'Цифровая') : []),
+    ...(productType.includes(FilterTypes.Film) ? cameras.filter((el) => el.type === 'Плёночная') : []),
+    ...(productType.includes(FilterTypes.Snapshot) ? cameras.filter((el) => el.type === 'Моментальная') : []),
+  ];
+  return filteredCameras;
+};
+
 const sortCameras = (cameras: Camera[], type: SortType.Price | SortType.Rating, order: SortOrder.Ascending | SortOrder.Descending) => {
   if (order === SortOrder.Ascending) {
     return cameras.sort((a, b) => a[type] - b[type]);
@@ -34,9 +67,11 @@ function Catalog(): JSX.Element {
 
   const { page, sortType, order } = pageParams;
 
-  const sortedCameras = sortCameras(cameras.slice(), sortType, order);
+  const filteredCameras = filterCameras(cameras.slice(), pageParams);
 
-  const totalPageAmount = Math.ceil(cameras.length / CARDSONPAGE);
+  const sortedCameras = sortCameras(filteredCameras.slice(), sortType, order);
+
+  const totalPageAmount = Math.ceil(filteredCameras.length / CARDSONPAGE);
 
   const handleSortTypeButtonClick = (evt: React.ChangeEvent) => {
     const newSortType = evt.currentTarget.id;

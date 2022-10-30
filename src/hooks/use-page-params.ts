@@ -7,7 +7,8 @@ export const usePageParams = () => {
   if (
     params.page !== undefined &&
     params.sortType !== undefined &&
-    params.order !== undefined
+    params.order !== undefined &&
+    params.category !== undefined
   ) {
     return params as URLParams;
   }
