@@ -97,7 +97,7 @@ function Catalog(): JSX.Element {
 
   if (page) {
     const camerasToRender = sortedCameras.slice((+page - 1) * CARDSONPAGE, +page * CARDSONPAGE);
-    if (camerasToRender.length === 0 && cameras.length !== 0) {
+    if (+page > totalPageAmount && page !== '1') {
       navigate(AppRoute.Unknown());
     }
 
@@ -128,8 +128,14 @@ function Catalog(): JSX.Element {
                 <CatalogFilter params={pageParams} />
                 <div className="catalog__content">
                   <CatalogSort handleSortTypeButtonClick={handleSortTypeButtonClick} handleSortOrderButtonClick={handleSortOrderButtonClick} params={pageParams} />
-                  <CatalogGallery cameras={camerasToRender} />
-                  <CatalogPagination params={pageParams} totalPageAmount={totalPageAmount} />
+                  {camerasToRender.length === 0 ?
+                    (<p style={{ fontSize: '32px', textAlign: 'center', marginTop: '100px' }}>По вашему запросу ничего не найдено ;(</p>) :
+                    (
+                      <>
+                        <CatalogGallery cameras={camerasToRender} />
+                        <CatalogPagination params={pageParams} totalPageAmount={totalPageAmount} />
+                      </>
+                    )}
                 </div>
               </div>
             </div>
