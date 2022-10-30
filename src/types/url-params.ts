@@ -6,6 +6,6 @@ export type URLParams = {
   //lowerPrice: string,
   //higherPrice: string,
   //category: string,
-  //level: string,
-  producttype: string,
+  level: string,
+  productType: string,
 };

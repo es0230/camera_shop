@@ -8,5 +8,10 @@ export type Filter = {
     film: boolean,
     snapshot: boolean,
     collection: boolean,
+  },
+  level: {
+    zero: boolean,
+    amateur: boolean,
+    professional: boolean,
   }
 };

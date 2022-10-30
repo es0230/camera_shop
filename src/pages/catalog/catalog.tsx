@@ -5,7 +5,7 @@ import CatalogGallery from '../../components/catalog/catalog-content/catalog-gal
 import CatalogPagination from '../../components/catalog/catalog-content/catalog-pagination/catalog-pagination';
 import CatalogSort from '../../components/catalog/catalog-content/catalog-sort/catalog-sort';
 import CatalogFilter from '../../components/catalog/catalog-filter/catalog-filter';
-import { AppRoute, FilterCategories, FilterTypes, INITIAL_CATALOG_PAGE_URL_PARAMS, SortOrder, SortType } from '../../const';
+import { AppRoute, FilterCategories, FilterLevels, FilterTypes, INITIAL_CATALOG_PAGE_URL_PARAMS, SortOrder, SortType } from '../../const';
 import { useAppSelector } from '../../hooks';
 import { usePageParams } from '../../hooks/use-page-params';
 import { selectCameras, selectPromo } from '../../store/app-data/selectors';
@@ -15,11 +15,11 @@ import { URLParams } from '../../types/url-params';
 const CARDSONPAGE = 9;
 
 const filterCameras = (cameras: Camera[], params: URLParams) => {
-  const { category, producttype } = params;
+  const { category, productType, level } = params;
   const filteredByCategory = filterByCategory(cameras, category);
-  const filteredByProductType = filterByProductType(filteredByCategory, producttype);
-
-  return filteredByProductType;
+  const filteredByProductType = filterByProductType(filteredByCategory, productType);
+  const filteredByLevel = filterByLevel(filteredByProductType, level);
+  return filteredByLevel;
 };
 
 const filterByCategory = (cameras: Camera[], category: string) => {
@@ -42,6 +42,18 @@ const filterByProductType = (cameras: Camera[], productType: string) => {
     ...(productType.includes(FilterTypes.Digital) ? cameras.filter((el) => el.type === 'Цифровая') : []),
     ...(productType.includes(FilterTypes.Film) ? cameras.filter((el) => el.type === 'Плёночная') : []),
     ...(productType.includes(FilterTypes.Snapshot) ? cameras.filter((el) => el.type === 'Моментальная') : []),
+  ];
+  return filteredCameras;
+};
+
+const filterByLevel = (cameras: Camera[], productLevel: string) => {
+  if (productLevel === FilterLevels.Any) {
+    return cameras;
+  }
+  const filteredCameras = [
+    ...(productLevel.includes(FilterLevels.Zero) ? cameras.filter((el) => el.level === 'Нулевой') : []),
+    ...(productLevel.includes(FilterLevels.Amateur) ? cameras.filter((el) => el.level === 'Любительский') : []),
+    ...(productLevel.includes(FilterLevels.Professional) ? cameras.filter((el) => el.level === 'Профессиональный') : []),
   ];
   return filteredCameras;
 };
