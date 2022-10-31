@@ -1,4 +1,8 @@
 export type Filter = {
+  price: {
+    minPrice: string,
+    maxPrice: string,
+  }
   category: {
     photocamera: boolean,
     videocamera: boolean,

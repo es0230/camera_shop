@@ -1,15 +1,21 @@
 /* eslint-disable no-console */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AppRoute, FilterCategories, FilterTypes, FilterLevels } from '../../../const';
+import { AppRoute, FilterCategories, FilterTypes, FilterLevels, DEFAULT_FILTER_VALUE } from '../../../const';
+import { Camera } from '../../../types/camera';
 import { Filter } from '../../../types/filter';
 import { URLParams } from '../../../types/url-params';
 
 type CatalogFilterProps = {
   params: URLParams,
+  cameras: Camera[],
 }
 
 const initialFilterState: Filter = {
+  price: {
+    minPrice: DEFAULT_FILTER_VALUE,
+    maxPrice: DEFAULT_FILTER_VALUE,
+  },
   category: {
     photocamera: false,
     videocamera: false,
@@ -27,20 +33,63 @@ const initialFilterState: Filter = {
   }
 };
 
-function CatalogFilter({ params }: CatalogFilterProps): JSX.Element {
+function CatalogFilter({ params, cameras }: CatalogFilterProps): JSX.Element {
   const navigate = useNavigate();
   const [filterState, setFilterState] = useState(initialFilterState);
   const [filtersUpdated, setFiltersUpdated] = useState(false);
 
+  const productPrices = useMemo(() => {
+    if (cameras.length !== 0) {
+      const sortedCameraPrices = cameras.slice().sort((a, b) => a.price - b.price).map((el) => el.price);
+      return sortedCameraPrices;
+    }
+    return [0];
+  }, [cameras]);
+
+  const currentMinPrice = String(Math.min(...productPrices));
+  const currentMaxPrice = String(Math.max(...productPrices));
+
   useEffect(() => {
+    if (cameras.length !== 0 && (filterState.price.minPrice === DEFAULT_FILTER_VALUE || filterState.price.maxPrice === DEFAULT_FILTER_VALUE)) {
+      setFilterState({ ...filterState, price: { minPrice: currentMinPrice, maxPrice: currentMaxPrice } });
+      setFiltersUpdated(true);
+    }
     if (filtersUpdated) {
+      const newFilterMinPrice = filterState.price.minPrice;
+      const newFilterMaxPrice = filterState.price.maxPrice;
       const newFilterCategory = Object.entries(filterState.category).filter(([, toggled]) => toggled).map((el) => el[0]).join(',') || FilterCategories.Any;
       const newFilterType = Object.entries(filterState.type).filter(([, toggled]) => toggled).map((el) => el[0]).join(',') || FilterTypes.Any;
       const newFilterLevel = Object.entries(filterState.level).filter(([, toggled]) => toggled).map((el) => el[0]).join(',') || FilterLevels.Any;
-      navigate(AppRoute.Catalog({ ...params, category: newFilterCategory, productType: newFilterType, level: newFilterLevel }));
+      navigate(AppRoute.Catalog({ ...params, minPrice: newFilterMinPrice, maxPrice: newFilterMaxPrice, category: newFilterCategory, productType: newFilterType, level: newFilterLevel }));
       setFiltersUpdated(false);
     }
-  }, [filterState.category, filterState.level, filterState.type, filtersUpdated, navigate, params]);
+  }, [cameras.length, currentMaxPrice, currentMinPrice, filterState, filtersUpdated, navigate, params]);
+
+  const handleFilterPriceChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
+    //8
+    const target = evt.currentTarget;
+    if (
+      target.value === '' ||
+      +target.value < 0 ||
+      (target.name === 'minPrice' && +target.value < +currentMinPrice) ||
+      (target.name === 'maxPrice' && +target.value > +currentMaxPrice)
+    ) {
+      target.value = target.name === 'minPrice' ? currentMinPrice : currentMaxPrice;
+      setFilterState({ ...filterState, price: { ...filterState.price, [target.name]: target.name === 'minPrice' ? currentMinPrice : currentMaxPrice } });
+    } else {
+      if (target.name === 'maxPrice' && +target.value < +filterState.price.minPrice) {
+        target.value = filterState.price.minPrice;
+      }
+      if (!productPrices.includes(+target.value)) {
+        const priceDifferences = productPrices.slice().map((el) => Math.abs(el - +target.value));
+        const indexOfMinimalDifference = priceDifferences.indexOf(Math.min(...priceDifferences));
+        const closestPrice = String(productPrices[indexOfMinimalDifference]);
+        target.value = closestPrice;
+      }
+      setFilterState({ ...filterState, price: { ...filterState.price, [target.name]: target.value } });
+    }
+    setFiltersUpdated(true);
+  };
 
   const handleFilterCategoryClick = (evt: React.ChangeEvent<HTMLInputElement>) => {
     const target = evt.currentTarget;
@@ -61,7 +110,7 @@ function CatalogFilter({ params }: CatalogFilterProps): JSX.Element {
   };
 
   const handleClearFiltersButtonClick = () => {
-    setFilterState(initialFilterState);
+    setFilterState({ ...initialFilterState, price: { minPrice: currentMinPrice, maxPrice: currentMaxPrice } });
     setFiltersUpdated(true);
   };
 
@@ -75,12 +124,12 @@ function CatalogFilter({ params }: CatalogFilterProps): JSX.Element {
             <div className="catalog-filter__price-range">
               <div className="custom-input">
                 <label>
-                  <input type="number" name="price" placeholder="от" />
+                  <input type="number" name="minPrice" min={0} placeholder={filterState.price.minPrice} onBlur={handleFilterPriceChange} />
                 </label>
               </div>
               <div className="custom-input">
                 <label>
-                  <input type="number" name="priceUp" placeholder="до" />
+                  <input type="number" name="maxPrice" min={0} placeholder={filterState.price.maxPrice} onBlur={handleFilterPriceChange} />
                 </label>
               </div>
             </div>

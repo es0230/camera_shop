@@ -5,10 +5,7 @@ export const usePageParams = () => {
   const params = useParams<URLParams>();
 
   if (
-    params.page !== undefined &&
-    params.sortType !== undefined &&
-    params.order !== undefined &&
-    params.category !== undefined
+    Object.entries(params).every(([, v]) => v !== undefined)
   ) {
     return params as URLParams;
   }

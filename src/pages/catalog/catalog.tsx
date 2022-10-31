@@ -15,11 +15,17 @@ import { URLParams } from '../../types/url-params';
 const CARDSONPAGE = 9;
 
 const filterCameras = (cameras: Camera[], params: URLParams) => {
-  const { category, productType, level } = params;
-  const filteredByCategory = filterByCategory(cameras, category);
+  const { category, productType, level, minPrice, maxPrice } = params;
+  const filteredByPrice = filterByPrice(cameras, minPrice, maxPrice);
+  const filteredByCategory = filterByCategory(filteredByPrice, category);
   const filteredByProductType = filterByProductType(filteredByCategory, productType);
   const filteredByLevel = filterByLevel(filteredByProductType, level);
   return filteredByLevel;
+};
+
+const filterByPrice = (cameras: Camera[], minPrice: string, maxPrice: string) => {
+  const filteredCameras = cameras.filter((el) => el.price >= +minPrice && el.price <= +maxPrice);
+  return filteredCameras;
 };
 
 const filterByCategory = (cameras: Camera[], category: string) => {
@@ -125,7 +131,7 @@ function Catalog(): JSX.Element {
             <div className="container">
               <h1 className="title title--h2">Каталог фото- и видеотехники</h1>
               <div className="page-content__columns">
-                <CatalogFilter params={pageParams} />
+                <CatalogFilter params={pageParams} cameras={cameras} />
                 <div className="catalog__content">
                   <CatalogSort handleSortTypeButtonClick={handleSortTypeButtonClick} handleSortOrderButtonClick={handleSortOrderButtonClick} params={pageParams} />
                   {camerasToRender.length === 0 ?

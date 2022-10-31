@@ -3,9 +3,8 @@ export type URLParams = {
   sortType: string,
   order: string,
   category: string,
-  //lowerPrice: string,
-  //higherPrice: string,
-  //category: string,
+  minPrice: string,
+  maxPrice: string,
   level: string,
   productType: string,
 };

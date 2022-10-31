@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import { useEffect, useState } from 'react';
 import { Link as ScrollLink } from 'react-scroll';
-import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import ProductCard from '../../components/product/product-card/product-card';
 import ProductReviews from '../../components/product/product-reviews/product-reviews';
 import SimilarProducts from '../../components/product/similar-products/similar-products';
@@ -14,8 +14,6 @@ import { selectCurrentProduct, selectCurrentReviews, selectCurrentSimilarProduct
 
 function Product(): JSX.Element {
   const { id, tabType } = useParams();
-  const [searchParams] = useSearchParams();
-  console.log(searchParams.get('tabType'));
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
