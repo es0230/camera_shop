@@ -33,6 +33,11 @@ const initialFilterState: Filter = {
   }
 };
 
+enum PriceFilterNames {
+  MinPrice = 'minPrice',
+  MaxPrice = 'maxPrice'
+}
+
 function CatalogFilter({ params, cameras }: CatalogFilterProps): JSX.Element {
   const navigate = useNavigate();
   const [filterState, setFilterState] = useState(initialFilterState);
@@ -66,18 +71,17 @@ function CatalogFilter({ params, cameras }: CatalogFilterProps): JSX.Element {
   }, [cameras.length, currentMaxPrice, currentMinPrice, filterState, filtersUpdated, navigate, params]);
 
   const handleFilterPriceChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    //8
     const target = evt.currentTarget;
     if (
       target.value === '' ||
       +target.value < 0 ||
-      (target.name === 'minPrice' && +target.value < +currentMinPrice) ||
-      (target.name === 'maxPrice' && +target.value > +currentMaxPrice)
+      (target.name === PriceFilterNames.MinPrice && +target.value < +currentMinPrice) ||
+      (target.name === PriceFilterNames.MaxPrice && +target.value > +currentMaxPrice)
     ) {
-      target.value = target.name === 'minPrice' ? currentMinPrice : currentMaxPrice;
-      setFilterState({ ...filterState, price: { ...filterState.price, [target.name]: target.name === 'minPrice' ? currentMinPrice : currentMaxPrice } });
+      target.value = target.name === PriceFilterNames.MinPrice ? currentMinPrice : currentMaxPrice;
+      setFilterState({ ...filterState, price: { ...filterState.price, [target.name]: target.name === PriceFilterNames.MinPrice ? currentMinPrice : currentMaxPrice } });
     } else {
-      if (target.name === 'maxPrice' && +target.value < +filterState.price.minPrice) {
+      if (target.name === PriceFilterNames.MaxPrice && +target.value < +filterState.price.minPrice) {
         target.value = filterState.price.minPrice;
       }
       if (!productPrices.includes(+target.value)) {
