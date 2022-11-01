@@ -1,14 +1,15 @@
 import React from 'react';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Ad from '../../components/ad/ad';
 import CatalogGallery from '../../components/catalog/catalog-content/catalog-gallery/catalog-gallery';
 import CatalogPagination from '../../components/catalog/catalog-content/catalog-pagination/catalog-pagination';
 import CatalogSort from '../../components/catalog/catalog-content/catalog-sort/catalog-sort';
 import CatalogFilter from '../../components/catalog/catalog-filter/catalog-filter';
+import ServerError from '../../components/server-error/server-error';
 import { AppRoute, FilterCategories, FilterLevels, FilterTypes, INITIAL_CATALOG_PAGE_URL_PARAMS, SortOrder, SortType } from '../../const';
 import { useAppSelector } from '../../hooks';
 import { usePageParams } from '../../hooks/use-page-params';
-import { selectCameras, selectIsDataLoaded, selectPromo } from '../../store/app-data/selectors';
+import { selectCameras, selectIsDataLoaded, selectIsLoadingFailed, selectPromo } from '../../store/app-data/selectors';
 import { Camera } from '../../types/camera';
 import { URLParams } from '../../types/url-params';
 
@@ -77,11 +78,13 @@ function Catalog(): JSX.Element {
   const pageParams = usePageParams();
   const cameras = useAppSelector(selectCameras);
   const isDataLoaded = useAppSelector(selectIsDataLoaded);
+  const isLoadingFailed = useAppSelector(selectIsLoadingFailed);
 
-  if (pageParams === undefined ||
+  if (isLoadingFailed ||
+    pageParams === undefined ||
     (pageParams.sortType !== SortType.Price && pageParams.sortType !== SortType.Rating) ||
     (pageParams.order !== SortOrder.Ascending && pageParams.order !== SortOrder.Descending)) {
-    return <Navigate to={AppRoute.Unknown()} />;
+    return <ServerError />;
   }
 
   const { page, sortType, order } = pageParams;

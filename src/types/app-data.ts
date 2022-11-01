@@ -6,6 +6,7 @@ export type AppData = {
   cameras: Camera[],
   promo: Promo | null,
   isDataLoaded: boolean,
+  isLoadingFailed: boolean,
   currentProduct: Camera | null,
   currentReviews: Review[],
   currentSimilarProducts: Camera[],

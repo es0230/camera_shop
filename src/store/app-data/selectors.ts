@@ -16,3 +16,5 @@ export const selectCurrentReviews = (state: State): Review[] => state[NameSpace.
 export const selectCurrentSimilarProducts = (state: State): Camera[] => state[NameSpace.Data].currentSimilarProducts;
 
 export const selectIsDataLoaded = (state: State): boolean => state[NameSpace.Data].isDataLoaded;
+
+export const selectIsLoadingFailed = (state: State): boolean => state[NameSpace.Data].isLoadingFailed;
