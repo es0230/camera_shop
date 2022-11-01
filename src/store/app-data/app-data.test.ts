@@ -8,6 +8,7 @@ const initialState: AppData = {
   cameras: [],
   promo: null,
   isDataLoaded: false,
+  isLoadingFailed: false,
   currentProduct: null,
   currentReviews: [],
   currentSimilarProducts: [],
@@ -23,22 +24,22 @@ describe('Testing appData', () => {
   describe('fetchCamerasAction test', () => {
     it('should keep isDataLoaded = true on "pending"', () => {
       expect(appData.reducer(state, { type: fetchCamerasAction.pending.type }))
-        .toEqual({ cameras: [], promo: null, isDataLoaded: true, currentProduct: null, currentReviews: [], currentSimilarProducts: [] });
+        .toEqual({ cameras: [], promo: null, isDataLoaded: true, isLoadingFailed: false, currentProduct: null, currentReviews: [], currentSimilarProducts: [] });
     });
 
-    it('should make isDataLoaded = false on "rejected"', () => {
+    it('should make isDataLoaded = false and isLoadingFailed = true on "rejected"', () => {
       state = { ...state, isDataLoaded: true };
 
       expect(appData.reducer(state, { type: fetchCamerasAction.rejected.type }))
-        .toEqual({ cameras: [], promo: null, isDataLoaded: false, currentProduct: null, currentReviews: [], currentSimilarProducts: [] });
+        .toEqual({ cameras: [], promo: null, isDataLoaded: false, isLoadingFailed: true, currentProduct: null, currentReviews: [], currentSimilarProducts: [] });
     });
 
-    it('should pass received data to state and change isDataLoaded to false on "fulfilled"', () => {
-      state = { ...state, isDataLoaded: true };
+    it('should pass received data to state and change isDataLoaded and isLoadingFailed to false on "fulfilled"', () => {
+      state = { ...state, isDataLoaded: true, isLoadingFailed: true };
       const cameras = Array.from({ length: 10 }, () => makeFakeCamera());
 
       expect(appData.reducer(state, { type: fetchCamerasAction.fulfilled.type, payload: cameras }))
-        .toEqual({ cameras: cameras, promo: null, isDataLoaded: false, currentProduct: null, currentReviews: [], currentSimilarProducts: [] });
+        .toEqual({ cameras: cameras, promo: null, isDataLoaded: false, isLoadingFailed: false, currentProduct: null, currentReviews: [], currentSimilarProducts: [] });
     });
   });
 
@@ -47,16 +48,27 @@ describe('Testing appData', () => {
       const promo = makeFakePromo();
 
       expect(appData.reducer(state, { type: fetchPromoAction.fulfilled, payload: promo }))
-        .toEqual({ cameras: [], isDataLoaded: false, promo: promo, currentProduct: null, currentReviews: [], currentSimilarProducts: [] });
+        .toEqual({ cameras: [], isDataLoaded: false, isLoadingFailed: false, promo: promo, currentProduct: null, currentReviews: [], currentSimilarProducts: [] });
     });
   });
 
   describe('fetchCameraAction test', () => {
+    it('should keep isDataLoaded = true on "pending"', () => {
+      expect(appData.reducer(state, { type: fetchCameraAction.pending }))
+        .toEqual({ cameras: [], isDataLoaded: true, isLoadingFailed: false, promo: null, currentProduct: null, currentReviews: [], currentSimilarProducts: [] });
+    });
+    it('should make isDataLoaded = false and isLoadingFailed = true on "rejected"', () => {
+      state = { ...state, isDataLoaded: true };
+
+      expect(appData.reducer(state, { type: fetchCameraAction.rejected }))
+        .toEqual({ cameras: [], isDataLoaded: false, isLoadingFailed: true, promo: null, currentProduct: null, currentReviews: [], currentSimilarProducts: [] });
+    });
     it('should pass received data to state on "fulfilled"', () => {
+      state = { ...state, isDataLoaded: true, isLoadingFailed: true };
       const camera = makeFakeCamera();
 
       expect(appData.reducer(state, { type: fetchCameraAction.fulfilled, payload: camera }))
-        .toEqual({ cameras: [], isDataLoaded: false, promo: null, currentProduct: camera, currentReviews: [], currentSimilarProducts: [] });
+        .toEqual({ cameras: [], isDataLoaded: false, isLoadingFailed: false, promo: null, currentProduct: camera, currentReviews: [], currentSimilarProducts: [] });
     });
   });
 
@@ -65,7 +77,7 @@ describe('Testing appData', () => {
       const reviews = Array.from({ length: Math.ceil(Math.random() * 5) }, () => makeFakeReview());
 
       expect(appData.reducer(state, { type: fetchReviewsAction.fulfilled, payload: reviews }))
-        .toEqual({ cameras: [], isDataLoaded: false, promo: null, currentProduct: null, currentReviews: reviews, currentSimilarProducts: [] });
+        .toEqual({ cameras: [], isDataLoaded: false, isLoadingFailed: false, promo: null, currentProduct: null, currentReviews: reviews, currentSimilarProducts: [] });
     });
   });
 
@@ -74,7 +86,7 @@ describe('Testing appData', () => {
       const similarProducts = Array.from({ length: 10 }, () => makeFakeCamera());
 
       expect(appData.reducer(state, { type: fetchSimilarProductsAction.fulfilled, payload: similarProducts }))
-        .toEqual({ cameras: [], isDataLoaded: false, promo: null, currentProduct: null, currentReviews: [], currentSimilarProducts: similarProducts });
+        .toEqual({ cameras: [], isDataLoaded: false, isLoadingFailed: false, promo: null, currentProduct: null, currentReviews: [], currentSimilarProducts: similarProducts });
     });
   });
 });
