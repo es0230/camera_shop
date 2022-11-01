@@ -33,8 +33,15 @@ export const appData = createSlice({
       .addCase(fetchPromoAction.fulfilled, (state, action) => {
         state.promo = action.payload;
       })
+      .addCase(fetchCameraAction.pending, (state) => {
+        state.isDataLoaded = true;
+      })
+      .addCase(fetchCameraAction.rejected, (state) => {
+        state.isDataLoaded = false;
+      })
       .addCase(fetchCameraAction.fulfilled, (state, action) => {
         state.currentProduct = action.payload;
+        state.isDataLoaded = false;
       })
       .addCase(fetchReviewsAction.fulfilled, (state, action) => {
         state.currentReviews = action.payload;
