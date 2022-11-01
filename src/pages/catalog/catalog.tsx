@@ -8,7 +8,7 @@ import CatalogFilter from '../../components/catalog/catalog-filter/catalog-filte
 import { AppRoute, FilterCategories, FilterLevels, FilterTypes, INITIAL_CATALOG_PAGE_URL_PARAMS, SortOrder, SortType } from '../../const';
 import { useAppSelector } from '../../hooks';
 import { usePageParams } from '../../hooks/use-page-params';
-import { selectCameras, selectPromo } from '../../store/app-data/selectors';
+import { selectCameras, selectIsDataLoaded, selectPromo } from '../../store/app-data/selectors';
 import { Camera } from '../../types/camera';
 import { URLParams } from '../../types/url-params';
 
@@ -76,6 +76,7 @@ function Catalog(): JSX.Element {
   const navigate = useNavigate();
   const pageParams = usePageParams();
   const cameras = useAppSelector(selectCameras);
+  const isDataLoaded = useAppSelector(selectIsDataLoaded);
 
   if (pageParams === undefined ||
     (pageParams.sortType !== SortType.Price && pageParams.sortType !== SortType.Rating) ||
@@ -134,8 +135,8 @@ function Catalog(): JSX.Element {
                 <CatalogFilter params={pageParams} cameras={cameras} />
                 <div className="catalog__content">
                   <CatalogSort handleSortTypeButtonClick={handleSortTypeButtonClick} handleSortOrderButtonClick={handleSortOrderButtonClick} params={pageParams} />
-                  {camerasToRender.length === 0 ?
-                    (<p style={{ fontSize: '32px', textAlign: 'center', marginTop: '100px' }}>По вашему запросу ничего не найдено ;(</p>) :
+                  {isDataLoaded ?
+                    (<p style={{ fontSize: '32px', textAlign: 'center', marginTop: '100px' }}>Загрузка...</p>) :
                     (
                       <>
                         <CatalogGallery cameras={camerasToRender} />

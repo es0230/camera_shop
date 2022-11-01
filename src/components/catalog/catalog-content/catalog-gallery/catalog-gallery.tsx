@@ -8,9 +8,14 @@ type CatalogGalleryProps = {
 function CatalogGallery({ cameras }: CatalogGalleryProps): JSX.Element {
 
   return (
-    <div data-testid="catalog-gallery-component" className="cards catalog__cards">
-      {cameras.map((el) => <CameraCard camera={el} key={el.id} />)}
-    </div>
+
+    cameras.length === 0 ?
+      (<p style={{ fontSize: '32px', textAlign: 'center', marginTop: '100px' }}>По вашему запросу ничего не найдено ;(</p>) :
+      (
+        <div data-testid="catalog-gallery-component" className="cards catalog__cards">
+          {cameras.map((el) => <CameraCard camera={el} key={el.id} />)}
+        </div>
+      )
   );
 }
 
