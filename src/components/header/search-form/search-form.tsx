@@ -8,7 +8,7 @@ import SearchItem from '../search-item/search-item';
 function SearchForm() {
   const [searchQuery, setSearchQuery] = useState('');
   const cameras = useAppSelector(selectCameras);
-  const itemsToRender = cameras.filter((el) => el.name.match(new RegExp(searchQuery, 'i')));
+  const itemsToRender = searchQuery === '' ? [] : cameras.filter((el) => el.name.match(new RegExp(searchQuery, 'i')));
 
   const handleSearchFormInput = (evt: React.FormEvent<HTMLInputElement>) => {
     const { value } = evt.currentTarget;
@@ -28,7 +28,7 @@ function SearchForm() {
       <form>
         <label>
           <LensIcon />
-          <input className="form-search__input" type="text" autoComplete="off" placeholder="Поиск по сайту" value={searchQuery} onInput={handleSearchFormInput} />
+          <input className="form-search__input" data-testid="searchInput" type="text" autoComplete="off" placeholder="Поиск по сайту" value={searchQuery} onInput={handleSearchFormInput} />
         </label>
         <ul className="form-search__select-list">
           {itemsToRender.length ?
@@ -36,7 +36,7 @@ function SearchForm() {
             <div style={{ textAlign: 'center' }}>Подходящих товаров нет :(</div>}
         </ul>
       </form>
-      <button className="form-search__reset" type="reset" onClick={handleClearButtonClick}>
+      <button className="form-search__reset" data-testid="clearButton" type="reset" onClick={handleClearButtonClick}>
         <CloseIcon />
         <span className="visually-hidden">Сбросить поиск</span>
       </button>
