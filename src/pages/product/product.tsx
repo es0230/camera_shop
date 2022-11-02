@@ -11,6 +11,7 @@ import ReviewModal from '../../components/product/review-modal/review-modal';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { fetchCameraAction, fetchReviewsAction, fetchSimilarProductsAction } from '../../store/api-actions';
 import { selectCurrentProduct, selectCurrentReviews, selectCurrentSimilarProducts, selectIsDataLoaded, selectIsLoadingFailed } from '../../store/app-data/selectors';
+import LoadingScreen from '../../components/loading-screen/loading-screen';
 
 function Product(): JSX.Element {
   const { id, tabType } = useParams();
@@ -41,7 +42,7 @@ function Product(): JSX.Element {
   const isLoadingFailed = useAppSelector(selectIsLoadingFailed);
 
   if (isDataLoaded) {
-    return (<p style={{ fontSize: '72px', textAlign: 'center', marginTop: '100px' }}>Загрузка...</p>);
+    return (<LoadingScreen />);
   }
 
   if (isLoadingFailed || currentProduct === null) {

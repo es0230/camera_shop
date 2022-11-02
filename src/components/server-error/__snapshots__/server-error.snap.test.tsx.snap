@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`testing ServerError component should render correctly 1`] = `
+<div>
+  <p
+    style="font-size: 72px; text-align: center; margin-top: 100px; line-height: 100px;"
+  >
+    Ошибка на сервере, вернитесь позднее
+  </p>
+</div>
+`;

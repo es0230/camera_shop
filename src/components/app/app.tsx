@@ -11,9 +11,9 @@ function App(): JSX.Element {
       <Route path={'/'} element={<Layout />}>
         <Route path={AppRoute.Catalog()} element={<Catalog />} />
         <Route path={AppRoute.Product()} element={<Product />} />
-        <Route path={AppRoute.Unknown()} element={<PageNotFound />} />
         <Route index element={<Navigate to={AppRoute.Catalog(INITIAL_CATALOG_PAGE_URL_PARAMS)} replace />} />
       </Route>
+      <Route path={AppRoute.Unknown()} element={<PageNotFound />} />
 
     </Routes>
   );

@@ -1,8 +1,6 @@
 function LoadingScreen(): JSX.Element {
   return (
-    <h1>
-      Загрузка...
-    </h1>
+    <p style={{ fontSize: '72px', textAlign: 'center', marginTop: '100px' }}>Загрузка...</p>
   );
 }
 

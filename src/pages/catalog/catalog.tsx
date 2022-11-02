@@ -5,6 +5,7 @@ import CatalogGallery from '../../components/catalog/catalog-content/catalog-gal
 import CatalogPagination from '../../components/catalog/catalog-content/catalog-pagination/catalog-pagination';
 import CatalogSort from '../../components/catalog/catalog-content/catalog-sort/catalog-sort';
 import CatalogFilter from '../../components/catalog/catalog-filter/catalog-filter';
+import LoadingScreen from '../../components/loading-screen/loading-screen';
 import ServerError from '../../components/server-error/server-error';
 import { AppRoute, FilterCategories, FilterLevels, FilterTypes, INITIAL_CATALOG_PAGE_URL_PARAMS, SortOrder, SortType } from '../../const';
 import { useAppSelector } from '../../hooks';
@@ -139,7 +140,7 @@ function Catalog(): JSX.Element {
                 <div className="catalog__content">
                   <CatalogSort handleSortTypeButtonClick={handleSortTypeButtonClick} handleSortOrderButtonClick={handleSortOrderButtonClick} params={pageParams} />
                   {isDataLoaded ?
-                    (<p style={{ fontSize: '32px', textAlign: 'center', marginTop: '100px' }}>Загрузка...</p>) :
+                    (<LoadingScreen/>) :
                     (
                       <>
                         <CatalogGallery cameras={camerasToRender} />

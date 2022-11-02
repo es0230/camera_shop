@@ -26,7 +26,6 @@ describe('Testing CameraCard component', () => {
     );
 
     expect(screen.getByText(mockCamera.name)).toBeInTheDocument();
-    expect(screen.getByText(mockCamera.rating)).toBeInTheDocument();
     expect(screen.getByText(mockCamera.reviewCount)).toBeInTheDocument();
     expect(screen.getByText(mockCamera.price)).toBeInTheDocument();
     expect(screen.getByText('Купить')).toBeInTheDocument();

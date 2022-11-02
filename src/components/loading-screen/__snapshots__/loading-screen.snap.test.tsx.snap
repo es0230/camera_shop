@@ -2,8 +2,10 @@
 
 exports[`Testing Footer component should render correctly 1`] = `
 <div>
-  <h1>
+  <p
+    style="font-size: 72px; text-align: center; margin-top: 100px;"
+  >
     Загрузка...
-  </h1>
+  </p>
 </div>
 `;

@@ -25,11 +25,14 @@ const mockStore = configureMockStore<
   ThunkDispatch<State, typeof api, Action>
 >(middlewares);
 
+const fakeCamera = makeFakeCamera();
+
 const store = mockStore({
   DATA: {
-    cameras: [makeFakeCamera()],
+    cameras: [fakeCamera],
     promo: makeFakePromo(),
     isDataLoaded: false,
+    isLoadingFailed: false,
     currentProduct: makeFakeCamera(),
     currentReviews: [makeFakeReview()],
     currentSimilarProducts: [makeFakeCamera()],
@@ -47,12 +50,12 @@ const fakeApp = (
 );
 
 describe('Testing App component', () => {
-  it('should render Catalog when user navigate to "/catalog/1&price&asc"', () => {
+  it('should render Catalog when user navigate to Catalog route', () => {
     history.push(AppRoute.Catalog(INITIAL_CATALOG_PAGE_URL_PARAMS));
 
     render(fakeApp);
 
-    expect(history.location.pathname).toBe(AppRoute.Catalog(INITIAL_CATALOG_PAGE_URL_PARAMS));
+    expect(history.location.pathname).toBe(AppRoute.Catalog({ ...INITIAL_CATALOG_PAGE_URL_PARAMS, minPrice: String(fakeCamera.price), maxPrice: String(fakeCamera.price) }));
 
     expect(screen.getByTestId('catalog-page')).toBeInTheDocument();
   });
