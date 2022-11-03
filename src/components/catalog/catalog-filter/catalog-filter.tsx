@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AppRoute, FilterCategories, FilterTypes, FilterLevels, DEFAULT_FILTER_VALUE } from '../../../const';
@@ -84,6 +83,9 @@ function CatalogFilter({ params, cameras }: CatalogFilterProps): JSX.Element {
       if (target.name === PriceFilterNames.MaxPrice && +target.value < +filterState.price.minPrice) {
         target.value = filterState.price.minPrice;
       }
+      if (target.name === PriceFilterNames.MinPrice && +target.value > +filterState.price.maxPrice) {
+        target.value = filterState.price.maxPrice;
+      }
       if (!productPrices.includes(+target.value)) {
         const priceDifferences = productPrices.slice().map((el) => Math.abs(el - +target.value));
         const indexOfMinimalDifference = priceDifferences.indexOf(Math.min(...priceDifferences));
@@ -128,12 +130,12 @@ function CatalogFilter({ params, cameras }: CatalogFilterProps): JSX.Element {
             <div className="catalog-filter__price-range">
               <div className="custom-input">
                 <label>
-                  <input type="number" name="minPrice" min={0} placeholder={filterState.price.minPrice} onBlur={handleFilterPriceChange} />
+                  <input type="number" data-testid="minPriceInput" name="minPrice" min={0} placeholder={filterState.price.minPrice} onBlur={handleFilterPriceChange} />
                 </label>
               </div>
               <div className="custom-input">
                 <label>
-                  <input type="number" name="maxPrice" min={0} placeholder={filterState.price.maxPrice} onBlur={handleFilterPriceChange} />
+                  <input type="number" data-testid="maxPriceInput" name="maxPrice" min={0} placeholder={filterState.price.maxPrice} onBlur={handleFilterPriceChange} />
                 </label>
               </div>
             </div>
@@ -210,7 +212,7 @@ function CatalogFilter({ params, cameras }: CatalogFilterProps): JSX.Element {
               </label>
             </div>
           </fieldset>
-          <button className="btn catalog-filter__reset-btn" type="reset" onClick={handleClearFiltersButtonClick}>Сбросить фильтры</button>
+          <button className="btn catalog-filter__reset-btn" data-testid="resetButton" type="reset" onClick={handleClearFiltersButtonClick}>Сбросить фильтры</button>
         </form>
       </div>
     </div>
