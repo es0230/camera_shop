@@ -144,14 +144,14 @@ function CatalogFilter({ params, cameras }: CatalogFilterProps): JSX.Element {
             <legend className="title title--h5">Категория</legend>
             <div className="custom-checkbox catalog-filter__item">
               <label>
-                <input type="checkbox" name="photocamera" checked={params.category.includes(FilterCategories.Photo)} onChange={handleFilterCategoryClick} />
+                <input type="checkbox" data-testid="photoCategory" name="photocamera" checked={params.category.includes(FilterCategories.Photo)} onChange={handleFilterCategoryClick} />
                 <span className="custom-checkbox__icon" />
                 <span className="custom-checkbox__label">Фотокамера</span>
               </label>
             </div>
             <div className="custom-checkbox catalog-filter__item">
               <label>
-                <input type="checkbox" name="videocamera" checked={params.category.includes(FilterCategories.Video)} disabled={params.productType.includes(FilterTypes.Film) || params.productType.includes(FilterTypes.Snapshot)} onChange={handleFilterCategoryClick} />
+                <input type="checkbox" data-testid="videoCategory" name="videocamera" checked={params.category.includes(FilterCategories.Video)} disabled={params.productType.includes(FilterTypes.Film) || params.productType.includes(FilterTypes.Snapshot)} onChange={handleFilterCategoryClick} />
                 <span className="custom-checkbox__icon" />
                 <span className="custom-checkbox__label">Видеокамера</span>
               </label>
@@ -161,28 +161,28 @@ function CatalogFilter({ params, cameras }: CatalogFilterProps): JSX.Element {
             <legend className="title title--h5">Тип камеры</legend>
             <div className="custom-checkbox catalog-filter__item">
               <label>
-                <input type="checkbox" name="digital" checked={params.productType.includes(FilterTypes.Digital)} onChange={handleFilterProductTypeClick} />
+                <input type="checkbox" data-testid="digitalType" name="digital" checked={params.productType.includes(FilterTypes.Digital)} onChange={handleFilterProductTypeClick} />
                 <span className="custom-checkbox__icon" />
                 <span className="custom-checkbox__label">Цифровая</span>
               </label>
             </div>
             <div className="custom-checkbox catalog-filter__item">
               <label>
-                <input type="checkbox" name="film" checked={params.productType.includes(FilterTypes.Film)} disabled={params.category.includes(FilterCategories.Video)} onChange={handleFilterProductTypeClick} />
+                <input type="checkbox" data-testid="filmType" name="film" checked={params.productType.includes(FilterTypes.Film)} disabled={params.category.includes(FilterCategories.Video)} onChange={handleFilterProductTypeClick} />
                 <span className="custom-checkbox__icon" />
                 <span className="custom-checkbox__label">Плёночная</span>
               </label>
             </div>
             <div className="custom-checkbox catalog-filter__item">
               <label>
-                <input type="checkbox" name="snapshot" checked={params.productType.includes(FilterTypes.Snapshot)} disabled={params.category.includes(FilterCategories.Video)} onChange={handleFilterProductTypeClick} />
+                <input type="checkbox" data-testid="snapshotType" name="snapshot" checked={params.productType.includes(FilterTypes.Snapshot)} disabled={params.category.includes(FilterCategories.Video)} onChange={handleFilterProductTypeClick} />
                 <span className="custom-checkbox__icon" />
                 <span className="custom-checkbox__label">Моментальная</span>
               </label>
             </div>
             <div className="custom-checkbox catalog-filter__item">
               <label>
-                <input type="checkbox" name="collection" checked={params.productType.includes(FilterTypes.Collection)} onChange={handleFilterProductTypeClick} />
+                <input type="checkbox" data-testid="collectionType" name="collection" checked={params.productType.includes(FilterTypes.Collection)} onChange={handleFilterProductTypeClick} />
                 <span className="custom-checkbox__icon" />
                 <span className="custom-checkbox__label">Коллекционная</span>
               </label>
@@ -192,21 +192,21 @@ function CatalogFilter({ params, cameras }: CatalogFilterProps): JSX.Element {
             <legend className="title title--h5">Уровень</legend>
             <div className="custom-checkbox catalog-filter__item">
               <label>
-                <input type="checkbox" name="zero" checked={params.level.includes(FilterLevels.Zero)} onChange={handleFilterLevelClick} />
+                <input type="checkbox" data-testid="zeroLevel" name="zero" checked={params.level.includes(FilterLevels.Zero)} onChange={handleFilterLevelClick} />
                 <span className="custom-checkbox__icon" />
                 <span className="custom-checkbox__label">Нулевой</span>
               </label>
             </div>
             <div className="custom-checkbox catalog-filter__item">
               <label>
-                <input type="checkbox" name="amateur" checked={params.level.includes(FilterLevels.Amateur)} onChange={handleFilterLevelClick} />
+                <input type="checkbox" data-testid="amateurLevel" name="amateur" checked={params.level.includes(FilterLevels.Amateur)} onChange={handleFilterLevelClick} />
                 <span className="custom-checkbox__icon" />
                 <span className="custom-checkbox__label">Любительский</span>
               </label>
             </div>
             <div className="custom-checkbox catalog-filter__item">
               <label>
-                <input type="checkbox" name="professional" checked={params.level.includes(FilterLevels.Professional)} onChange={handleFilterLevelClick} />
+                <input type="checkbox" data-testid="professionalLevel" name="professional" checked={params.level.includes(FilterLevels.Professional)} onChange={handleFilterLevelClick} />
                 <span className="custom-checkbox__icon" />
                 <span className="custom-checkbox__label">Профессиональный</span>
               </label>

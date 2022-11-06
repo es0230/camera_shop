@@ -48,8 +48,6 @@ describe('Testing CatalogFilter component', () => {
 
   describe('should treat price change correctly', () => {
     const lessThanMinimalPrice = minPrice - 1;
-    //const moreThanMinimalPrice = minPrice + 1;
-    //const lessThanMaximalPrice = maxPrice - 1;
     const moreThanMaximalPrice = maxPrice + 1;
 
     it('should change lessThanMinimalPrice to minPrice', async () => {
