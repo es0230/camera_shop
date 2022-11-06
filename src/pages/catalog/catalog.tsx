@@ -16,6 +16,24 @@ import { URLParams } from '../../types/url-params';
 
 const CARDSONPAGE = 9;
 
+enum CameraCategories {
+  Photo = 'Фотоаппарат',
+  Video = 'Видеокамера'
+}
+
+enum CameraTypes {
+  Collection = 'Коллекционная',
+  Digital = 'Цифровая',
+  Snapshot = 'Моментальная',
+  Film = 'Плёночная'
+}
+
+enum CameraLevels {
+  Zero = 'Нулевой',
+  Amateur = 'Любительский',
+  Professional = 'Профессиональный'
+}
+
 const filterCameras = (cameras: Camera[], params: URLParams) => {
   const { category, productType, level, minPrice, maxPrice } = params;
   const filteredByPrice = filterByPrice(cameras, minPrice, maxPrice);
@@ -35,8 +53,8 @@ const filterByCategory = (cameras: Camera[], category: string) => {
     return cameras;
   }
   const filteredCameras = [
-    ...(category.includes(FilterCategories.Photo) ? cameras.filter((el) => el.category === 'Фотоаппарат') : []),
-    ...(category.includes(FilterCategories.Video) ? cameras.filter((el) => el.category === 'Видеокамера') : [])
+    ...(category.includes(FilterCategories.Photo) ? cameras.filter((el) => el.category === CameraCategories.Photo) : []),
+    ...(category.includes(FilterCategories.Video) ? cameras.filter((el) => el.category === CameraCategories.Video) : [])
   ];
   return filteredCameras;
 };
@@ -46,10 +64,10 @@ const filterByProductType = (cameras: Camera[], productType: string) => {
     return cameras;
   }
   const filteredCameras = [
-    ...(productType.includes(FilterTypes.Collection) ? cameras.filter((el) => el.type === 'Коллекционная') : []),
-    ...(productType.includes(FilterTypes.Digital) ? cameras.filter((el) => el.type === 'Цифровая') : []),
-    ...(productType.includes(FilterTypes.Film) ? cameras.filter((el) => el.type === 'Плёночная') : []),
-    ...(productType.includes(FilterTypes.Snapshot) ? cameras.filter((el) => el.type === 'Моментальная') : []),
+    ...(productType.includes(FilterTypes.Collection) ? cameras.filter((el) => el.type === CameraTypes.Collection) : []),
+    ...(productType.includes(FilterTypes.Digital) ? cameras.filter((el) => el.type === CameraTypes.Digital) : []),
+    ...(productType.includes(FilterTypes.Film) ? cameras.filter((el) => el.type === CameraTypes.Film) : []),
+    ...(productType.includes(FilterTypes.Snapshot) ? cameras.filter((el) => el.type === CameraTypes.Snapshot) : []),
   ];
   return filteredCameras;
 };
@@ -59,9 +77,9 @@ const filterByLevel = (cameras: Camera[], productLevel: string) => {
     return cameras;
   }
   const filteredCameras = [
-    ...(productLevel.includes(FilterLevels.Zero) ? cameras.filter((el) => el.level === 'Нулевой') : []),
-    ...(productLevel.includes(FilterLevels.Amateur) ? cameras.filter((el) => el.level === 'Любительский') : []),
-    ...(productLevel.includes(FilterLevels.Professional) ? cameras.filter((el) => el.level === 'Профессиональный') : []),
+    ...(productLevel.includes(FilterLevels.Zero) ? cameras.filter((el) => el.level === CameraLevels.Zero) : []),
+    ...(productLevel.includes(FilterLevels.Amateur) ? cameras.filter((el) => el.level === CameraLevels.Amateur) : []),
+    ...(productLevel.includes(FilterLevels.Professional) ? cameras.filter((el) => el.level === CameraLevels.Professional) : []),
   ];
   return filteredCameras;
 };
@@ -108,7 +126,7 @@ function Catalog(): JSX.Element {
 
   if (page) {
     const camerasToRender = sortedCameras.slice((+page - 1) * CARDSONPAGE, +page * CARDSONPAGE);
-    if (+page > totalPageAmount && page !== '1') {
+    if (+page > totalPageAmount && page !== INITIAL_CATALOG_PAGE_URL_PARAMS.page) {
       navigate(AppRoute.Unknown());
     }
 
@@ -140,7 +158,7 @@ function Catalog(): JSX.Element {
                 <div className="catalog__content">
                   <CatalogSort handleSortTypeButtonClick={handleSortTypeButtonClick} handleSortOrderButtonClick={handleSortOrderButtonClick} params={pageParams} />
                   {isDataLoaded ?
-                    (<LoadingScreen/>) :
+                    (<LoadingScreen />) :
                     (
                       <>
                         <CatalogGallery cameras={camerasToRender} />
