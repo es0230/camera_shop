@@ -21,6 +21,7 @@ enum APIRoute {
 
 enum NameSpace {
   Data = 'DATA',
+  Filters = 'FILTERS',
 }
 
 enum TabType {

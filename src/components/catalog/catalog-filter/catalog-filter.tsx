@@ -1,8 +1,11 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AppRoute, FilterCategories, FilterTypes, FilterLevels, DEFAULT_FILTER_VALUE } from '../../../const';
+import { useAppDispatch, useAppSelector, } from '../../../hooks';
+import { resetFilters, setMaxPriceFilter, setMinPriceFilter, toggleCameraTypeFilter, toggleCategoryFilter, toggleLevelFilter } from '../../../store/app-filters/app-filters';
+import { selectFilterState } from '../../../store/app-filters/selectors';
 import { Camera } from '../../../types/camera';
-import { Filter } from '../../../types/filter';
+//import { Filter } from '../../../types/filter';
 import { URLParams } from '../../../types/url-params';
 
 type CatalogFilterProps = {
@@ -10,27 +13,27 @@ type CatalogFilterProps = {
   cameras: Camera[],
 }
 
-const initialFilterState: Filter = {
-  price: {
-    minPrice: DEFAULT_FILTER_VALUE,
-    maxPrice: DEFAULT_FILTER_VALUE,
-  },
-  category: {
-    photocamera: false,
-    videocamera: false,
-  },
-  type: {
-    digital: false,
-    film: false,
-    snapshot: false,
-    collection: false,
-  },
-  level: {
-    zero: false,
-    amateur: false,
-    professional: false,
-  }
-};
+//const initialFilterState: Filter = {
+//  price: {
+//    minPrice: DEFAULT_FILTER_VALUE,
+//    maxPrice: DEFAULT_FILTER_VALUE,
+//  },
+//  category: {
+//    photocamera: false,
+//    videocamera: false,
+//  },
+//  type: {
+//    digital: false,
+//    film: false,
+//    snapshot: false,
+//    collection: false,
+//  },
+//  level: {
+//    zero: false,
+//    amateur: false,
+//    professional: false,
+//  }
+//};
 
 enum PriceFilterNames {
   MinPrice = 'minPrice',
@@ -39,7 +42,9 @@ enum PriceFilterNames {
 
 function CatalogFilter({ params, cameras }: CatalogFilterProps): JSX.Element {
   const navigate = useNavigate();
-  const [filterState, setFilterState] = useState(initialFilterState);
+  const dispatch = useAppDispatch();
+  //const [filterState, setFilterState] = useState(initialFilterState);
+  const globalFilterState = useAppSelector(selectFilterState);
   const [filtersUpdated, setFiltersUpdated] = useState(false);
 
   const productPrices = useMemo(() => {
@@ -54,20 +59,24 @@ function CatalogFilter({ params, cameras }: CatalogFilterProps): JSX.Element {
   const currentMaxPrice = String(Math.max(...productPrices));
 
   useEffect(() => {
-    if (cameras.length !== 0 && (filterState.price.minPrice === DEFAULT_FILTER_VALUE || filterState.price.maxPrice === DEFAULT_FILTER_VALUE)) {
-      setFilterState({ ...filterState, price: { minPrice: currentMinPrice, maxPrice: currentMaxPrice } });
+    if (globalFilterState.price.minPrice === DEFAULT_FILTER_VALUE || globalFilterState.price.maxPrice === DEFAULT_FILTER_VALUE) {
+      //setFilterState({ ...filterState, price: { minPrice: currentMinPrice, maxPrice: currentMaxPrice } });
+      dispatch(setMinPriceFilter(currentMinPrice));
+      dispatch(setMaxPriceFilter(currentMaxPrice));
+      // eslint-disable-next-line no-console
+      console.log(Object.values(globalFilterState.price));
       setFiltersUpdated(true);
     }
     if (filtersUpdated) {
-      const newFilterMinPrice = filterState.price.minPrice;
-      const newFilterMaxPrice = filterState.price.maxPrice;
-      const newFilterCategory = Object.entries(filterState.category).filter(([, toggled]) => toggled).map((el) => el[0]).join(',') || FilterCategories.Any;
-      const newFilterType = Object.entries(filterState.type).filter(([, toggled]) => toggled).map((el) => el[0]).join(',') || FilterTypes.Any;
-      const newFilterLevel = Object.entries(filterState.level).filter(([, toggled]) => toggled).map((el) => el[0]).join(',') || FilterLevels.Any;
+      const newFilterMinPrice = globalFilterState.price.minPrice;
+      const newFilterMaxPrice = globalFilterState.price.maxPrice;
+      const newFilterCategory = Object.entries(globalFilterState.category).filter(([, toggled]) => toggled).map((el) => el[0]).join(',') || FilterCategories.Any;
+      const newFilterType = Object.entries(globalFilterState.type).filter(([, toggled]) => toggled).map((el) => el[0]).join(',') || FilterTypes.Any;
+      const newFilterLevel = Object.entries(globalFilterState.level).filter(([, toggled]) => toggled).map((el) => el[0]).join(',') || FilterLevels.Any;
       navigate(AppRoute.Catalog({ ...params, minPrice: newFilterMinPrice, maxPrice: newFilterMaxPrice, category: newFilterCategory, productType: newFilterType, level: newFilterLevel }));
       setFiltersUpdated(false);
     }
-  }, [cameras.length, currentMaxPrice, currentMinPrice, filterState, filtersUpdated, navigate, params]);
+  }, [currentMaxPrice, currentMinPrice, dispatch, filtersUpdated, globalFilterState.category, globalFilterState.level, globalFilterState.price, globalFilterState.type, navigate, params]);
 
   const handleFilterPriceChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
     const target = evt.currentTarget;
@@ -78,13 +87,18 @@ function CatalogFilter({ params, cameras }: CatalogFilterProps): JSX.Element {
       (target.name === PriceFilterNames.MaxPrice && +target.value > +currentMaxPrice)
     ) {
       target.value = target.name === PriceFilterNames.MinPrice ? currentMinPrice : currentMaxPrice;
-      setFilterState({ ...filterState, price: { ...filterState.price, [target.name]: target.name === PriceFilterNames.MinPrice ? currentMinPrice : currentMaxPrice } });
-    } else {
-      if (target.name === PriceFilterNames.MaxPrice && +target.value < +filterState.price.minPrice) {
-        target.value = filterState.price.minPrice;
+
+      if (target.name === PriceFilterNames.MinPrice) {
+        dispatch(setMinPriceFilter(target.value));
+      } else {
+        dispatch(setMaxPriceFilter(target.value));
       }
-      if (target.name === PriceFilterNames.MinPrice && +target.value > +filterState.price.maxPrice) {
-        target.value = filterState.price.maxPrice;
+    } else {
+      if (target.name === PriceFilterNames.MaxPrice && +target.value < +globalFilterState.price.minPrice) {
+        target.value = globalFilterState.price.minPrice;
+      }
+      if (target.name === PriceFilterNames.MinPrice && +target.value > +globalFilterState.price.maxPrice) {
+        target.value = globalFilterState.price.maxPrice;
       }
       if (!productPrices.includes(+target.value)) {
         const priceDifferences = productPrices.slice().map((el) => Math.abs(el - +target.value));
@@ -92,31 +106,40 @@ function CatalogFilter({ params, cameras }: CatalogFilterProps): JSX.Element {
         const closestPrice = String(productPrices[indexOfMinimalDifference]);
         target.value = closestPrice;
       }
-      setFilterState({ ...filterState, price: { ...filterState.price, [target.name]: target.value } });
+
+      if (target.name === PriceFilterNames.MinPrice) {
+        dispatch(setMinPriceFilter(target.value));
+      } else {
+        dispatch(setMaxPriceFilter(target.value));
+      }
     }
     setFiltersUpdated(true);
   };
 
   const handleFilterCategoryClick = (evt: React.ChangeEvent<HTMLInputElement>) => {
     const target = evt.currentTarget;
-    setFilterState({ ...filterState, category: { ...filterState.category, [target.name]: target.checked } });
+    //setFilterState({ ...filterState, category: { ...filterState.category, [target.name]: target.checked } });
+    dispatch(toggleCategoryFilter(target.name));
     setFiltersUpdated(true);
   };
 
   const handleFilterProductTypeClick = (evt: React.ChangeEvent<HTMLInputElement>) => {
     const target = evt.currentTarget;
-    setFilterState({ ...filterState, type: { ...filterState.type, [target.name]: target.checked } });
+    //setFilterState({ ...filterState, type: { ...filterState.type, [target.name]: target.checked } });
+    dispatch(toggleCameraTypeFilter(target.name));
     setFiltersUpdated(true);
   };
 
   const handleFilterLevelClick = (evt: React.ChangeEvent<HTMLInputElement>) => {
     const target = evt.currentTarget;
-    setFilterState({ ...filterState, level: { ...filterState.level, [target.name]: target.checked } });
+    //setFilterState({ ...filterState, level: { ...filterState.level, [target.name]: target.checked } });
+    dispatch(toggleLevelFilter(target.name));
     setFiltersUpdated(true);
   };
 
   const handleClearFiltersButtonClick = () => {
-    setFilterState({ ...initialFilterState, price: { minPrice: currentMinPrice, maxPrice: currentMaxPrice } });
+    //setFilterState({ ...initialFilterState, price: { minPrice: currentMinPrice, maxPrice: currentMaxPrice } });
+    dispatch(resetFilters());
     setFiltersUpdated(true);
   };
 
@@ -130,12 +153,12 @@ function CatalogFilter({ params, cameras }: CatalogFilterProps): JSX.Element {
             <div className="catalog-filter__price-range">
               <div className="custom-input">
                 <label>
-                  <input type="number" data-testid="minPriceInput" name="minPrice" min={0} placeholder={filterState.price.minPrice} onBlur={handleFilterPriceChange} />
+                  <input type="number" data-testid="minPriceInput" name="minPrice" min={0} placeholder={currentMinPrice} onBlur={handleFilterPriceChange} />
                 </label>
               </div>
               <div className="custom-input">
                 <label>
-                  <input type="number" data-testid="maxPriceInput" name="maxPrice" min={0} placeholder={filterState.price.maxPrice} onBlur={handleFilterPriceChange} />
+                  <input type="number" data-testid="maxPriceInput" name="maxPrice" min={0} placeholder={currentMaxPrice} onBlur={handleFilterPriceChange} />
                 </label>
               </div>
             </div>
