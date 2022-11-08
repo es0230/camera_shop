@@ -18,3 +18,11 @@ export const selectCurrentSimilarProducts = (state: State): Camera[] => state[Na
 export const selectIsDataLoaded = (state: State): boolean => state[NameSpace.Data].isDataLoaded;
 
 export const selectIsLoadingFailed = (state: State): boolean => state[NameSpace.Data].isLoadingFailed;
+
+export const selectTotalCount = (state: State): string => state[NameSpace.Data].totalCount;
+
+export const selectMinPrice = (state: State): string => state[NameSpace.Data].minPrice;
+
+export const selectMaxPrice = (state: State): string => state[NameSpace.Data].maxPrice;
+
+export const selectPrices = (state: State): string[] => state[NameSpace.Data].prices;

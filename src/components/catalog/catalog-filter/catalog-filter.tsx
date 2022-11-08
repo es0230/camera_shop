@@ -1,146 +1,92 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AppRoute, FilterCategories, FilterTypes, FilterLevels, DEFAULT_FILTER_VALUE } from '../../../const';
+import { AppRoute, INITIAL_CATALOG_PAGE_URL_PARAMS } from '../../../const';
 import { useAppDispatch, useAppSelector, } from '../../../hooks';
-import { resetFilters, setMaxPriceFilter, setMinPriceFilter, toggleCameraTypeFilter, toggleCategoryFilter, toggleLevelFilter } from '../../../store/app-filters/app-filters';
-import { selectFilterState } from '../../../store/app-filters/selectors';
-import { Camera } from '../../../types/camera';
-//import { Filter } from '../../../types/filter';
-import { URLParams } from '../../../types/url-params';
+import { selectPrices } from '../../../store/app-data/selectors';
+import { setMaxPriceFilter, setMinPriceFilter, toggleCameraTypeFilter, toggleCategoryFilter, toggleLevelFilter } from '../../../store/catalog-parameters/catalog-parameters';
+import { selectFilterState, selectPageParams } from '../../../store/catalog-parameters/selectors';
 
 type CatalogFilterProps = {
-  params: URLParams,
-  cameras: Camera[],
+  minPrice: string,
+  maxPrice: string,
+  onClearFiltersButtonClick: () => void,
 }
-
-//const initialFilterState: Filter = {
-//  price: {
-//    minPrice: DEFAULT_FILTER_VALUE,
-//    maxPrice: DEFAULT_FILTER_VALUE,
-//  },
-//  category: {
-//    photocamera: false,
-//    videocamera: false,
-//  },
-//  type: {
-//    digital: false,
-//    film: false,
-//    snapshot: false,
-//    collection: false,
-//  },
-//  level: {
-//    zero: false,
-//    amateur: false,
-//    professional: false,
-//  }
-//};
 
 enum PriceFilterNames {
   MinPrice = 'minPrice',
   MaxPrice = 'maxPrice'
 }
 
-function CatalogFilter({ params, cameras }: CatalogFilterProps): JSX.Element {
+function CatalogFilter({ minPrice, maxPrice, onClearFiltersButtonClick }: CatalogFilterProps): JSX.Element {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  //const [filterState, setFilterState] = useState(initialFilterState);
-  const globalFilterState = useAppSelector(selectFilterState);
+  const filterState = useAppSelector(selectFilterState);
+  const pageParams = useAppSelector(selectPageParams);
   const [filtersUpdated, setFiltersUpdated] = useState(false);
 
-  const productPrices = useMemo(() => {
-    if (cameras.length !== 0) {
-      const sortedCameraPrices = cameras.slice().sort((a, b) => a.price - b.price).map((el) => el.price);
-      return sortedCameraPrices;
-    }
-    return [0];
-  }, [cameras]);
-
-  const currentMinPrice = String(Math.min(...productPrices));
-  const currentMaxPrice = String(Math.max(...productPrices));
+  const productPrices = useAppSelector(selectPrices);
 
   useEffect(() => {
-    if (globalFilterState.price.minPrice === DEFAULT_FILTER_VALUE || globalFilterState.price.maxPrice === DEFAULT_FILTER_VALUE) {
-      //setFilterState({ ...filterState, price: { minPrice: currentMinPrice, maxPrice: currentMaxPrice } });
-      dispatch(setMinPriceFilter(currentMinPrice));
-      dispatch(setMaxPriceFilter(currentMaxPrice));
-      // eslint-disable-next-line no-console
-      console.log(Object.values(globalFilterState.price));
-      setFiltersUpdated(true);
-    }
     if (filtersUpdated) {
-      const newFilterMinPrice = globalFilterState.price.minPrice;
-      const newFilterMaxPrice = globalFilterState.price.maxPrice;
-      const newFilterCategory = Object.entries(globalFilterState.category).filter(([, toggled]) => toggled).map((el) => el[0]).join(',') || FilterCategories.Any;
-      const newFilterType = Object.entries(globalFilterState.type).filter(([, toggled]) => toggled).map((el) => el[0]).join(',') || FilterTypes.Any;
-      const newFilterLevel = Object.entries(globalFilterState.level).filter(([, toggled]) => toggled).map((el) => el[0]).join(',') || FilterLevels.Any;
-      navigate(AppRoute.Catalog({ ...params, minPrice: newFilterMinPrice, maxPrice: newFilterMaxPrice, category: newFilterCategory, productType: newFilterType, level: newFilterLevel }));
+      navigate(AppRoute.Catalog(pageParams));
       setFiltersUpdated(false);
     }
-  }, [currentMaxPrice, currentMinPrice, dispatch, filtersUpdated, globalFilterState.category, globalFilterState.level, globalFilterState.price, globalFilterState.type, navigate, params]);
+
+  }, [filtersUpdated, navigate, pageParams]);
 
   const handleFilterPriceChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
     const target = evt.currentTarget;
     if (
       target.value === '' ||
       +target.value < 0 ||
-      (target.name === PriceFilterNames.MinPrice && +target.value < +currentMinPrice) ||
-      (target.name === PriceFilterNames.MaxPrice && +target.value > +currentMaxPrice)
+      (target.name === PriceFilterNames.MinPrice && +target.value < +minPrice) ||
+      (target.name === PriceFilterNames.MaxPrice && +target.value > +maxPrice)
     ) {
-      target.value = target.name === PriceFilterNames.MinPrice ? currentMinPrice : currentMaxPrice;
-
-      if (target.name === PriceFilterNames.MinPrice) {
-        dispatch(setMinPriceFilter(target.value));
-      } else {
-        dispatch(setMaxPriceFilter(target.value));
-      }
+      target.value = target.name === PriceFilterNames.MinPrice ? minPrice : maxPrice;
     } else {
-      if (target.name === PriceFilterNames.MaxPrice && +target.value < +globalFilterState.price.minPrice) {
-        target.value = globalFilterState.price.minPrice;
+      if (target.name === PriceFilterNames.MaxPrice && +target.value < +filterState.price.minPrice) {
+        target.value = filterState.price.minPrice;
       }
-      if (target.name === PriceFilterNames.MinPrice && +target.value > +globalFilterState.price.maxPrice) {
-        target.value = globalFilterState.price.maxPrice;
+      if (target.name === PriceFilterNames.MinPrice && +target.value > +filterState.price.maxPrice) {
+        target.value = filterState.price.maxPrice;
       }
-      if (!productPrices.includes(+target.value)) {
-        const priceDifferences = productPrices.slice().map((el) => Math.abs(el - +target.value));
+      if (!productPrices.includes(target.value)) {
+        const priceDifferences = productPrices.slice().map((el) => Math.abs(+el - +target.value));
         const indexOfMinimalDifference = priceDifferences.indexOf(Math.min(...priceDifferences));
         const closestPrice = String(productPrices[indexOfMinimalDifference]);
         target.value = closestPrice;
       }
+    }
 
-      if (target.name === PriceFilterNames.MinPrice) {
-        dispatch(setMinPriceFilter(target.value));
-      } else {
-        dispatch(setMaxPriceFilter(target.value));
-      }
+    if (target.name === PriceFilterNames.MinPrice) {
+      dispatch(setMinPriceFilter(target.value));
+    } else {
+      dispatch(setMaxPriceFilter(target.value));
     }
     setFiltersUpdated(true);
   };
 
   const handleFilterCategoryClick = (evt: React.ChangeEvent<HTMLInputElement>) => {
     const target = evt.currentTarget;
-    //setFilterState({ ...filterState, category: { ...filterState.category, [target.name]: target.checked } });
     dispatch(toggleCategoryFilter(target.name));
     setFiltersUpdated(true);
   };
 
   const handleFilterProductTypeClick = (evt: React.ChangeEvent<HTMLInputElement>) => {
     const target = evt.currentTarget;
-    //setFilterState({ ...filterState, type: { ...filterState.type, [target.name]: target.checked } });
     dispatch(toggleCameraTypeFilter(target.name));
     setFiltersUpdated(true);
   };
 
   const handleFilterLevelClick = (evt: React.ChangeEvent<HTMLInputElement>) => {
     const target = evt.currentTarget;
-    //setFilterState({ ...filterState, level: { ...filterState.level, [target.name]: target.checked } });
     dispatch(toggleLevelFilter(target.name));
     setFiltersUpdated(true);
   };
 
   const handleClearFiltersButtonClick = () => {
-    //setFilterState({ ...initialFilterState, price: { minPrice: currentMinPrice, maxPrice: currentMaxPrice } });
-    dispatch(resetFilters());
-    setFiltersUpdated(true);
+    navigate(AppRoute.Catalog({ ...INITIAL_CATALOG_PAGE_URL_PARAMS, minPrice, maxPrice }));
+    onClearFiltersButtonClick();
   };
 
   return (
@@ -153,12 +99,12 @@ function CatalogFilter({ params, cameras }: CatalogFilterProps): JSX.Element {
             <div className="catalog-filter__price-range">
               <div className="custom-input">
                 <label>
-                  <input type="number" data-testid="minPriceInput" name="minPrice" min={0} placeholder={currentMinPrice} onBlur={handleFilterPriceChange} />
+                  <input type="number" data-testid="minPriceInput" name="minPrice" min={0} placeholder={minPrice} onBlur={handleFilterPriceChange} />
                 </label>
               </div>
               <div className="custom-input">
                 <label>
-                  <input type="number" data-testid="maxPriceInput" name="maxPrice" min={0} placeholder={currentMaxPrice} onBlur={handleFilterPriceChange} />
+                  <input type="number" data-testid="maxPriceInput" name="maxPrice" min={0} placeholder={maxPrice} onBlur={handleFilterPriceChange} />
                 </label>
               </div>
             </div>
@@ -167,14 +113,14 @@ function CatalogFilter({ params, cameras }: CatalogFilterProps): JSX.Element {
             <legend className="title title--h5">Категория</legend>
             <div className="custom-checkbox catalog-filter__item">
               <label>
-                <input type="checkbox" data-testid="photoCategory" name="photocamera" checked={params.category.includes(FilterCategories.Photo)} onChange={handleFilterCategoryClick} />
+                <input type="checkbox" data-testid="photoCategory" name="Фотоаппарат" checked={filterState.category['Фотоаппарат']} onChange={handleFilterCategoryClick} />
                 <span className="custom-checkbox__icon" />
                 <span className="custom-checkbox__label">Фотокамера</span>
               </label>
             </div>
             <div className="custom-checkbox catalog-filter__item">
               <label>
-                <input type="checkbox" data-testid="videoCategory" name="videocamera" checked={params.category.includes(FilterCategories.Video)} disabled={params.productType.includes(FilterTypes.Film) || params.productType.includes(FilterTypes.Snapshot)} onChange={handleFilterCategoryClick} />
+                <input type="checkbox" data-testid="videoCategory" name="Видеокамера" checked={filterState.category['Видеокамера']} disabled={filterState.type['Плёночная'] || filterState.type['Моментальная']} onChange={handleFilterCategoryClick} />
                 <span className="custom-checkbox__icon" />
                 <span className="custom-checkbox__label">Видеокамера</span>
               </label>
@@ -184,28 +130,28 @@ function CatalogFilter({ params, cameras }: CatalogFilterProps): JSX.Element {
             <legend className="title title--h5">Тип камеры</legend>
             <div className="custom-checkbox catalog-filter__item">
               <label>
-                <input type="checkbox" data-testid="digitalType" name="digital" checked={params.productType.includes(FilterTypes.Digital)} onChange={handleFilterProductTypeClick} />
+                <input type="checkbox" data-testid="digitalType" name="Цифровая" checked={filterState.type['Цифровая']} onChange={handleFilterProductTypeClick} />
                 <span className="custom-checkbox__icon" />
                 <span className="custom-checkbox__label">Цифровая</span>
               </label>
             </div>
             <div className="custom-checkbox catalog-filter__item">
               <label>
-                <input type="checkbox" data-testid="filmType" name="film" checked={params.productType.includes(FilterTypes.Film)} disabled={params.category.includes(FilterCategories.Video)} onChange={handleFilterProductTypeClick} />
+                <input type="checkbox" data-testid="filmType" name="Плёночная" checked={filterState.type['Плёночная']} disabled={filterState.category['Видеокамера']} onChange={handleFilterProductTypeClick} />
                 <span className="custom-checkbox__icon" />
                 <span className="custom-checkbox__label">Плёночная</span>
               </label>
             </div>
             <div className="custom-checkbox catalog-filter__item">
               <label>
-                <input type="checkbox" data-testid="snapshotType" name="snapshot" checked={params.productType.includes(FilterTypes.Snapshot)} disabled={params.category.includes(FilterCategories.Video)} onChange={handleFilterProductTypeClick} />
+                <input type="checkbox" data-testid="snapshotType" name="Моментальная" checked={filterState.type['Моментальная']} disabled={filterState.category['Видеокамера']} onChange={handleFilterProductTypeClick} />
                 <span className="custom-checkbox__icon" />
                 <span className="custom-checkbox__label">Моментальная</span>
               </label>
             </div>
             <div className="custom-checkbox catalog-filter__item">
               <label>
-                <input type="checkbox" data-testid="collectionType" name="collection" checked={params.productType.includes(FilterTypes.Collection)} onChange={handleFilterProductTypeClick} />
+                <input type="checkbox" data-testid="collectionType" name="Коллекционная" checked={filterState.type['Коллекционная']} onChange={handleFilterProductTypeClick} />
                 <span className="custom-checkbox__icon" />
                 <span className="custom-checkbox__label">Коллекционная</span>
               </label>
@@ -215,21 +161,21 @@ function CatalogFilter({ params, cameras }: CatalogFilterProps): JSX.Element {
             <legend className="title title--h5">Уровень</legend>
             <div className="custom-checkbox catalog-filter__item">
               <label>
-                <input type="checkbox" data-testid="zeroLevel" name="zero" checked={params.level.includes(FilterLevels.Zero)} onChange={handleFilterLevelClick} />
+                <input type="checkbox" data-testid="zeroLevel" name="Нулевой" checked={filterState.level['Нулевой']} onChange={handleFilterLevelClick} />
                 <span className="custom-checkbox__icon" />
                 <span className="custom-checkbox__label">Нулевой</span>
               </label>
             </div>
             <div className="custom-checkbox catalog-filter__item">
               <label>
-                <input type="checkbox" data-testid="amateurLevel" name="amateur" checked={params.level.includes(FilterLevels.Amateur)} onChange={handleFilterLevelClick} />
+                <input type="checkbox" data-testid="amateurLevel" name="Любительский" checked={filterState.level['Любительский']} onChange={handleFilterLevelClick} />
                 <span className="custom-checkbox__icon" />
                 <span className="custom-checkbox__label">Любительский</span>
               </label>
             </div>
             <div className="custom-checkbox catalog-filter__item">
               <label>
-                <input type="checkbox" data-testid="professionalLevel" name="professional" checked={params.level.includes(FilterLevels.Professional)} onChange={handleFilterLevelClick} />
+                <input type="checkbox" data-testid="professionalLevel" name="Профессиональный" checked={filterState.level['Профессиональный']} onChange={handleFilterLevelClick} />
                 <span className="custom-checkbox__icon" />
                 <span className="custom-checkbox__label">Профессиональный</span>
               </label>

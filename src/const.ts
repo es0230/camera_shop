@@ -41,29 +41,30 @@ enum SortOrder {
 
 enum FilterCategories {
   Any = 'anyCategory',
-  Photo = 'photocamera',
-  Video = 'videocamera'
+  Photo = 'Фотоаппарат',
+  Video = 'Видеокамера'
 }
 
 enum FilterTypes {
   Any = 'anyType',
-  Digital = 'digital',
-  Film = 'film',
-  Snapshot = 'snapshot',
-  Collection = 'collection',
+  Digital = 'Цифровая',
+  Film = 'Плёночная',
+  Snapshot = 'Моментальная',
+  Collection = 'Коллекционная',
 }
 
 enum FilterLevels {
   Any = 'anyLevel',
-  Zero = 'zero',
-  Amateur = 'amateur',
-  Professional = 'professional'
+  Zero = 'Нулевой',
+  Amateur = 'Любительский',
+  Professional = 'Профессиональный'
 }
 
 const MAX_RATING = 5;
 const INITIAL_REVIEWS = 3;
+const PRODUCTS_PER_PAGE = 9;
 const DEFAULT_FILTER_VALUE = 'default';
 
 const INITIAL_CATALOG_PAGE_URL_PARAMS: URLParams = { page: '1', sortType: SortType.Price, order: SortOrder.Ascending, minPrice: DEFAULT_FILTER_VALUE, maxPrice: DEFAULT_FILTER_VALUE, category: FilterCategories.Any, productType: FilterTypes.Any, level: FilterLevels.Any };
 
-export { AppRoute, APIRoute, NameSpace, TabType, SortType, SortOrder, FilterCategories, FilterTypes, FilterLevels, INITIAL_REVIEWS, DEFAULT_FILTER_VALUE, MAX_RATING, INITIAL_CATALOG_PAGE_URL_PARAMS };
+export { AppRoute, APIRoute, NameSpace, TabType, SortType, SortOrder, FilterCategories, FilterTypes, FilterLevels, INITIAL_REVIEWS, PRODUCTS_PER_PAGE, DEFAULT_FILTER_VALUE, MAX_RATING, INITIAL_CATALOG_PAGE_URL_PARAMS };

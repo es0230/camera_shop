@@ -5,13 +5,13 @@ import browserHistory from './browser-history';
 import App from './components/app/app';
 import HistoryRouter from './components/history-router/history-router';
 import { store } from './store';
-import { fetchCamerasAction, fetchPromoAction } from './store/api-actions';
+import { fetchInitialData, fetchPromoAction } from './store/api-actions';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
 );
 
-store.dispatch(fetchCamerasAction());
+store.dispatch(fetchInitialData());
 store.dispatch(fetchPromoAction());
 
 root.render(

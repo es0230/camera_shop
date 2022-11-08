@@ -4,7 +4,7 @@ import { Action, ThunkDispatch } from '@reduxjs/toolkit';
 import { State } from '../types/state';
 import { configureMockStore } from '@jedmao/redux-mock-store';
 import thunk from 'redux-thunk';
-import { APIRoute } from '../const';
+import { APIRoute, INITIAL_CATALOG_PAGE_URL_PARAMS } from '../const';
 import { fetchCameraAction, fetchCamerasAction, fetchPromoAction, fetchReviewsAction, fetchSimilarProductsAction, sendReviewAction } from './api-actions';
 import { makeFakeCamera, makeFakePromo, makeFakeReview, makeFakeReviewPost } from '../mocks/mocks';
 import { datatype } from 'faker';
@@ -32,7 +32,7 @@ describe('Testing async actions', () => {
 
       expect(store.getActions()).toEqual([]);
 
-      await store.dispatch(fetchCamerasAction());
+      await store.dispatch(fetchCamerasAction(INITIAL_CATALOG_PAGE_URL_PARAMS));
 
       const actions = store.getActions().map(({ type }) => type);
 

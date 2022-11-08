@@ -1,10 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { NameSpace } from '../../const';
 import { AppData } from '../../types/app-data';
-import { fetchCameraAction, fetchCamerasAction, fetchPromoAction, fetchReviewsAction, fetchSimilarProductsAction } from '../api-actions';
+import { fetchCameraAction, fetchCamerasAction, fetchInitialData, fetchPromoAction, fetchReviewsAction, fetchSimilarProductsAction } from '../api-actions';
 
 const initialState: AppData = {
   cameras: [],
+  minPrice: '0',
+  maxPrice: '0',
+  prices: [],
+  totalCount: '1',
   promo: null,
   isDataLoaded: false,
   isLoadingFailed: false,
@@ -21,6 +25,22 @@ export const appData = createSlice({
   },
   extraReducers(builder) {
     builder
+      .addCase(fetchInitialData.pending, (state) => {
+        state.isDataLoaded = true;
+      })
+      .addCase(fetchInitialData.rejected, (state) => {
+        state.isDataLoaded = false;
+        state.isLoadingFailed = true;
+      })
+      .addCase(fetchInitialData.fulfilled, (state, action) => {
+        const { minPrice, maxPrice, totalCount, cameras } = action.payload;
+        state.minPrice = minPrice;
+        state.maxPrice = maxPrice;
+        state.totalCount = totalCount;
+        state.prices = cameras.map((el) => String(el.price));
+        state.isDataLoaded = false;
+        state.isLoadingFailed = false;
+      })
       .addCase(fetchCamerasAction.pending, (state) => {
         state.isDataLoaded = true;
       })
@@ -29,7 +49,9 @@ export const appData = createSlice({
         state.isLoadingFailed = true;
       })
       .addCase(fetchCamerasAction.fulfilled, (state, action) => {
-        state.cameras = action.payload;
+        const { data, totalCount } = action.payload;
+        state.cameras = data;
+        state.totalCount = totalCount;
         state.isDataLoaded = false;
         state.isLoadingFailed = false;
       })

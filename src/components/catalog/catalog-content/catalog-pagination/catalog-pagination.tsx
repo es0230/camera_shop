@@ -1,21 +1,26 @@
 import { Link } from 'react-router-dom';
-import { AppRoute } from '../../../../const';
+import { AppRoute, PRODUCTS_PER_PAGE } from '../../../../const';
+import { useAppSelector } from '../../../../hooks';
+import { selectTotalCount } from '../../../../store/app-data/selectors';
 import { URLParams } from '../../../../types/url-params';
 
 type CatalogPaginationProps = {
   params: URLParams,
-  totalPageAmount: number,
 }
 
-function CatalogPagination({ params, totalPageAmount }: CatalogPaginationProps): JSX.Element {
+function CatalogPagination({ params }: CatalogPaginationProps): JSX.Element {
   const { page } = params;
+
+  const totalPageAmount = Math.ceil(+useAppSelector(selectTotalCount) / PRODUCTS_PER_PAGE);
 
   return (
     <div data-testid="catalog-pagination-component" className="pagination">
       <ul className="pagination__list">
         {+page !== 1 ?
           <li className="pagination__item">
-            <Link className="pagination__link pagination__link--text" to={AppRoute.Catalog({ ...params, page: `${+page - 1}` })}>Назад</Link>
+            <Link className="pagination__link pagination__link--text" to={AppRoute.Catalog({ ...params, page: `${+page - 1}` })}>
+              Назад
+            </Link>
           </li> :
           <> </>}
         {Array.from({ length: totalPageAmount }, (el, i) => (

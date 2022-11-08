@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Ad from '../../components/ad/ad';
 import CatalogGallery from '../../components/catalog/catalog-content/catalog-gallery/catalog-gallery';
@@ -7,97 +7,46 @@ import CatalogSort from '../../components/catalog/catalog-content/catalog-sort/c
 import CatalogFilter from '../../components/catalog/catalog-filter/catalog-filter';
 import LoadingScreen from '../../components/loading-screen/loading-screen';
 import ServerError from '../../components/server-error/server-error';
-import { AppRoute, FilterCategories, FilterLevels, FilterTypes, INITIAL_CATALOG_PAGE_URL_PARAMS, SortOrder, SortType } from '../../const';
-import { useAppSelector } from '../../hooks';
+import { AppRoute, DEFAULT_FILTER_VALUE, INITIAL_CATALOG_PAGE_URL_PARAMS, SortOrder, SortType } from '../../const';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { usePageParams } from '../../hooks/use-page-params';
-import { selectCameras, selectIsDataLoaded, selectIsLoadingFailed, selectPromo } from '../../store/app-data/selectors';
-import { Camera } from '../../types/camera';
+import { fetchCamerasAction } from '../../store/api-actions';
+import { selectCameras, selectIsDataLoaded, selectIsLoadingFailed, selectMaxPrice, selectMinPrice, selectPromo } from '../../store/app-data/selectors';
+import { actualizeState, setSortOrder, setSortType } from '../../store/catalog-parameters/catalog-parameters';
 import { URLParams } from '../../types/url-params';
 
-const CARDSONPAGE = 9;
-
-enum CameraCategories {
-  Photo = 'Фотоаппарат',
-  Video = 'Видеокамера'
-}
-
-enum CameraTypes {
-  Collection = 'Коллекционная',
-  Digital = 'Цифровая',
-  Snapshot = 'Моментальная',
-  Film = 'Плёночная'
-}
-
-enum CameraLevels {
-  Zero = 'Нулевой',
-  Amateur = 'Любительский',
-  Professional = 'Профессиональный'
-}
-
-const filterCameras = (cameras: Camera[], params: URLParams) => {
-  const { category, productType, level, minPrice, maxPrice } = params;
-  const filteredByPrice = filterByPrice(cameras, minPrice, maxPrice);
-  const filteredByCategory = filterByCategory(filteredByPrice, category);
-  const filteredByProductType = filterByProductType(filteredByCategory, productType);
-  const filteredByLevel = filterByLevel(filteredByProductType, level);
-  return filteredByLevel;
-};
-
-const filterByPrice = (cameras: Camera[], minPrice: string, maxPrice: string) => {
-  const filteredCameras = cameras.filter((el) => el.price >= +minPrice && el.price <= +maxPrice);
-  return filteredCameras;
-};
-
-const filterByCategory = (cameras: Camera[], category: string) => {
-  if (category === FilterCategories.Any) {
-    return cameras;
-  }
-  const filteredCameras = [
-    ...(category.includes(FilterCategories.Photo) ? cameras.filter((el) => el.category === CameraCategories.Photo) : []),
-    ...(category.includes(FilterCategories.Video) ? cameras.filter((el) => el.category === CameraCategories.Video) : [])
-  ];
-  return filteredCameras;
-};
-
-const filterByProductType = (cameras: Camera[], productType: string) => {
-  if (productType === FilterTypes.Any) {
-    return cameras;
-  }
-  const filteredCameras = [
-    ...(productType.includes(FilterTypes.Collection) ? cameras.filter((el) => el.type === CameraTypes.Collection) : []),
-    ...(productType.includes(FilterTypes.Digital) ? cameras.filter((el) => el.type === CameraTypes.Digital) : []),
-    ...(productType.includes(FilterTypes.Film) ? cameras.filter((el) => el.type === CameraTypes.Film) : []),
-    ...(productType.includes(FilterTypes.Snapshot) ? cameras.filter((el) => el.type === CameraTypes.Snapshot) : []),
-  ];
-  return filteredCameras;
-};
-
-const filterByLevel = (cameras: Camera[], productLevel: string) => {
-  if (productLevel === FilterLevels.Any) {
-    return cameras;
-  }
-  const filteredCameras = [
-    ...(productLevel.includes(FilterLevels.Zero) ? cameras.filter((el) => el.level === CameraLevels.Zero) : []),
-    ...(productLevel.includes(FilterLevels.Amateur) ? cameras.filter((el) => el.level === CameraLevels.Amateur) : []),
-    ...(productLevel.includes(FilterLevels.Professional) ? cameras.filter((el) => el.level === CameraLevels.Professional) : []),
-  ];
-  return filteredCameras;
-};
-
-const sortCameras = (cameras: Camera[], type: SortType.Price | SortType.Rating, order: SortOrder.Ascending | SortOrder.Descending) => {
-  if (order === SortOrder.Ascending) {
-    return cameras.sort((a, b) => a[type] - b[type]);
-  }
-  return cameras.sort((a, b) => b[type] - a[type]);
-};
-
 function Catalog(): JSX.Element {
-  const ad = useAppSelector(selectPromo);
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const pageParams = usePageParams();
+
+  const pageParams = usePageParams() as URLParams;
+  const page = pageParams.page;
+  const minPrice = useAppSelector(selectMinPrice);
+  const maxPrice = useAppSelector(selectMaxPrice);
+
+  const ad = useAppSelector(selectPromo);
   const cameras = useAppSelector(selectCameras);
   const isDataLoaded = useAppSelector(selectIsDataLoaded);
   const isLoadingFailed = useAppSelector(selectIsLoadingFailed);
+
+  const [stateNeedsUpdate, setStateNeedsUpdate] = useState(true);
+
+  useEffect(() => {
+    if (stateNeedsUpdate) {
+      dispatch(actualizeState(pageParams));
+      setStateNeedsUpdate(false);
+    }
+  }, [dispatch, pageParams, stateNeedsUpdate]);
+
+  useEffect(() => {
+    dispatch(fetchCamerasAction(pageParams));
+  }, [dispatch, pageParams]);
+
+  useEffect(() => {
+    if (pageParams.minPrice === DEFAULT_FILTER_VALUE || pageParams.minPrice === '0' || pageParams.maxPrice === DEFAULT_FILTER_VALUE || pageParams.maxPrice === '0') {
+      navigate(AppRoute.Catalog({ ...INITIAL_CATALOG_PAGE_URL_PARAMS, minPrice, maxPrice }));
+    }
+  }, [maxPrice, minPrice, navigate, pageParams.maxPrice, pageParams.minPrice]);
 
   if (isLoadingFailed ||
     pageParams === undefined ||
@@ -106,29 +55,23 @@ function Catalog(): JSX.Element {
     return <ServerError />;
   }
 
-  const { page, sortType, order } = pageParams;
-
-  const filteredCameras = filterCameras(cameras.slice(), pageParams);
-
-  const sortedCameras = sortCameras(filteredCameras.slice(), sortType, order);
-
-  const totalPageAmount = Math.ceil(filteredCameras.length / CARDSONPAGE);
-
-  const handleSortTypeButtonClick = (evt: React.ChangeEvent) => {
+  const onSortTypeButtonClick = (evt: React.ChangeEvent) => {
     const newSortType = evt.currentTarget.id;
+    dispatch(setSortType(newSortType));
     navigate(AppRoute.Catalog({ ...pageParams, sortType: newSortType }));
   };
 
-  const handleSortOrderButtonClick = (evt: React.ChangeEvent) => {
-    const newSortOrderType = evt.currentTarget.id;
-    navigate(AppRoute.Catalog({ ...pageParams, order: newSortOrderType }));
+  const onSortOrderButtonClick = (evt: React.ChangeEvent) => {
+    const newSortOrder = evt.currentTarget.id;
+    dispatch(setSortOrder(newSortOrder));
+    navigate(AppRoute.Catalog({ ...pageParams, order: newSortOrder }));
+  };
+
+  const onClearFiltersButtonClick = () => {
+    setStateNeedsUpdate(true);
   };
 
   if (page) {
-    const camerasToRender = sortedCameras.slice((+page - 1) * CARDSONPAGE, +page * CARDSONPAGE);
-    if (+page > totalPageAmount && page !== INITIAL_CATALOG_PAGE_URL_PARAMS.page) {
-      navigate(AppRoute.Unknown());
-    }
 
     return (
       <>
@@ -138,7 +81,7 @@ function Catalog(): JSX.Element {
             <div className="container">
               <ul className="breadcrumbs__list">
                 <li className="breadcrumbs__item">
-                  <Link className="breadcrumbs__link" to={AppRoute.Catalog(INITIAL_CATALOG_PAGE_URL_PARAMS)}>Главная
+                  <Link className="breadcrumbs__link" to={AppRoute.Catalog({ ...INITIAL_CATALOG_PAGE_URL_PARAMS, minPrice, maxPrice })}>Главная
                     <svg width="5" height="8" aria-hidden="true">
                       <use xlinkHref="#icon-arrow-mini"></use>
                     </svg>
@@ -154,15 +97,15 @@ function Catalog(): JSX.Element {
             <div className="container">
               <h1 className="title title--h2">Каталог фото- и видеотехники</h1>
               <div className="page-content__columns">
-                <CatalogFilter params={pageParams} cameras={cameras} />
+                <CatalogFilter minPrice={minPrice} maxPrice={maxPrice} onClearFiltersButtonClick={onClearFiltersButtonClick} />
                 <div className="catalog__content">
-                  <CatalogSort handleSortTypeButtonClick={handleSortTypeButtonClick} handleSortOrderButtonClick={handleSortOrderButtonClick} params={pageParams} />
+                  <CatalogSort onSortTypeButtonClick={onSortTypeButtonClick} onSortOrderButtonClick={onSortOrderButtonClick} />
                   {isDataLoaded ?
                     (<LoadingScreen />) :
                     (
                       <>
-                        <CatalogGallery cameras={camerasToRender} />
-                        <CatalogPagination params={pageParams} totalPageAmount={totalPageAmount} />
+                        <CatalogGallery cameras={cameras} />
+                        <CatalogPagination params={pageParams} />
                       </>
                     )}
                 </div>

@@ -10,11 +10,9 @@ import { INITIAL_CATALOG_PAGE_URL_PARAMS } from '../../../../const';
 describe('Testing catalogPagination component', () => {
   describe('should render correctly', () => {
     it('on first page', () => {
-      const mockPageAmount = 3;
-
       render(
         <BrowserRouter>
-          <CatalogPagination params={INITIAL_CATALOG_PAGE_URL_PARAMS} totalPageAmount={mockPageAmount} />
+          <CatalogPagination params={INITIAL_CATALOG_PAGE_URL_PARAMS} />
         </BrowserRouter>
       );
 
@@ -26,12 +24,11 @@ describe('Testing catalogPagination component', () => {
     });
 
     it('on last page', () => {
-      const mockPageAmount = 3;
       const mockPageNumber = '3';
 
       render(
         <BrowserRouter>
-          <CatalogPagination params={{ ...INITIAL_CATALOG_PAGE_URL_PARAMS, page: mockPageNumber }} totalPageAmount={mockPageAmount} />
+          <CatalogPagination params={{ ...INITIAL_CATALOG_PAGE_URL_PARAMS, page: mockPageNumber }} />
         </BrowserRouter>
       );
 
@@ -43,12 +40,11 @@ describe('Testing catalogPagination component', () => {
     });
 
     it('on any page but first or last', () => {
-      const mockPageAmount = 3;
       const mockPageNumber = '2';
 
       render(
         <BrowserRouter>
-          <CatalogPagination params={{ ...INITIAL_CATALOG_PAGE_URL_PARAMS, page: mockPageNumber }} totalPageAmount={mockPageAmount} />
+          <CatalogPagination params={{ ...INITIAL_CATALOG_PAGE_URL_PARAMS, page: mockPageNumber }} />
         </BrowserRouter>
       );
 

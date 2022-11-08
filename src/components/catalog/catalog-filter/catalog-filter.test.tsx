@@ -6,22 +6,16 @@ import '@testing-library/jest-dom';
 import userEvent from '@testing-library/user-event';
 import { render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
-import { INITIAL_CATALOG_PAGE_URL_PARAMS } from '../../../const';
-import { makeFakeCamera } from '../../../mocks/mocks';
 import CatalogFilter from './catalog-filter';
 
 describe('Testing CatalogFilter component', () => {
-  const minPrice = 500;
-  const maxPrice = 1000;
-
-  const fakeCamera1 = { ...makeFakeCamera(), price: minPrice };
-  const fakeCamera2 = { ...makeFakeCamera(), price: maxPrice };
-  const mockCameras = [fakeCamera1, fakeCamera2];
+  const minPrice = '500';
+  const maxPrice = '1000';
 
   it('should render correctly', () => {
     render(
       <BrowserRouter>
-        <CatalogFilter cameras={mockCameras} params={INITIAL_CATALOG_PAGE_URL_PARAMS} />
+        <CatalogFilter minPrice={minPrice} maxPrice={maxPrice} onClearFiltersButtonClick={jest.fn()} />
       </BrowserRouter>
     );
 
@@ -47,13 +41,13 @@ describe('Testing CatalogFilter component', () => {
   });
 
   describe('should treat price change correctly', () => {
-    const lessThanMinimalPrice = minPrice - 1;
-    const moreThanMaximalPrice = maxPrice + 1;
+    const lessThanMinimalPrice = +minPrice - 1;
+    const moreThanMaximalPrice = +maxPrice + 1;
 
     it('should change lessThanMinimalPrice to minPrice', async () => {
       render(
         <BrowserRouter>
-          <CatalogFilter cameras={mockCameras} params={INITIAL_CATALOG_PAGE_URL_PARAMS} />
+          <CatalogFilter minPrice={minPrice} maxPrice={maxPrice} onClearFiltersButtonClick={jest.fn()} />
         </BrowserRouter>
       );
 
@@ -70,7 +64,7 @@ describe('Testing CatalogFilter component', () => {
     it('should change moreThanMaximalPrice to maxPrice', async () => {
       render(
         <BrowserRouter>
-          <CatalogFilter cameras={mockCameras} params={INITIAL_CATALOG_PAGE_URL_PARAMS} />
+          <CatalogFilter minPrice={minPrice} maxPrice={maxPrice} onClearFiltersButtonClick={jest.fn()} />
         </BrowserRouter>
       );
 
@@ -87,7 +81,7 @@ describe('Testing CatalogFilter component', () => {
     it('should change value in minPriceInput to a value in maxPriceInput in the first one is greater', async () => {
       render(
         <BrowserRouter>
-          <CatalogFilter cameras={mockCameras} params={INITIAL_CATALOG_PAGE_URL_PARAMS} />
+          <CatalogFilter minPrice={minPrice} maxPrice={maxPrice} onClearFiltersButtonClick={jest.fn()} />
         </BrowserRouter>
       );
 
@@ -106,7 +100,7 @@ describe('Testing CatalogFilter component', () => {
     it('should change value in maxPriceInput to a value in minPriceInput in the first one is lesser', async () => {
       render(
         <BrowserRouter>
-          <CatalogFilter cameras={mockCameras} params={INITIAL_CATALOG_PAGE_URL_PARAMS} />
+          <CatalogFilter minPrice={minPrice} maxPrice={maxPrice} onClearFiltersButtonClick={jest.fn()} />
         </BrowserRouter>
       );
 

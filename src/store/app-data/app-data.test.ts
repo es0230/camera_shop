@@ -6,6 +6,10 @@ import { appData } from './app-data';
 
 const initialState: AppData = {
   cameras: [],
+  minPrice: '0',
+  maxPrice: '0',
+  prices: [],
+  totalCount: '1',
   promo: null,
   isDataLoaded: false,
   isLoadingFailed: false,

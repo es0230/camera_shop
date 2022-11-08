@@ -4,12 +4,11 @@
 
 import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
-import { INITIAL_CATALOG_PAGE_URL_PARAMS, SortOrder, SortType } from '../../../../const';
 import CatalogSort from './catalog-sort';
 
 describe('Testing CatalogSort component', () => {
   it('should render correctly with initial params', () => {
-    render(<CatalogSort handleSortOrderButtonClick={jest.fn()} handleSortTypeButtonClick={jest.fn()} params={INITIAL_CATALOG_PAGE_URL_PARAMS} />);
+    render(<CatalogSort onSortOrderButtonClick={jest.fn()} onSortTypeButtonClick={jest.fn()} />);
 
     const priceSort = screen.getByTestId('priceSort');
     const popularitySort = screen.getByTestId('popularitySort');
@@ -27,7 +26,7 @@ describe('Testing CatalogSort component', () => {
   });
 
   it('should render correctly with other params', () => {
-    render(<CatalogSort handleSortOrderButtonClick={jest.fn()} handleSortTypeButtonClick={jest.fn()} params={{ ...INITIAL_CATALOG_PAGE_URL_PARAMS, sortType: SortType.Rating, order: SortOrder.Descending }} />);
+    render(<CatalogSort onSortOrderButtonClick={jest.fn()} onSortTypeButtonClick={jest.fn()} />);
 
     const priceSort = screen.getByTestId('priceSort');
     const popularitySort = screen.getByTestId('popularitySort');

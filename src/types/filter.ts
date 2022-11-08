@@ -2,20 +2,20 @@ export type Filter = {
   price: {
     minPrice: string,
     maxPrice: string,
-  }
+  },
   category: {
-    photocamera: boolean,
-    videocamera: boolean,
+    'Фотоаппарат': boolean,
+    'Видеокамера': boolean,
   },
   type: {
-    digital: boolean,
-    film: boolean,
-    snapshot: boolean,
-    collection: boolean,
+    'Цифровая': boolean,
+    'Плёночная': boolean,
+    'Моментальная': boolean,
+    'Коллекционная': boolean,
   },
   level: {
-    zero: boolean,
-    amateur: boolean,
-    professional: boolean,
+    'Нулевой': boolean,
+    'Любительский': boolean,
+    'Профессиональный': boolean,
   }
 };
