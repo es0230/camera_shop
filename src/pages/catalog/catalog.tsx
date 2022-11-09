@@ -20,6 +20,8 @@ function Catalog(): JSX.Element {
   const navigate = useNavigate();
 
   const pageParams = usePageParams() as URLParams;
+  // eslint-disable-next-line no-console
+  console.log(pageParams);
   const page = pageParams.page;
   const minPrice = useAppSelector(selectMinPrice);
   const maxPrice = useAppSelector(selectMaxPrice);

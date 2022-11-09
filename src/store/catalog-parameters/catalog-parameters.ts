@@ -31,7 +31,7 @@ const initialState: CatalogParameters = {
   page: '1',
 };
 
-export const appFilters = createSlice({
+export const catalogParameters = createSlice({
   name: NameSpace.Filters,
   initialState,
   reducers: {
@@ -79,5 +79,5 @@ export const appFilters = createSlice({
   }
 });
 
-export const { actualizeState, setSortType, setSortOrder, setCurrentPage, setMinPriceFilter, setMaxPriceFilter, toggleCategoryFilter, toggleLevelFilter, toggleCameraTypeFilter } = appFilters.actions;
+export const { actualizeState, setSortType, setSortOrder, setCurrentPage, setMinPriceFilter, setMaxPriceFilter, toggleCategoryFilter, toggleLevelFilter, toggleCameraTypeFilter } = catalogParameters.actions;
 
