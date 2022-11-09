@@ -1,12 +1,13 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosInstance } from 'axios';
-import { APIRoute, DEFAULT_FILTER_VALUE, FilterCategories, FilterLevels, FilterTypes } from '../const';
+import { APIRoute } from '../const';
 import { Camera } from '../types/camera';
 import { Promo } from '../types/promo';
 import { Review } from '../types/review';
 import { ReviewPost } from '../types/review-post';
 import { AppDispatch, State } from '../types/state';
 import { URLParams } from '../types/url-params';
+import { getExtraQueryURL } from '../utils';
 
 export const fetchInitialData = createAsyncThunk<{ minPrice: string, maxPrice: string, totalCount: string, cameras: Camera[] }, undefined, {
   dispatch: AppDispatch,
@@ -23,6 +24,7 @@ export const fetchInitialData = createAsyncThunk<{ minPrice: string, maxPrice: s
   }
 );
 
+
 export const fetchCamerasAction = createAsyncThunk<{ data: Camera[], totalCount: string }, URLParams, {
   dispatch: AppDispatch,
   state: State,
@@ -30,12 +32,7 @@ export const fetchCamerasAction = createAsyncThunk<{ data: Camera[], totalCount:
 }>(
   'data/fetchCameras',
   async (params, { extra: api }) => {
-    const { page, sortType, order, category, productType, level, minPrice, maxPrice } = params;
-    const categoryURLPart = category === FilterCategories.Any ? '' : category.split(',').map((el) => `&category=${el}`).join('');
-    const productTypeURLPart = productType === FilterTypes.Any ? '' : productType.split(',').map((el) => `&type=${el}`).join('');
-    const levelURLPart = level === FilterLevels.Any ? '' : level.split(',').map((el) => `&level=${el}`).join('');
-    const priceURLPart = `${minPrice !== DEFAULT_FILTER_VALUE ? `&price_gte=${minPrice}` : ''}${maxPrice !== DEFAULT_FILTER_VALUE ? `&price_lte=${maxPrice}` : ''}`;
-    const extraQueryURL = `?_start=${(+page - 1) * 9}&_end=${+page * 9}&_sort=${sortType}&_order=${order}${categoryURLPart}${productTypeURLPart}${levelURLPart}${priceURLPart}`;
+    const extraQueryURL = getExtraQueryURL(params);
     const { data, headers } = await api.get<Camera[]>(`${APIRoute.Cameras}${extraQueryURL}`);
     return { data, totalCount: headers['x-total-count'] };
   },
