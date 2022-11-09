@@ -2,13 +2,43 @@
  * @jest-environment jsdom
  */
 
+import { configureMockStore } from '@jedmao/redux-mock-store';
 import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
+import { Provider } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
+import { SortOrder, SortType } from '../../../../const';
 import CatalogSort from './catalog-sort';
+
+const mockStore = configureMockStore();
+
+const store = mockStore({
+  FILTERS: {
+    sort: {
+      type: SortType.Price,
+      order: SortOrder.Ascending,
+    },
+  },
+});
+
+const otherStore = mockStore({
+  FILTERS: {
+    sort: {
+      type: SortType.Rating,
+      order: SortOrder.Descending,
+    },
+  },
+});
 
 describe('Testing CatalogSort component', () => {
   it('should render correctly with initial params', () => {
-    render(<CatalogSort onSortOrderButtonClick={jest.fn()} onSortTypeButtonClick={jest.fn()} />);
+    render(
+      <Provider store={store} >
+        <BrowserRouter>
+          <CatalogSort onSortOrderButtonClick={jest.fn()} onSortTypeButtonClick={jest.fn()} />
+        </BrowserRouter>
+      </Provider>
+    );
 
     const priceSort = screen.getByTestId('priceSort');
     const popularitySort = screen.getByTestId('popularitySort');
@@ -26,7 +56,13 @@ describe('Testing CatalogSort component', () => {
   });
 
   it('should render correctly with other params', () => {
-    render(<CatalogSort onSortOrderButtonClick={jest.fn()} onSortTypeButtonClick={jest.fn()} />);
+    render(
+      <Provider store={otherStore} >
+        <BrowserRouter>
+          <CatalogSort onSortOrderButtonClick={jest.fn()} onSortTypeButtonClick={jest.fn()} />
+        </BrowserRouter>
+      </Provider>
+    );
 
     const priceSort = screen.getByTestId('priceSort');
     const popularitySort = screen.getByTestId('popularitySort');

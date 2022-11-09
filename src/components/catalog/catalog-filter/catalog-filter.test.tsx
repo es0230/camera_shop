@@ -7,6 +7,45 @@ import userEvent from '@testing-library/user-event';
 import { render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import CatalogFilter from './catalog-filter';
+import { configureMockStore } from '@jedmao/redux-mock-store';
+import { SortType, SortOrder } from '../../../const';
+import { Provider } from 'react-redux';
+
+const mockStore = configureMockStore();
+
+const store = mockStore({
+  DATA: {
+    prices: ['500', '1000']
+  },
+  FILTERS: {
+    filters: {
+      price: {
+        minPrice: '500',
+        maxPrice: '1000',
+      },
+      category: {
+        'Фотоаппарат': false,
+        'Видеокамера': false,
+      },
+      type: {
+        'Цифровая': false,
+        'Плёночная': false,
+        'Моментальная': false,
+        'Коллекционная': false,
+      },
+      level: {
+        'Нулевой': false,
+        'Любительский': false,
+        'Профессиональный': false,
+      }
+    },
+    sort: {
+      type: SortType.Price,
+      order: SortOrder.Ascending,
+    },
+    page: '1',
+  },
+});
 
 describe('Testing CatalogFilter component', () => {
   const minPrice = '500';
@@ -14,9 +53,11 @@ describe('Testing CatalogFilter component', () => {
 
   it('should render correctly', () => {
     render(
-      <BrowserRouter>
-        <CatalogFilter minPrice={minPrice} maxPrice={maxPrice} onClearFiltersButtonClick={jest.fn()} />
-      </BrowserRouter>
+      <Provider store={store} >
+        <BrowserRouter>
+          <CatalogFilter minPrice={minPrice} maxPrice={maxPrice} onClearFiltersButtonClick={jest.fn()} />
+        </BrowserRouter>
+      </Provider>
     );
 
     const minPriceInput = screen.getByTestId('minPriceInput');
@@ -46,9 +87,11 @@ describe('Testing CatalogFilter component', () => {
 
     it('should change lessThanMinimalPrice to minPrice', async () => {
       render(
-        <BrowserRouter>
-          <CatalogFilter minPrice={minPrice} maxPrice={maxPrice} onClearFiltersButtonClick={jest.fn()} />
-        </BrowserRouter>
+        <Provider store={store} >
+          <BrowserRouter>
+            <CatalogFilter minPrice={minPrice} maxPrice={maxPrice} onClearFiltersButtonClick={jest.fn()} />
+          </BrowserRouter>
+        </Provider>
       );
 
       const minPriceInput = screen.getByTestId('minPriceInput');
@@ -63,9 +106,11 @@ describe('Testing CatalogFilter component', () => {
 
     it('should change moreThanMaximalPrice to maxPrice', async () => {
       render(
-        <BrowserRouter>
-          <CatalogFilter minPrice={minPrice} maxPrice={maxPrice} onClearFiltersButtonClick={jest.fn()} />
-        </BrowserRouter>
+        <Provider store={store} >
+          <BrowserRouter>
+            <CatalogFilter minPrice={minPrice} maxPrice={maxPrice} onClearFiltersButtonClick={jest.fn()} />
+          </BrowserRouter>
+        </Provider>
       );
 
       const minPriceInput = screen.getByTestId('minPriceInput');
@@ -80,9 +125,11 @@ describe('Testing CatalogFilter component', () => {
 
     it('should change value in minPriceInput to a value in maxPriceInput in the first one is greater', async () => {
       render(
-        <BrowserRouter>
-          <CatalogFilter minPrice={minPrice} maxPrice={maxPrice} onClearFiltersButtonClick={jest.fn()} />
-        </BrowserRouter>
+        <Provider store={store} >
+          <BrowserRouter>
+            <CatalogFilter minPrice={minPrice} maxPrice={maxPrice} onClearFiltersButtonClick={jest.fn()} />
+          </BrowserRouter>
+        </Provider>
       );
 
       const minPriceInput = screen.getByTestId('minPriceInput');
@@ -99,9 +146,11 @@ describe('Testing CatalogFilter component', () => {
 
     it('should change value in maxPriceInput to a value in minPriceInput in the first one is lesser', async () => {
       render(
-        <BrowserRouter>
-          <CatalogFilter minPrice={minPrice} maxPrice={maxPrice} onClearFiltersButtonClick={jest.fn()} />
-        </BrowserRouter>
+        <Provider store={store} >
+          <BrowserRouter>
+            <CatalogFilter minPrice={minPrice} maxPrice={maxPrice} onClearFiltersButtonClick={jest.fn()} />
+          </BrowserRouter>
+        </Provider>
       );
 
       const minPriceInput = screen.getByTestId('minPriceInput');
