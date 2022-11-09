@@ -10,7 +10,7 @@ import PageNotFound from '../page-not-found/page-not-found';
 import ReviewModal from '../../components/product/review-modal/review-modal';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { fetchCameraAction, fetchReviewsAction, fetchSimilarProductsAction } from '../../store/api-actions';
-import { selectCurrentProduct, selectCurrentReviews, selectCurrentSimilarProducts, selectIsDataLoaded, selectIsLoadingFailed } from '../../store/app-data/selectors';
+import { selectCurrentProduct, selectCurrentReviews, selectCurrentSimilarProducts, selectIsDataLoaded, selectIsLoadingFailed, selectMaxPrice, selectMinPrice } from '../../store/app-data/selectors';
 import LoadingScreen from '../../components/loading-screen/loading-screen';
 
 function Product(): JSX.Element {
@@ -40,6 +40,8 @@ function Product(): JSX.Element {
   const currentSimilarProducts = useAppSelector(selectCurrentSimilarProducts);
   const isDataLoaded = useAppSelector(selectIsDataLoaded);
   const isLoadingFailed = useAppSelector(selectIsLoadingFailed);
+  const minPrice = useAppSelector(selectMinPrice);
+  const maxPrice = useAppSelector(selectMaxPrice);
 
   if (isDataLoaded) {
     return (<LoadingScreen />);
@@ -57,14 +59,14 @@ function Product(): JSX.Element {
             <div className="container">
               <ul className="breadcrumbs__list">
                 <li className="breadcrumbs__item">
-                  <Link className="breadcrumbs__link" to={AppRoute.Catalog(INITIAL_CATALOG_PAGE_URL_PARAMS)}>Главная
+                  <Link className="breadcrumbs__link" to={AppRoute.Catalog({ ...INITIAL_CATALOG_PAGE_URL_PARAMS, minPrice, maxPrice })}>Главная
                     <svg width="5" height="8" aria-hidden="true">
                       <use xlinkHref="#icon-arrow-mini"></use>
                     </svg>
                   </Link>
                 </li>
                 <li className="breadcrumbs__item">
-                  <Link className="breadcrumbs__link" to={AppRoute.Catalog(INITIAL_CATALOG_PAGE_URL_PARAMS)}>Каталог
+                  <Link className="breadcrumbs__link" to={AppRoute.Catalog({ ...INITIAL_CATALOG_PAGE_URL_PARAMS, minPrice, maxPrice })}>Каталог
                     <svg width="5" height="8" aria-hidden="true">
                       <use xlinkHref="#icon-arrow-mini"></use>
                     </svg>
