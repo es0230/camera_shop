@@ -15,4 +15,5 @@ export type AppData = {
   currentReviews: Review[],
   currentSimilarProducts: Camera[],
   searchedCameras: Camera[],
+  searchLoaded: boolean,
 };

@@ -9,6 +9,8 @@ export const selectCameras = (state: State): Camera[] => state[NameSpace.Data].c
 
 export const selectCamerasSearchedByName = (state: State): Camera[] => state[NameSpace.Data].searchedCameras;
 
+export const selectSearchLoaded = (state: State): boolean => state[NameSpace.Data].searchLoaded;
+
 export const selectPromo = (state: State): Promo | null => state[NameSpace.Data].promo;
 
 export const selectCurrentProduct = (state: State): Camera | null => state[NameSpace.Data].currentProduct;

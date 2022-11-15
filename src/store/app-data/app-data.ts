@@ -16,6 +16,7 @@ const initialState: AppData = {
   currentReviews: [],
   currentSimilarProducts: [],
   searchedCameras: [],
+  searchLoaded: false,
 };
 
 export const appData = createSlice({
@@ -26,7 +27,11 @@ export const appData = createSlice({
   },
   extraReducers(builder) {
     builder
+      .addCase(fetchCamerasByName.pending, (state) => {
+        state.searchLoaded = true;
+      })
       .addCase(fetchCamerasByName.fulfilled, (state, action) => {
+        state.searchLoaded = false;
         state.searchedCameras = action.payload;
       })
       .addCase(fetchInitialData.pending, (state) => {
