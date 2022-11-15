@@ -38,7 +38,7 @@ function SearchForm() {
           <LensIcon />
           <input className="form-search__input" data-testid="searchInput" type="text" autoComplete="off" placeholder="Поиск по сайту" value={searchQuery} onInput={handleSearchFormInput} />
         </label>
-        <ul className="form-search__select-list">
+        <ul className="form-search__select-list scroller">
           {isDataLoaded ? <p>Загрузка...</p> : <> </>}
           {!isDataLoaded && (cameras.length ?
             cameras.map((el) => <SearchItem camera={el} onSearchItemClick={onSearchItemClick} key={el.id} />) :

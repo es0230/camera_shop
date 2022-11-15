@@ -12,8 +12,8 @@ function SearchItem({ camera, onSearchItemClick }: SearchItemProps) {
   const { name, id } = camera;
 
   return (
-    <Link to={AppRoute.Product(id, TabType.Perks)} onClick={onSearchItemClick} tabIndex={-1}>
-      <li data-testid="searchItem" className="form-search__select-item" tabIndex={0}>{name}</li>
+    <Link to={AppRoute.Product(id, TabType.Perks)} onClick={onSearchItemClick} tabIndex={0}>
+      <li data-testid="searchItem" className="form-search__select-item" tabIndex={-1}>{name}</li>
     </Link>
 
   );
