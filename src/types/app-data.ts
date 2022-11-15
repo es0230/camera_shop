@@ -14,4 +14,5 @@ export type AppData = {
   currentProduct: Camera | null,
   currentReviews: Review[],
   currentSimilarProducts: Camera[],
+  searchedCameras: Camera[],
 };

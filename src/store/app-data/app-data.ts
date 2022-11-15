@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { NameSpace } from '../../const';
 import { AppData } from '../../types/app-data';
-import { fetchCameraAction, fetchCamerasAction, fetchInitialData, fetchPromoAction, fetchReviewsAction, fetchSimilarProductsAction } from '../api-actions';
+import { fetchCameraAction, fetchCamerasAction, fetchCamerasByName, fetchInitialData, fetchPromoAction, fetchReviewsAction, fetchSimilarProductsAction } from '../api-actions';
 
 const initialState: AppData = {
   cameras: [],
@@ -15,6 +15,7 @@ const initialState: AppData = {
   currentProduct: null,
   currentReviews: [],
   currentSimilarProducts: [],
+  searchedCameras: [],
 };
 
 export const appData = createSlice({
@@ -25,6 +26,9 @@ export const appData = createSlice({
   },
   extraReducers(builder) {
     builder
+      .addCase(fetchCamerasByName.fulfilled, (state, action) => {
+        state.searchedCameras = action.payload;
+      })
       .addCase(fetchInitialData.pending, (state) => {
         state.isDataLoaded = true;
       })

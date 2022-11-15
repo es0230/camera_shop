@@ -5,7 +5,7 @@ import { State } from '../types/state';
 import { configureMockStore } from '@jedmao/redux-mock-store';
 import thunk from 'redux-thunk';
 import { APIRoute, INITIAL_CATALOG_PAGE_URL_PARAMS } from '../const';
-import { fetchCameraAction, fetchCamerasAction, fetchInitialData, fetchPromoAction, fetchReviewsAction, fetchSimilarProductsAction, sendReviewAction } from './api-actions';
+import { fetchCameraAction, fetchCamerasAction, fetchCamerasByName, fetchInitialData, fetchPromoAction, fetchReviewsAction, fetchSimilarProductsAction, sendReviewAction } from './api-actions';
 import { makeFakeCamera, makeFakePromo, makeFakeReview, makeFakeReviewPost } from '../mocks/mocks';
 import { datatype } from 'faker';
 import { Review } from '../types/review';
@@ -21,6 +21,28 @@ describe('Testing async actions', () => {
     Action,
     ThunkDispatch<State, typeof api, Action>
   >(middlewares);
+
+  describe('Testing fetchCamerasByName', () => {
+    it('should trigger .pending and .fulfilled type of fetchCamerasByName when server returns 200', async () => {
+      const store = mockStore();
+      const mockCamerasResponse = Array.from({ length: 10 }, () => makeFakeCamera());
+
+      mockAPI
+        .onGet(`${APIRoute.Cameras}?name_like=camera`)
+        .reply(200, mockCamerasResponse);
+
+      expect(store.getActions()).toEqual([]);
+
+      await store.dispatch(fetchCamerasByName('camera'));
+
+      const actions = store.getActions().map(({ type }) => type);
+
+      expect(actions).toEqual([
+        fetchCamerasByName.pending.type,
+        fetchCamerasByName.fulfilled.type
+      ]);
+    });
+  });
 
   describe('Testing fetchInitialData', () => {
     it('should trigger .pending and .fulfilled types of fetchInitialData when server returns 200', async () => {

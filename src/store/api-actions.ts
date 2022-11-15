@@ -9,6 +9,18 @@ import { AppDispatch, State } from '../types/state';
 import { URLParams } from '../types/url-params';
 import { getExtraQueryURL } from '../utils';
 
+export const fetchCamerasByName = createAsyncThunk<Camera[], string, {
+  dispatch: AppDispatch,
+  state: State,
+  extra: AxiosInstance
+}>(
+  'data/fetchCamerasByName',
+  async (cameraName, { extra: api }) => {
+    const { data } = await api.get(`${APIRoute.Cameras}?name_like=${cameraName}`);
+    return data;
+  }
+);
+
 export const fetchInitialData = createAsyncThunk<{ minPrice: string, maxPrice: string, totalCount: string, cameras: Camera[] }, undefined, {
   dispatch: AppDispatch,
   state: State,

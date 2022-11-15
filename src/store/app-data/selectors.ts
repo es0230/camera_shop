@@ -7,6 +7,8 @@ import { State } from '../../types/state';
 
 export const selectCameras = (state: State): Camera[] => state[NameSpace.Data].cameras;
 
+export const selectCamerasSearchedByName = (state: State): Camera[] => state[NameSpace.Data].searchedCameras;
+
 export const selectPromo = (state: State): Promo | null => state[NameSpace.Data].promo;
 
 export const selectCurrentProduct = (state: State): Camera | null => state[NameSpace.Data].currentProduct;

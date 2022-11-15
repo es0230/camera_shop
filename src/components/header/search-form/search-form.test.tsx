@@ -8,26 +8,31 @@ import { configureMockStore } from '@jedmao/redux-mock-store';
 import { render, screen } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { Provider } from 'react-redux';
-import { makeFakeCamera, makeFakePromo, makeFakeReview } from '../../../mocks/mocks';
+import { makeFakeCamera } from '../../../mocks/mocks';
 import HistoryRouter from '../../history-router/history-router';
 import SearchForm from './search-form';
+import { createAPI } from '../../../services/api';
+import thunk from 'redux-thunk';
+import { State } from '../../../types/state';
+import { Action, ThunkDispatch } from '@reduxjs/toolkit';
 
 const fakeCamera1 = { ...makeFakeCamera(), name: 'Camera Nicon', id: 1 };
 const fakeCamera2 = { ...makeFakeCamera(), name: 'Camera Canon', id: 2 };
 const fakeCamera3 = { ...makeFakeCamera(), name: 'Videocamera', id: 3 };
 const fakeCamera4 = { ...makeFakeCamera(), name: 'Polaroid', id: 4 };
 
-const mockStore = configureMockStore();
+const api = createAPI();
+const middlewares = [thunk.withExtraArgument(api)];
+
+const mockStore = configureMockStore<
+  State,
+  Action,
+  ThunkDispatch<State, typeof api, Action>
+>(middlewares);
 
 const store = mockStore({
   DATA: {
-    cameras: [fakeCamera1, fakeCamera2, fakeCamera3, fakeCamera4],
-    promo: makeFakePromo(),
-    isDataLoaded: false,
-    isLoadingFailed: false,
-    currentProduct: makeFakeCamera(),
-    currentReviews: [makeFakeReview()],
-    currentSimilarProducts: [makeFakeCamera()],
+    searchedCameras: [fakeCamera1, fakeCamera2, fakeCamera3, fakeCamera4],
   },
 });
 
@@ -46,25 +51,18 @@ describe('Testing Search form component', () => {
   it('should show search results correctly', async () => {
     render(fakeApp);
 
-    const searchInput = screen.getByTestId('searchInput');
-
-    await userEvent.type(searchInput, 'camera');
-
-    expect(screen.getAllByTestId('searchItem').length).toBe(3);
+    expect(screen.getAllByTestId('searchItem').length).toBe(4);
   });
 
   it('clear button should work correctly', async () => {
     render(fakeApp);
 
-    const searchInput = screen.getByTestId('searchInput');
     const clearButton = screen.getByTestId('clearButton');
 
-    await userEvent.type(searchInput, 'c');
-
-    expect(screen.getAllByTestId('searchItem').length).toBe(3);
+    expect(screen.getAllByTestId('searchItem').length).toBe(4);
 
     await userEvent.click(clearButton);
 
-    expect(screen.queryByTestId('searchItem')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('formSearch')?.classList.contains('list-opened')).toBe(false);
   });
 });
