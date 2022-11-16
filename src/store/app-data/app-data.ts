@@ -47,6 +47,7 @@ export const appData = createSlice({
         state.maxPrice = maxPrice;
         state.totalCount = totalCount;
         state.prices = cameras.map((el) => String(el.price));
+        state.cameras = cameras;
         state.isDataLoaded = false;
         state.isLoadingFailed = false;
       })

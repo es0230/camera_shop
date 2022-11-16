@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AppRoute, INITIAL_CATALOG_PAGE_URL_PARAMS } from '../../../const';
 import { useAppDispatch, useAppSelector, } from '../../../hooks';
+import { fetchCamerasAction } from '../../../store/api-actions';
 import { selectPrices } from '../../../store/app-data/selectors';
 import { setMaxPriceFilter, setMinPriceFilter, toggleCameraTypeFilter, toggleCategoryFilter, toggleLevelFilter } from '../../../store/catalog-parameters/catalog-parameters';
 import { selectFilterState, selectPageParams } from '../../../store/catalog-parameters/selectors';
@@ -28,11 +29,12 @@ function CatalogFilter({ minPrice, maxPrice, onClearFiltersButtonClick }: Catalo
 
   useEffect(() => {
     if (filtersUpdated) {
+      dispatch(fetchCamerasAction(pageParams));
       navigate(AppRoute.Catalog(pageParams));
       setFiltersUpdated(false);
     }
 
-  }, [filtersUpdated, navigate, pageParams]);
+  }, [dispatch, filtersUpdated, navigate, pageParams]);
 
   const handleFilterPriceChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
     const target = evt.currentTarget;
@@ -87,6 +89,7 @@ function CatalogFilter({ minPrice, maxPrice, onClearFiltersButtonClick }: Catalo
   const handleClearFiltersButtonClick = () => {
     navigate(AppRoute.Catalog({ ...INITIAL_CATALOG_PAGE_URL_PARAMS, minPrice: productPrices[0], maxPrice: productPrices[productPrices.length - 1] }));
     onClearFiltersButtonClick();
+    setFiltersUpdated(true);
   };
 
   return (

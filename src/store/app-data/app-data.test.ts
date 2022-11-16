@@ -61,7 +61,7 @@ describe('Testing appData', () => {
       const cameraPrices = cameras.map((el) => String(el.price));
 
       expect(appData.reducer(state, { type: fetchInitialData.fulfilled.type, payload: { cameras: cameras, minPrice: '100', maxPrice: '1000', totalCount: '10' } }))
-        .toEqual({ ...initialState, minPrice: '100', maxPrice: '1000', prices: cameraPrices, totalCount: '10', isDataLoaded: false, isLoadingFailed: false });
+        .toEqual({ ...initialState, cameras, minPrice: '100', maxPrice: '1000', prices: cameraPrices, totalCount: '10', isDataLoaded: false, isLoadingFailed: false });
     });
   });
 

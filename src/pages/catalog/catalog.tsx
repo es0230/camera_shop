@@ -10,7 +10,7 @@ import ServerError from '../../components/server-error/server-error';
 import { AppRoute, DEFAULT_FILTER_VALUE, INITIAL_CATALOG_PAGE_URL_PARAMS, SortOrder, SortType } from '../../const';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { usePageParams } from '../../hooks/use-page-params';
-import { fetchCamerasAction } from '../../store/api-actions';
+//import { fetchCamerasAction } from '../../store/api-actions';
 import { selectCameras, selectIsDataLoaded, selectIsLoadingFailed, selectMaxPrice, selectMinPrice, selectPromo } from '../../store/app-data/selectors';
 import { actualizeState, setSortOrder, setSortType } from '../../store/catalog-parameters/catalog-parameters';
 import { URLParams } from '../../types/url-params';
@@ -37,12 +37,6 @@ function Catalog(): JSX.Element {
       setStateNeedsUpdate(false);
     }
   }, [dispatch, pageParams, stateNeedsUpdate]);
-
-  useEffect(() => {
-    if (minPrice !== DEFAULT_FILTER_VALUE && minPrice !== '0' && maxPrice !== DEFAULT_FILTER_VALUE && maxPrice !== '0') {
-      dispatch(fetchCamerasAction(pageParams));
-    }
-  }, [dispatch, maxPrice, minPrice, pageParams]);
 
   useEffect(() => {
     if (pageParams.minPrice === DEFAULT_FILTER_VALUE || pageParams.minPrice === '0' || pageParams.maxPrice === DEFAULT_FILTER_VALUE || pageParams.maxPrice === '0') {
