@@ -9,7 +9,7 @@ import { fetchCameraAction, fetchCamerasAction, fetchCamerasByName, fetchInitial
 import { makeFakeCamera, makeFakePromo, makeFakeReview, makeFakeReviewPost } from '../mocks/mocks';
 import { datatype } from 'faker';
 import { Review } from '../types/review';
-import { getExtraQueryURL } from '../utils';
+import { getExtraQueryURL, getExtraQueryURLForFilters } from '../utils';
 
 describe('Testing async actions', () => {
   const api = createAPI();
@@ -71,9 +71,14 @@ describe('Testing async actions', () => {
       const store = mockStore();
       const mockCamerasResponse = Array.from({ length: 10 }, () => makeFakeCamera());
       const extraQueryURL = getExtraQueryURL(INITIAL_CATALOG_PAGE_URL_PARAMS);
+      const extraQueryURLWithoutPages = getExtraQueryURLForFilters(INITIAL_CATALOG_PAGE_URL_PARAMS);
 
       mockAPI
         .onGet(`${APIRoute.Cameras}${extraQueryURL}`)
+        .reply(200, mockCamerasResponse, { 'x-total-count': '10' });
+
+      mockAPI
+        .onGet(`${APIRoute.Cameras}${extraQueryURLWithoutPages}`)
         .reply(200, mockCamerasResponse, { 'x-total-count': '10' });
 
       expect(store.getActions()).toEqual([]);

@@ -10,3 +10,12 @@ export const getExtraQueryURL = (params: URLParams) => {
   const extraQueryURL = `?_start=${(+page - 1) * 9}&_end=${+page * 9}&_sort=${sortType}&_order=${order}${categoryURLPart}${productTypeURLPart}${levelURLPart}${priceURLPart}`;
   return extraQueryURL;
 };
+
+export const getExtraQueryURLForFilters = (params: URLParams) => {
+  const { sortType, order, category, productType, level } = params;
+  const categoryURLPart = category === FilterCategories.Any ? '' : category.split(',').map((el) => `&category=${el}`).join('');
+  const productTypeURLPart = productType === FilterTypes.Any ? '' : productType.split(',').map((el) => `&type=${el}`).join('');
+  const levelURLPart = level === FilterLevels.Any ? '' : level.split(',').map((el) => `&level=${el}`).join('');
+  const extraQueryURL = `?_sort=${sortType}&_order=${order}${categoryURLPart}${productTypeURLPart}${levelURLPart}`;
+  return extraQueryURL;
+};

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { makeFakeCamera, makeFakePromo, makeFakeReview } from '../../mocks/mocks';
 import { AppData } from '../../types/app-data';
 import { fetchCameraAction, fetchCamerasAction, fetchCamerasByName, fetchInitialData, fetchPromoAction, fetchReviewsAction, fetchSimilarProductsAction } from '../api-actions';
@@ -81,8 +82,8 @@ describe('Testing appData', () => {
       state = { ...state, isDataLoaded: true, isLoadingFailed: true };
       const cameras = Array.from({ length: 10 }, () => makeFakeCamera());
 
-      expect(appData.reducer(state, { type: fetchCamerasAction.fulfilled.type, payload: { data: cameras, totalCount: '10' } }))
-        .toEqual({ ...initialState, cameras: cameras, totalCount: '10', isDataLoaded: false, isLoadingFailed: false });
+      expect(appData.reducer(state, { type: fetchCamerasAction.fulfilled.type, payload: { data: cameras, totalCount: '10', minPrice: '1', maxPrice: '10' } }))
+        .toEqual({ ...initialState, cameras: cameras, totalCount: '10', isDataLoaded: false, isLoadingFailed: false, minPrice: '1', maxPrice: '10' });
     });
   });
 

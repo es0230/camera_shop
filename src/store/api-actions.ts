@@ -7,7 +7,7 @@ import { Review } from '../types/review';
 import { ReviewPost } from '../types/review-post';
 import { AppDispatch, State } from '../types/state';
 import { URLParams } from '../types/url-params';
-import { getExtraQueryURL } from '../utils';
+import { getExtraQueryURL, getExtraQueryURLForFilters } from '../utils';
 
 export const fetchCamerasByName = createAsyncThunk<Camera[], string, {
   dispatch: AppDispatch,
@@ -37,7 +37,7 @@ export const fetchInitialData = createAsyncThunk<{ minPrice: string, maxPrice: s
 );
 
 
-export const fetchCamerasAction = createAsyncThunk<{ data: Camera[], totalCount: string }, URLParams, {
+export const fetchCamerasAction = createAsyncThunk<{ minPrice: string, maxPrice: string, data: Camera[], totalCount: string }, URLParams, {
   dispatch: AppDispatch,
   state: State,
   extra: AxiosInstance
@@ -45,8 +45,13 @@ export const fetchCamerasAction = createAsyncThunk<{ data: Camera[], totalCount:
   'data/fetchCameras',
   async (params, { extra: api }) => {
     const extraQueryURL = getExtraQueryURL(params);
+    const extraQueryURLForFilters = getExtraQueryURLForFilters(params);
     const { data, headers } = await api.get<Camera[]>(`${APIRoute.Cameras}${extraQueryURL}`);
-    return { data, totalCount: headers['x-total-count'] };
+    const validCamerasForFilters = (await api.get<Camera[]>(`${APIRoute.Cameras}${extraQueryURLForFilters}`)).data;
+    const prices = validCamerasForFilters.slice().sort((a, b) => a.price - b.price);
+    const minPrice = `${prices[0].price}`;
+    const maxPrice = `${prices[prices.length - 1].price}`;
+    return { data, minPrice, maxPrice, totalCount: headers['x-total-count'] };
   },
 );
 

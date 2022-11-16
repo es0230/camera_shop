@@ -85,7 +85,7 @@ function CatalogFilter({ minPrice, maxPrice, onClearFiltersButtonClick }: Catalo
   };
 
   const handleClearFiltersButtonClick = () => {
-    navigate(AppRoute.Catalog({ ...INITIAL_CATALOG_PAGE_URL_PARAMS, minPrice, maxPrice }));
+    navigate(AppRoute.Catalog({ ...INITIAL_CATALOG_PAGE_URL_PARAMS, minPrice: productPrices[0], maxPrice: productPrices[productPrices.length - 1] }));
     onClearFiltersButtonClick();
   };
 

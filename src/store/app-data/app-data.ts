@@ -58,9 +58,11 @@ export const appData = createSlice({
         state.isLoadingFailed = true;
       })
       .addCase(fetchCamerasAction.fulfilled, (state, action) => {
-        const { data, totalCount } = action.payload;
+        const { data, totalCount, minPrice, maxPrice } = action.payload;
         state.cameras = data;
         state.totalCount = totalCount;
+        state.minPrice = minPrice;
+        state.maxPrice = maxPrice;
         state.isDataLoaded = false;
         state.isLoadingFailed = false;
       })
