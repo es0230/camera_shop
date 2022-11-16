@@ -39,8 +39,10 @@ function Catalog(): JSX.Element {
   }, [dispatch, pageParams, stateNeedsUpdate]);
 
   useEffect(() => {
-    dispatch(fetchCamerasAction(pageParams));
-  }, [dispatch, pageParams]);
+    if (minPrice !== DEFAULT_FILTER_VALUE && minPrice !== '0' && maxPrice !== DEFAULT_FILTER_VALUE && maxPrice !== '0') {
+      dispatch(fetchCamerasAction(pageParams));
+    }
+  }, [dispatch, maxPrice, minPrice, pageParams]);
 
   useEffect(() => {
     if (pageParams.minPrice === DEFAULT_FILTER_VALUE || pageParams.minPrice === '0' || pageParams.maxPrice === DEFAULT_FILTER_VALUE || pageParams.maxPrice === '0') {
