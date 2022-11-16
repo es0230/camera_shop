@@ -10,6 +10,7 @@ import ServerError from '../../components/server-error/server-error';
 import { AppRoute, DEFAULT_FILTER_VALUE, INITIAL_CATALOG_PAGE_URL_PARAMS, SortOrder, SortType } from '../../const';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { usePageParams } from '../../hooks/use-page-params';
+import { fetchCamerasAction } from '../../store/api-actions';
 //import { fetchCamerasAction } from '../../store/api-actions';
 import { selectCameras, selectIsDataLoaded, selectIsLoadingFailed, selectMaxPrice, selectMinPrice, selectPromo } from '../../store/app-data/selectors';
 import { actualizeState, setSortOrder, setSortType } from '../../store/catalog-parameters/catalog-parameters';
@@ -54,12 +55,14 @@ function Catalog(): JSX.Element {
   const onSortTypeButtonClick = (evt: React.ChangeEvent) => {
     const newSortType = evt.currentTarget.id;
     dispatch(setSortType(newSortType));
+    dispatch(fetchCamerasAction({ ...pageParams, sortType: newSortType }));
     navigate(AppRoute.Catalog({ ...pageParams, sortType: newSortType }));
   };
 
   const onSortOrderButtonClick = (evt: React.ChangeEvent) => {
     const newSortOrder = evt.currentTarget.id;
     dispatch(setSortOrder(newSortOrder));
+    dispatch(fetchCamerasAction({ ...pageParams, order: newSortOrder }));
     navigate(AppRoute.Catalog({ ...pageParams, order: newSortOrder }));
   };
 
