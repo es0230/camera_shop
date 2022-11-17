@@ -29,9 +29,9 @@ export const fetchInitialData = createAsyncThunk<{ minPrice: string, maxPrice: s
   'data/fetchInitialData',
   async (_arg, { extra: api }) => {
     const { data } = await api.get(`${APIRoute.Cameras}?_sort=price&_order=asc`);
-    const minPrice = data[0].price;
-    const maxPrice = data[data.length - 1].price;
-    const totalCount = data.length;
+    const minPrice = `${data[0].price}`;
+    const maxPrice = `${data[data.length - 1].price}`;
+    const totalCount = `${data.length}`;
     return { minPrice, maxPrice, totalCount, cameras: data };
   }
 );

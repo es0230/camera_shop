@@ -63,7 +63,7 @@ enum FilterLevels {
 const MAX_RATING = 5;
 const INITIAL_REVIEWS = 3;
 const PRODUCTS_PER_PAGE = 9;
-const DEFAULT_FILTER_VALUE = 'default';
+const DEFAULT_FILTER_VALUE = '0';
 
 const INITIAL_CATALOG_PAGE_URL_PARAMS: URLParams = { page: '1', sortType: SortType.Price, order: SortOrder.Ascending, minPrice: DEFAULT_FILTER_VALUE, maxPrice: DEFAULT_FILTER_VALUE, category: FilterCategories.Any, productType: FilterTypes.Any, level: FilterLevels.Any };
 

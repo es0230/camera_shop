@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Ad from '../../components/ad/ad';
 import CatalogGallery from '../../components/catalog/catalog-content/catalog-gallery/catalog-gallery';
@@ -7,13 +7,12 @@ import CatalogSort from '../../components/catalog/catalog-content/catalog-sort/c
 import CatalogFilter from '../../components/catalog/catalog-filter/catalog-filter';
 import LoadingScreen from '../../components/loading-screen/loading-screen';
 import ServerError from '../../components/server-error/server-error';
-import { AppRoute, DEFAULT_FILTER_VALUE, INITIAL_CATALOG_PAGE_URL_PARAMS, SortOrder, SortType } from '../../const';
+import { AppRoute, INITIAL_CATALOG_PAGE_URL_PARAMS, SortOrder, SortType } from '../../const';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { usePageParams } from '../../hooks/use-page-params';
 import { fetchCamerasAction } from '../../store/api-actions';
-//import { fetchCamerasAction } from '../../store/api-actions';
 import { selectCameras, selectIsDataLoaded, selectIsLoadingFailed, selectMaxPrice, selectMinPrice, selectPromo } from '../../store/app-data/selectors';
-import { actualizeState, setSortOrder, setSortType } from '../../store/catalog-parameters/catalog-parameters';
+import { actualizeState } from '../../store/catalog-parameters/catalog-parameters';
 import { URLParams } from '../../types/url-params';
 
 function Catalog(): JSX.Element {
@@ -30,20 +29,31 @@ function Catalog(): JSX.Element {
   const isDataLoaded = useAppSelector(selectIsDataLoaded);
   const isLoadingFailed = useAppSelector(selectIsLoadingFailed);
 
-  const [stateNeedsUpdate, setStateNeedsUpdate] = useState(true);
+  useEffect(() => {
+    dispatch(actualizeState(pageParams));
+    dispatch(fetchCamerasAction(pageParams));
+  }, [dispatch, pageParams]);
 
   useEffect(() => {
-    if (stateNeedsUpdate) {
-      dispatch(actualizeState(pageParams));
-      setStateNeedsUpdate(false);
+    if (pageParams.minPrice === '0' || pageParams.maxPrice === '0') {
+      navigate(AppRoute.Catalog({ ...pageParams, minPrice, maxPrice }));
     }
-  }, [dispatch, pageParams, stateNeedsUpdate]);
+  }, [maxPrice, minPrice, navigate, pageParams]);
 
-  useEffect(() => {
-    if (pageParams.minPrice === DEFAULT_FILTER_VALUE || pageParams.minPrice === '0' || pageParams.maxPrice === DEFAULT_FILTER_VALUE || pageParams.maxPrice === '0') {
-      navigate(AppRoute.Catalog({ ...INITIAL_CATALOG_PAGE_URL_PARAMS, minPrice, maxPrice }));
-    }
-  }, [maxPrice, minPrice, navigate, pageParams.maxPrice, pageParams.minPrice]);
+  const onSortTypeButtonClick = (evt: React.ChangeEvent) => {
+    const newSortType = evt.currentTarget.id;
+    navigate(AppRoute.Catalog({ ...pageParams, sortType: newSortType }));
+  };
+
+  const onSortOrderButtonClick = (evt: React.ChangeEvent) => {
+    const newSortOrder = evt.currentTarget.id;
+    navigate(AppRoute.Catalog({ ...pageParams, order: newSortOrder }));
+  };
+
+  const onClearFiltersButtonClick = () => {
+    dispatch(actualizeState(INITIAL_CATALOG_PAGE_URL_PARAMS));
+    navigate(AppRoute.Catalog(INITIAL_CATALOG_PAGE_URL_PARAMS));
+  };
 
   if (isLoadingFailed ||
     pageParams === undefined ||
@@ -51,24 +61,6 @@ function Catalog(): JSX.Element {
     (pageParams.order !== SortOrder.Ascending && pageParams.order !== SortOrder.Descending)) {
     return <ServerError />;
   }
-
-  const onSortTypeButtonClick = (evt: React.ChangeEvent) => {
-    const newSortType = evt.currentTarget.id;
-    dispatch(setSortType(newSortType));
-    dispatch(fetchCamerasAction({ ...pageParams, sortType: newSortType }));
-    navigate(AppRoute.Catalog({ ...pageParams, sortType: newSortType }));
-  };
-
-  const onSortOrderButtonClick = (evt: React.ChangeEvent) => {
-    const newSortOrder = evt.currentTarget.id;
-    dispatch(setSortOrder(newSortOrder));
-    dispatch(fetchCamerasAction({ ...pageParams, order: newSortOrder }));
-    navigate(AppRoute.Catalog({ ...pageParams, order: newSortOrder }));
-  };
-
-  const onClearFiltersButtonClick = () => {
-    setStateNeedsUpdate(true);
-  };
 
   if (page) {
 
