@@ -35,7 +35,7 @@ function Catalog(): JSX.Element {
   }, [dispatch, pageParams]);
 
   useEffect(() => {
-    if (pageParams.minPrice === '0' || pageParams.maxPrice === '0') {
+    if ((pageParams.minPrice === '0' || pageParams.maxPrice === '0') && minPrice !== '0' && maxPrice !== '0') {
       navigate(AppRoute.Catalog({ ...pageParams, minPrice, maxPrice }));
     }
   }, [maxPrice, minPrice, navigate, pageParams]);
