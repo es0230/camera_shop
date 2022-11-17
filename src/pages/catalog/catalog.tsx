@@ -11,7 +11,7 @@ import { AppRoute, INITIAL_CATALOG_PAGE_URL_PARAMS, SortOrder, SortType } from '
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { usePageParams } from '../../hooks/use-page-params';
 import { fetchCamerasAction } from '../../store/api-actions';
-import { selectCameras, selectIsDataLoaded, selectIsLoadingFailed, selectMaxPrice, selectMinPrice, selectPromo } from '../../store/app-data/selectors';
+import { selectCameras, selectIsDataLoaded, selectIsLoadingFailed, selectMaxPrice, selectMinPrice, selectPrices, selectPromo } from '../../store/app-data/selectors';
 import { actualizeState } from '../../store/catalog-parameters/catalog-parameters';
 import { URLParams } from '../../types/url-params';
 
@@ -23,6 +23,7 @@ function Catalog(): JSX.Element {
   const page = pageParams.page;
   const minPrice = useAppSelector(selectMinPrice);
   const maxPrice = useAppSelector(selectMaxPrice);
+  const prices = useAppSelector(selectPrices);
 
   const ad = useAppSelector(selectPromo);
   const cameras = useAppSelector(selectCameras);
@@ -51,8 +52,8 @@ function Catalog(): JSX.Element {
   };
 
   const onClearFiltersButtonClick = () => {
-    dispatch(actualizeState(INITIAL_CATALOG_PAGE_URL_PARAMS));
-    navigate(AppRoute.Catalog(INITIAL_CATALOG_PAGE_URL_PARAMS));
+    dispatch(actualizeState({ ...INITIAL_CATALOG_PAGE_URL_PARAMS, minPrice: prices[0], maxPrice: prices[prices.length - 1] }));
+    navigate(AppRoute.Catalog({ ...INITIAL_CATALOG_PAGE_URL_PARAMS, minPrice: prices[0], maxPrice: prices[prices.length - 1] }));
   };
 
   if (isLoadingFailed ||

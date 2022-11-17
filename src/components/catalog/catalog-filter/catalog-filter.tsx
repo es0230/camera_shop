@@ -28,7 +28,7 @@ function CatalogFilter({ minPrice, maxPrice, onClearFiltersButtonClick }: Catalo
 
   useEffect(() => {
     if (filtersUpdated) {
-      navigate(AppRoute.Catalog(pageParams));
+      navigate(AppRoute.Catalog({ ...pageParams, page: '1' }));
       setFiltersUpdated(false);
     }
   }, [dispatch, filtersUpdated, navigate, pageParams]);
