@@ -10,7 +10,7 @@ import { addToBasket } from '../../store/user-data/user-data';
 
 Modal.defaultStyles = {};
 
-const PRODUCTPAGEINDICATOR = 'product';
+const PRODUCTPAGEINDICATOR = '/product';
 
 function ProductModal(): JSX.Element {
   const dispatch = useAppDispatch();
