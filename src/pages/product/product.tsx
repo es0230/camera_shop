@@ -12,6 +12,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks';
 import { fetchCameraAction, fetchReviewsAction, fetchSimilarProductsAction } from '../../store/api-actions';
 import { selectCurrentProduct, selectCurrentReviews, selectCurrentSimilarProducts, selectIsDataLoaded, selectIsLoadingFailed, selectMaxPrice, selectMinPrice } from '../../store/app-data/selectors';
 import LoadingScreen from '../../components/loading-screen/loading-screen';
+import ProductModal from '../../components/product-modal/product-modal';
 
 function Product(): JSX.Element {
   const { id, tabType } = useParams();
@@ -90,6 +91,7 @@ function Product(): JSX.Element {
         </div>
         <ReviewModal isActive={modalOpened} setIsActive={setModalOpened} setIsNeededUpdate={setIsNeededUpdate} />
       </main>
+      <ProductModal />
       <ScrollLink
         data-testid="up-button"
         className='up-btn'

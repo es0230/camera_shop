@@ -1,5 +1,7 @@
 import { NavLink, useParams } from 'react-router-dom';
 import { AppRoute, MAX_RATING, TabType } from '../../../const';
+import { useAppDispatch } from '../../../hooks';
+import { toggleModalOpened } from '../../../store/app-data/app-data';
 import { Camera } from '../../../types/camera';
 
 type ProductCardProps = {
@@ -9,8 +11,13 @@ type ProductCardProps = {
 function ProductCard({ currentProduct }: ProductCardProps): JSX.Element {
   const { name, previewImg, previewImg2x, previewImgWebp, previewImgWebp2x, rating, price, vendorCode, type, category, description, level, reviewCount, id } = currentProduct;
   const { tabType } = useParams();
+  const dispatch = useAppDispatch();
 
   const setButtonActive = ({ isActive }: { isActive: boolean }) => isActive ? 'tabs__control is-active' : 'tabs__control';
+
+  const handleAddToBasketClick = () => {
+    dispatch(toggleModalOpened());
+  };
 
   return (
     <section data-testid="product-card-component" className="product">
@@ -42,7 +49,7 @@ function ProductCard({ currentProduct }: ProductCardProps): JSX.Element {
           <p className="product__price">
             <span className="visually-hidden">Цена:</span>{price} ₽
           </p>
-          <button className="btn btn--purple" type="button">
+          <button className="btn btn--purple" type="button" onClick={handleAddToBasketClick}>
             <svg width="24" height="16" aria-hidden="true">
               <use xlinkHref="#icon-add-basket" />
             </svg>Добавить в корзину

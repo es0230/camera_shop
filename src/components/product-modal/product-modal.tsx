@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import Modal from 'react-modal';
-import { FilterCategories, KEY_EVENT_TYPE, KEY_NAME_ESC } from '../../const';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { AppRoute, FilterCategories, INITIAL_CATALOG_PAGE_URL_PARAMS, KEY_EVENT_TYPE, KEY_NAME_ESC } from '../../const';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { makeFakeCamera } from '../../mocks/mocks';
 import { toggleModalOpened } from '../../store/app-data/app-data';
@@ -9,12 +10,16 @@ import { addToBasket } from '../../store/user-data/user-data';
 
 Modal.defaultStyles = {};
 
+const PRODUCTPAGEINDICATOR = 'product';
+
 function ProductModal(): JSX.Element {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const [productAdded, setProductAdded] = useState(false);
   const isOpened = useAppSelector(selectModalOpened);
   const camera = useAppSelector(selectCurrentProduct) || makeFakeCamera();
   const { name, previewImg, previewImg2x, previewImgWebp, previewImgWebp2x, price, vendorCode, type, category, level } = camera;
+  const isOnProductPage = useLocation().pathname.includes(PRODUCTPAGEINDICATOR);
 
   const handleAddToBasketClick = () => {
     dispatch(addToBasket(camera));
@@ -27,6 +32,14 @@ function ProductModal(): JSX.Element {
       setProductAdded(false);
     }
   }, [dispatch, productAdded]);
+
+  const handleBackToShoppingOnProductPageClick = () => {
+    dispatch(toggleModalOpened());
+    if (productAdded) {
+      setProductAdded(false);
+    }
+    navigate(AppRoute.Catalog(INITIAL_CATALOG_PAGE_URL_PARAMS));
+  };
 
   const handleEscKey = useCallback((evt: KeyboardEvent) => {
     if (evt.key === KEY_NAME_ESC) {
@@ -67,7 +80,7 @@ function ProductModal(): JSX.Element {
                 <use xlinkHref="#icon-success"></use>
               </svg>
               <div className="modal__buttons">
-                <button className="btn btn--transparent modal__btn" onClick={handleModalClosing}>Продолжить покупки</button>
+                <button className="btn btn--transparent modal__btn" onClick={isOnProductPage ? handleBackToShoppingOnProductPageClick : handleModalClosing}>Продолжить покупки</button>
                 <button className="btn btn--purple modal__btn modal__btn--fit-width">Перейти в корзину</button>
               </div>
               <button className="cross-btn" type="button" aria-label="Закрыть попап" onClick={handleModalClosing}>
