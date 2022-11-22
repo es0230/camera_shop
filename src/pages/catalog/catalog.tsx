@@ -6,6 +6,7 @@ import CatalogPagination from '../../components/catalog/catalog-content/catalog-
 import CatalogSort from '../../components/catalog/catalog-content/catalog-sort/catalog-sort';
 import CatalogFilter from '../../components/catalog/catalog-filter/catalog-filter';
 import LoadingScreen from '../../components/loading-screen/loading-screen';
+import ProductModal from '../../components/product-modal/product-modal';
 import ServerError from '../../components/server-error/server-error';
 import { AppRoute, INITIAL_CATALOG_PAGE_URL_PARAMS, SortOrder, SortType } from '../../const';
 import { useAppDispatch, useAppSelector } from '../../hooks';
@@ -21,10 +22,10 @@ function Catalog(): JSX.Element {
 
   const pageParams = usePageParams() as URLParams;
   const page = pageParams.page;
+
   const minPrice = useAppSelector(selectMinPrice);
   const maxPrice = useAppSelector(selectMaxPrice);
   const prices = useAppSelector(selectPrices);
-
   const ad = useAppSelector(selectPromo);
   const cameras = useAppSelector(selectCameras);
   const isDataLoaded = useAppSelector(selectIsDataLoaded);
@@ -66,7 +67,7 @@ function Catalog(): JSX.Element {
   if (page) {
 
     return (
-      <>
+      <main>
         <Ad ad={ad} />
         <div data-testid="catalog-page" className="page-content">
           <div data-testid="breadcrumbs" className="breadcrumbs">
@@ -105,7 +106,8 @@ function Catalog(): JSX.Element {
             </div>
           </section>
         </div>
-      </>
+        <ProductModal />
+      </main>
     );
   }
 

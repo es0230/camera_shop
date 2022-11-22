@@ -19,6 +19,7 @@ const initialState: AppData = {
   currentSimilarProducts: [],
   searchedCameras: [],
   searchLoaded: false,
+  modalOpened: false,
 };
 
 describe('Testing appData', () => {

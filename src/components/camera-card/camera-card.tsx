@@ -1,6 +1,10 @@
 import { Camera } from '../../types/camera';
 import { AppRoute, MAX_RATING, TabType } from '../../const';
 import { Link } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { selectBasket } from '../../store/user-data/selectors';
+import BasketIcon from '../svg/basket-icon/basket-icon';
+import { setCurrentCamera, toggleModalOpened } from '../../store/app-data/app-data';
 
 type CameraCardProps = {
   camera: Camera,
@@ -9,6 +13,16 @@ type CameraCardProps = {
 
 function CameraCard({ camera, isActive }: CameraCardProps): JSX.Element {
   const { id, name, rating, price, reviewCount, previewImg, previewImg2x, previewImgWebp, previewImgWebp2x } = camera;
+
+  const dispatch = useAppDispatch();
+
+  const alreadyInBasket = useAppSelector(selectBasket).some((el) => el.id === camera.id);
+
+  const handleBuyButtonClick = () => {
+    dispatch(setCurrentCamera(camera));
+    dispatch(toggleModalOpened());
+  };
+
   return (
     <div data-testid="camera-card" className={`product-card ${isActive ? 'is-active' : ''}`}>
       <div className="product-card__img">
@@ -40,7 +54,13 @@ function CameraCard({ camera, isActive }: CameraCardProps): JSX.Element {
         </p>
       </div>
       <div className="product-card__buttons">
-        <button className="btn btn--purple product-card__btn" type="button">Купить</button>
+        <button
+          className={`btn btn--purple${alreadyInBasket ? '-border' : ''} product-card__btn ${alreadyInBasket ? 'product-card__btn--in-cart' : ''}`}
+          type="button"
+          onClick={handleBuyButtonClick}
+        >
+          {alreadyInBasket ? <><BasketIcon /> В корзине</> : 'Купить'}
+        </button>
         <Link className="btn btn--transparent" to={AppRoute.Product(id, TabType.Perks)}>Подробнее</Link>
       </div>
     </div>

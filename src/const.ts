@@ -22,6 +22,7 @@ enum APIRoute {
 enum NameSpace {
   Data = 'DATA',
   Filters = 'FILTERS',
+  User = 'USER',
 }
 
 enum TabType {
@@ -64,7 +65,9 @@ const MAX_RATING = 5;
 const INITIAL_REVIEWS = 3;
 const PRODUCTS_PER_PAGE = 9;
 const DEFAULT_FILTER_VALUE = '0';
+const KEY_NAME_ESC = 'Escape';
+const KEY_EVENT_TYPE = 'keyup';
 
 const INITIAL_CATALOG_PAGE_URL_PARAMS: URLParams = { page: '1', sortType: SortType.Price, order: SortOrder.Ascending, minPrice: DEFAULT_FILTER_VALUE, maxPrice: DEFAULT_FILTER_VALUE, category: FilterCategories.Any, productType: FilterTypes.Any, level: FilterLevels.Any };
 
-export { AppRoute, APIRoute, NameSpace, TabType, SortType, SortOrder, FilterCategories, FilterTypes, FilterLevels, INITIAL_REVIEWS, PRODUCTS_PER_PAGE, DEFAULT_FILTER_VALUE, MAX_RATING, INITIAL_CATALOG_PAGE_URL_PARAMS };
+export { AppRoute, KEY_NAME_ESC, KEY_EVENT_TYPE, APIRoute, NameSpace, TabType, SortType, SortOrder, FilterCategories, FilterTypes, FilterLevels, INITIAL_REVIEWS, PRODUCTS_PER_PAGE, DEFAULT_FILTER_VALUE, MAX_RATING, INITIAL_CATALOG_PAGE_URL_PARAMS };

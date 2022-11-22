@@ -17,13 +17,19 @@ const initialState: AppData = {
   currentSimilarProducts: [],
   searchedCameras: [],
   searchLoaded: false,
+  modalOpened: false
 };
 
 export const appData = createSlice({
   name: NameSpace.Data,
   initialState,
   reducers: {
-
+    setCurrentCamera: (state, action) => {
+      state.currentProduct = action.payload;
+    },
+    toggleModalOpened: (state) => {
+      state.modalOpened = !state.modalOpened;
+    }
   },
   extraReducers(builder) {
     builder
@@ -90,3 +96,5 @@ export const appData = createSlice({
       });
   }
 });
+
+export const { setCurrentCamera, toggleModalOpened } = appData.actions;

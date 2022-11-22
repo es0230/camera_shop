@@ -16,4 +16,5 @@ export type AppData = {
   currentSimilarProducts: Camera[],
   searchedCameras: Camera[],
   searchLoaded: boolean,
+  modalOpened: boolean,
 };

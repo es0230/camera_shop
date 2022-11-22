@@ -7,6 +7,7 @@ import { sendReviewAction } from '../../../store/api-actions';
 import SnowflakeIcon from '../../svg/snowflake-icon/snowflake-icon';
 import CloseIcon from '../../svg/close-icon/close-icon';
 import ReviewSuccessIcon from '../../svg/review-success-icon/review-success-icon';
+import { KEY_EVENT_TYPE, KEY_NAME_ESC } from '../../../const';
 
 const MIN_REVIEW_LENGTH = 5;
 
@@ -23,9 +24,6 @@ enum ReviewInputMap {
   'user-comment' = 'review',
   'rate' = 'rating'
 }
-
-const KEY_NAME_ESC = 'Escape';
-const KEY_EVENT_TYPE = 'keyup';
 
 Modal.defaultStyles = {};
 

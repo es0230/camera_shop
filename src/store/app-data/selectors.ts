@@ -30,3 +30,5 @@ export const selectMinPrice = (state: State): string => state[NameSpace.Data].mi
 export const selectMaxPrice = (state: State): string => state[NameSpace.Data].maxPrice;
 
 export const selectPrices = (state: State): string[] => state[NameSpace.Data].prices;
+
+export const selectModalOpened = (state: State): boolean => state[NameSpace.Data].modalOpened;
