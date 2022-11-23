@@ -8,6 +8,7 @@ const AppRoute = {
     return `/catalog/${page}/${sortType}&${order}&minPrice=${minPrice}&maxPrice=${maxPrice}&category=${category}&productType=${productType}&level=${level}`; // /${createFilterURL(lowerPrice, higherPrice, category, level, productType)}
   },
   Product: (productId: string | number = ':id', tabType = ':tabType') => `/product/${productId}/${tabType}`,
+  Basket: () => '/basket',
   Unknown: () => '/*',
 };
 

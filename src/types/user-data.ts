@@ -1,5 +1,6 @@
 import { Camera } from './camera';
 
 export type UserData = {
-  basket: Camera[],
-};
+  productList: Camera[],
+  basket: { [id: number]: number },
+}

@@ -2,7 +2,7 @@ import { Camera } from '../../types/camera';
 import { AppRoute, MAX_RATING, TabType } from '../../const';
 import { Link } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { selectBasket } from '../../store/user-data/selectors';
+import { selectCamerasInBasket } from '../../store/user-data/selectors';
 import BasketIcon from '../svg/basket-icon/basket-icon';
 import { setCurrentCamera, toggleModalOpened } from '../../store/app-data/app-data';
 
@@ -16,7 +16,7 @@ function CameraCard({ camera, isActive }: CameraCardProps): JSX.Element {
 
   const dispatch = useAppDispatch();
 
-  const alreadyInBasket = useAppSelector(selectBasket).some((el) => el.id === camera.id);
+  const alreadyInBasket = useAppSelector(selectCamerasInBasket).some((el) => el.id === camera.id);
 
   const handleBuyButtonClick = () => {
     dispatch(setCurrentCamera(camera));

@@ -47,6 +47,11 @@ function ProductModal(): JSX.Element {
     }
   }, [handleModalClosing]);
 
+  const handleGoToBasketClick = () => {
+    dispatch(toggleModalOpened());
+    navigate(AppRoute.Basket());
+  };
+
   useEffect(() => {
     document.addEventListener(KEY_EVENT_TYPE, handleEscKey);
 
@@ -81,7 +86,7 @@ function ProductModal(): JSX.Element {
               </svg>
               <div className="modal__buttons">
                 <button className="btn btn--transparent modal__btn" onClick={isOnProductPage ? handleBackToShoppingOnProductPageClick : handleModalClosing}>Продолжить покупки</button>
-                <button className="btn btn--purple modal__btn modal__btn--fit-width">Перейти в корзину</button>
+                <button className="btn btn--purple modal__btn modal__btn--fit-width" onClick={handleGoToBasketClick}>Перейти в корзину</button>
               </div>
               <button className="cross-btn" type="button" aria-label="Закрыть попап" onClick={handleModalClosing}>
                 <svg width="10" height="10" aria-hidden="true">

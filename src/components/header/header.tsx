@@ -1,13 +1,13 @@
 import { Link } from 'react-router-dom';
 import { AppRoute, INITIAL_CATALOG_PAGE_URL_PARAMS } from '../../const';
 import { useAppSelector } from '../../hooks';
-import { selectBasket } from '../../store/user-data/selectors';
+import { selectBasketSize } from '../../store/user-data/selectors';
 import BasketIcon from '../svg/basket-icon/basket-icon';
 import LogoIcon from '../svg/logo-icon/logo-icon';
 import SearchForm from './search-form/search-form';
 
 function Header(): JSX.Element {
-  const basketCount = useAppSelector(selectBasket).length;
+  const basketCount = useAppSelector(selectBasketSize);
 
   return (
     <header data-testid="header-component" className="header" id="header">
@@ -32,9 +32,9 @@ function Header(): JSX.Element {
           </ul>
         </nav>
         <SearchForm />
-        <Link className="header__basket-link" to={AppRoute.Unknown()}>
+        <Link className="header__basket-link" to={AppRoute.Basket()}>
           <BasketIcon />
-          <span className="header__basket-count">{basketCount}</span>
+          {basketCount > 0 ? <span className="header__basket-count">{basketCount}</span> : <> </>}
         </Link>
       </div>
     </header>
