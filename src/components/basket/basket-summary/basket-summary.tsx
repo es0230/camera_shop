@@ -80,13 +80,13 @@ function BasketSummary({ totalPrice }: BasketSummaryProps): JSX.Element {
           <form action="#">
             <div className={`custom-input ${getCouponInputClass(couponStatus)}`}>
               <label>
-                <span className="custom-input__label">Промокод</span>
+                <span data-testid="inputLabel" className="custom-input__label">Промокод</span>
                 <input type="text" name="promo" placeholder="Введите промокод" value={coupon} onInput={handleCouponInput} />
               </label>
               <p className="custom-input__error">Промокод неверный</p>
               <p className="custom-input__success">Промокод принят!</p>
             </div>
-            <button className="btn" type="button" onClick={handleCouponPost}>Применить
+            <button data-testid="applyCouponButton" className="btn" type="button" onClick={handleCouponPost}>Применить
             </button>
           </form>
         </div>
@@ -95,7 +95,7 @@ function BasketSummary({ totalPrice }: BasketSummaryProps): JSX.Element {
         <p className="basket__summary-item"><span className="basket__summary-text">Всего:</span><span className="basket__summary-value">{totalPrice} ₽</span></p>
         <p className="basket__summary-item"><span className="basket__summary-text">Скидка:</span><span className={`basket__summary-value ${discount === 0 ? '' : 'basket__summary-value--bonus'}`}>{totalPrice * discount / 100} ₽</span></p>
         <p className="basket__summary-item"><span className="basket__summary-text basket__summary-text--total">К оплате:</span><span className="basket__summary-value basket__summary-value--total">{totalPrice * (100 - discount) / 100} ₽</span></p>
-        <button className="btn btn--purple" onClick={handleOrderPost}>Оформить заказ
+        <button data-testid="postOrderButton" className="btn btn--purple" onClick={handleOrderPost}>Оформить заказ
         </button>
       </div>
     </div>
