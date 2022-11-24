@@ -49,7 +49,7 @@ function BasketItem({ camera, count }: BasketItemProps): JSX.Element {
   };
 
   return (
-    <li className="basket-item">
+    <li data-testid="basketItem" className="basket-item">
       <div className="basket-item__img">
         <picture>
           <source type="image/webp" srcSet={`../../${previewImgWebp}, ../../${previewImgWebp2x} 2x`} />
