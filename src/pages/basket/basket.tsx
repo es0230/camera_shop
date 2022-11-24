@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import BasketModal from '../../components/basket/bakset-modal/basket-modal';
 import BasketList from '../../components/basket/basket-list/basket-list';
 import BasketSummary from '../../components/basket/basket-summary/basket-summary';
+import PurchaseModal from '../../components/basket/purchase-modal/purchase-modal';
 import { AppRoute, INITIAL_CATALOG_PAGE_URL_PARAMS } from '../../const';
 import { useAppSelector } from '../../hooks';
 import { selectCamerasInBasket, selectTotalPrice } from '../../store/user-data/selectors';
@@ -45,6 +46,7 @@ function Basket(): JSX.Element {
         </section>
       </div>
       <BasketModal />
+      <PurchaseModal />
     </main>
   );
 }

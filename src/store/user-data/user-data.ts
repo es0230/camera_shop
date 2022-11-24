@@ -1,11 +1,15 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { NameSpace } from '../../const';
+import { CouponStatus, NameSpace, OrderStatus } from '../../const';
 import { Camera } from '../../types/camera';
 import { UserData } from '../../types/user-data';
+import { postCouponAction, postOrderAction } from '../api-actions';
 
 const initialState: UserData = {
   productList: [],
   basket: {},
+  discount: 0,
+  couponStatus: CouponStatus.Unknown,
+  orderStatus: OrderStatus.Unknown,
 };
 
 export const userData = createSlice({
@@ -31,8 +35,31 @@ export const userData = createSlice({
     setItemCount: (state, action: PayloadAction<{ camera: Camera, countToMake: number }, string>) => {
       const { camera, countToMake } = action.payload;
       state.basket[camera.id] = countToMake;
+    },
+    resetOrderStatus: (state) => {
+      state.orderStatus = OrderStatus.Unknown;
     }
+  },
+  extraReducers(builder) {
+    builder
+      .addCase(postCouponAction.pending, (state) => {
+        state.couponStatus = CouponStatus.Unknown;
+      })
+      .addCase(postCouponAction.rejected, (state) => {
+        state.discount = 0;
+        state.couponStatus = CouponStatus.Invalid;
+      })
+      .addCase(postCouponAction.fulfilled, (state, action) => {
+        state.discount = action.payload;
+        state.couponStatus = CouponStatus.Valid;
+      })
+      .addCase(postOrderAction.rejected, (state) => {
+        state.orderStatus = OrderStatus.Fail;
+      })
+      .addCase(postOrderAction.fulfilled, (state) => {
+        state.orderStatus = OrderStatus.Success;
+      });
   }
 });
 
-export const { addToBasket, removeFromBasket, removeAllFromBasket, setItemCount } = userData.actions;
+export const { addToBasket, removeFromBasket, removeAllFromBasket, setItemCount, resetOrderStatus } = userData.actions;

@@ -10,6 +10,7 @@ const AppRoute = {
   Product: (productId: string | number = ':id', tabType = ':tabType') => `/product/${productId}/${tabType}`,
   Basket: () => '/basket',
   Unknown: () => '/*',
+  OrderFailed: () => '/failedOrder',
 };
 
 enum APIRoute {
@@ -62,6 +63,18 @@ enum FilterLevels {
   Professional = 'Профессиональный'
 }
 
+enum CouponStatus {
+  Unknown = 'unknown',
+  Valid = 'valid',
+  Invalid = 'invalid',
+}
+
+enum OrderStatus {
+  Unknown = 'unknown',
+  Success = 'success',
+  Fail = 'fail',
+}
+
 const MAX_RATING = 5;
 const INITIAL_REVIEWS = 3;
 const PRODUCTS_PER_PAGE = 9;
@@ -71,4 +84,4 @@ const KEY_EVENT_TYPE = 'keyup';
 
 const INITIAL_CATALOG_PAGE_URL_PARAMS: URLParams = { page: '1', sortType: SortType.Price, order: SortOrder.Ascending, minPrice: DEFAULT_FILTER_VALUE, maxPrice: DEFAULT_FILTER_VALUE, category: FilterCategories.Any, productType: FilterTypes.Any, level: FilterLevels.Any };
 
-export { AppRoute, KEY_NAME_ESC, KEY_EVENT_TYPE, APIRoute, NameSpace, TabType, SortType, SortOrder, FilterCategories, FilterTypes, FilterLevels, INITIAL_REVIEWS, PRODUCTS_PER_PAGE, DEFAULT_FILTER_VALUE, MAX_RATING, INITIAL_CATALOG_PAGE_URL_PARAMS };
+export { AppRoute, KEY_NAME_ESC, KEY_EVENT_TYPE, OrderStatus, CouponStatus, APIRoute, NameSpace, TabType, SortType, SortOrder, FilterCategories, FilterTypes, FilterLevels, INITIAL_REVIEWS, PRODUCTS_PER_PAGE, DEFAULT_FILTER_VALUE, MAX_RATING, INITIAL_CATALOG_PAGE_URL_PARAMS };

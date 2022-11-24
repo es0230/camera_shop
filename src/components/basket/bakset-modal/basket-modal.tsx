@@ -21,8 +21,10 @@ function BasketModal(): JSX.Element {
   };
 
   const handleModalClosing = useCallback(() => {
-    dispatch(toggleModalOpened());
-  }, [dispatch]);
+    if (isOpened) {
+      dispatch(toggleModalOpened());
+    }
+  }, [dispatch, isOpened]);
 
   const handleEscKey = useCallback((evt: KeyboardEvent) => {
     if (evt.key === KEY_NAME_ESC) {
