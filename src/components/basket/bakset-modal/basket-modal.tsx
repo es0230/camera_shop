@@ -79,7 +79,7 @@ function BasketModal(): JSX.Element {
               </div>
             </div>
             <div className="modal__buttons">
-              <button className="btn btn--purple modal__btn modal__btn--half-width" type="button" onClick={handleDeleteItemClick}>Удалить</button>
+              <button data-testid="deleteButton" className="btn btn--purple modal__btn modal__btn--half-width" type="button" onClick={handleDeleteItemClick}>Удалить</button>
               <button className="btn btn--transparent modal__btn modal__btn--half-width" onClick={handleModalClosing}>Продолжить покупки</button>
             </div>
             <button className="cross-btn" type="button" aria-label="Закрыть попап" onClick={handleModalClosing}>
