@@ -34,7 +34,7 @@ function Header(): JSX.Element {
         <SearchForm />
         <Link className="header__basket-link" to={AppRoute.Basket()}>
           <BasketIcon />
-          {basketCount > 0 ? <span className="header__basket-count">{basketCount}</span> : <> </>}
+          {basketCount > 0 ? <span data-testid="basketIconCounter" className="header__basket-count">{basketCount}</span> : <> </>}
         </Link>
       </div>
     </header>
