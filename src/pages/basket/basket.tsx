@@ -12,7 +12,7 @@ function Basket(): JSX.Element {
   const camerasInBasket = useAppSelector(selectCamerasInBasket);
 
   return (
-    <main>
+    <main data-testid="basket">
       <div className="page-content">
         <div className="breadcrumbs">
           <div className="container">
