@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import Modal from 'react-modal';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { AppRoute, FilterCategories, INITIAL_CATALOG_PAGE_URL_PARAMS, KEY_EVENT_TYPE, KEY_NAME_ESC } from '../../const';
+import { AppRoute, FilterCategories, INITIAL_CATALOG_PAGE_URL_PARAMS, KEY_EVENT_TYPE, KEY_NAME_ESC, ProductCategories } from '../../const';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { makeFakeCamera } from '../../mocks/mocks';
 import { toggleModalOpened } from '../../store/app-data/app-data';
@@ -100,7 +100,7 @@ function ProductModal(): JSX.Element {
                 <div className="basket-item__img">
                   <picture>
                     <source type="image/webp" srcSet={`../../${previewImgWebp}, ../../${previewImgWebp2x} 2x`} />
-                    <img src={`../../${previewImg}`} srcSet={`../../${previewImg2x} 2x`} width="140" height="120" alt="Фотоаппарат «Орлёнок»" />
+                    <img src={`../../${previewImg}`} srcSet={`../../${previewImg2x} 2x`} width="140" height="120" alt={name} />
                   </picture>
                 </div>
                 <div className="basket-item__description">
@@ -109,7 +109,7 @@ function ProductModal(): JSX.Element {
                     <li className="basket-item__list-item">
                       <span className="basket-item__article">Артикул:</span> <span className="basket-item__number">{vendorCode}</span>
                     </li>
-                    <li className="basket-item__list-item">{type} {category === FilterCategories.Photo ? 'фотокамера' : 'видеокамера'}</li>
+                    <li className="basket-item__list-item">{type} {category === FilterCategories.Photo ? ProductCategories.Photo : ProductCategories.Video}</li>
                     <li className="basket-item__list-item">{level} уровень</li>
                   </ul>
                   <p className="basket-item__price"><span className="visually-hidden">Цена:</span>{price} ₽</p>

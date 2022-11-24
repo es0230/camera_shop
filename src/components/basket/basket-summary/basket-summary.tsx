@@ -9,6 +9,8 @@ type BasketSummaryProps = {
   totalPrice: number,
 }
 
+type ValidCoupon = 'camera-333' | 'camera-444' | 'camera-555';
+
 const getCouponInputClass = (status: CouponStatus) => {
   switch (status) {
     case CouponStatus.Unknown:
@@ -59,7 +61,7 @@ function BasketSummary({ totalPrice }: BasketSummaryProps): JSX.Element {
 
   useEffect(() => {
     if (sendOrder) {
-      const couponToSend = couponStatus === CouponStatus.Valid ? coupon as 'camera-333' | 'camera-444' | 'camera-555' : null;
+      const couponToSend = couponStatus === CouponStatus.Valid ? coupon as ValidCoupon : null;
       const order = { camerasIds: basketContents, coupon: couponToSend };
       dispatch(postOrderAction(order));
       setSendOrder(false);

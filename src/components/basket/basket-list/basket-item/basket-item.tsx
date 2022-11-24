@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FilterCategories } from '../../../../const';
+import { FilterCategories, ProductCategories } from '../../../../const';
 import { useAppDispatch } from '../../../../hooks';
 import { setCurrentCamera, toggleModalOpened } from '../../../../store/app-data/app-data';
 import { addToBasket, removeFromBasket, setItemCount } from '../../../../store/user-data/user-data';
@@ -8,6 +8,11 @@ import { Camera } from '../../../../types/camera';
 type BasketItemProps = {
   camera: Camera,
   count: number,
+}
+
+enum BasketCountLimits {
+  Lower = 1,
+  Upper = 99,
 }
 
 function BasketItem({ camera, count }: BasketItemProps): JSX.Element {
@@ -53,7 +58,7 @@ function BasketItem({ camera, count }: BasketItemProps): JSX.Element {
       <div className="basket-item__img">
         <picture>
           <source type="image/webp" srcSet={`../../${previewImgWebp}, ../../${previewImgWebp2x} 2x`} />
-          <img src={`../../${previewImg}`} srcSet={`../../${previewImg2x} 2x`} width="140" height="120" alt="Фотоаппарат «Орлёнок»" />
+          <img src={`../../${previewImg}`} srcSet={`../../${previewImg2x} 2x`} width="140" height="120" alt={name} />
         </picture>
       </div>
       <div className="basket-item__description">
@@ -62,7 +67,7 @@ function BasketItem({ camera, count }: BasketItemProps): JSX.Element {
           <li className="basket-item__list-item">
             <span className="basket-item__article">Артикул:</span><span className="basket-item__number">{vendorCode}</span>
           </li>
-          <li className="basket-item__list-item">{type} {category === FilterCategories.Photo ? 'фотокамера' : 'видеокамера'}</li>
+          <li className="basket-item__list-item">{type} {category === FilterCategories.Photo ? ProductCategories.Photo : ProductCategories.Video}</li>
           <li className="basket-item__list-item">{level} уровень</li>
         </ul>
       </div>
@@ -70,14 +75,14 @@ function BasketItem({ camera, count }: BasketItemProps): JSX.Element {
         <span className="visually-hidden">Цена:</span>{price} ₽
       </p>
       <div className="quantity">
-        <button data-testid="decreaseButton" className="btn-icon btn-icon--prev" aria-label="уменьшить количество товара" disabled={currentCount === 1} onClick={handleRemoveItemClick}>
+        <button data-testid="decreaseButton" className="btn-icon btn-icon--prev" aria-label="уменьшить количество товара" disabled={currentCount === BasketCountLimits.Lower} onClick={handleRemoveItemClick}>
           <svg width="7" height="12" aria-hidden="true">
             <use xlinkHref="#icon-arrow" />
           </svg>
         </button>
         <label className="visually-hidden" htmlFor="counter1" />
         <input data-testid="counter" type="number" id="counter1" value={currentCount} min="1" max="99" aria-label="количество товара" onInput={handleItemCountInput} onBlur={handleItemCountBlur} />
-        <button data-testid="increaseButton" className="btn-icon btn-icon--next" aria-label="увеличить количество товара" disabled={currentCount === 99} onClick={handleAddItemClick}>
+        <button data-testid="increaseButton" className="btn-icon btn-icon--next" aria-label="увеличить количество товара" disabled={currentCount === BasketCountLimits.Upper} onClick={handleAddItemClick}>
           <svg width="7" height="12" aria-hidden="true">
             <use xlinkHref="#icon-arrow" />
           </svg>
