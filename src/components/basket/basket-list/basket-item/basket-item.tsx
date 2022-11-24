@@ -70,14 +70,14 @@ function BasketItem({ camera, count }: BasketItemProps): JSX.Element {
         <span className="visually-hidden">Цена:</span>{price} ₽
       </p>
       <div className="quantity">
-        <button className="btn-icon btn-icon--prev" aria-label="уменьшить количество товара" disabled={currentCount === 1} onClick={handleRemoveItemClick}>
+        <button data-testid="decreaseButton" className="btn-icon btn-icon--prev" aria-label="уменьшить количество товара" disabled={currentCount === 1} onClick={handleRemoveItemClick}>
           <svg width="7" height="12" aria-hidden="true">
             <use xlinkHref="#icon-arrow" />
           </svg>
         </button>
         <label className="visually-hidden" htmlFor="counter1" />
-        <input type="number" id="counter1" value={currentCount} min="1" max="99" aria-label="количество товара" onInput={handleItemCountInput} onBlur={handleItemCountBlur} />
-        <button className="btn-icon btn-icon--next" aria-label="увеличить количество товара" disabled={currentCount === 99} onClick={handleAddItemClick}>
+        <input data-testid="counter" type="number" id="counter1" value={currentCount} min="1" max="99" aria-label="количество товара" onInput={handleItemCountInput} onBlur={handleItemCountBlur} />
+        <button data-testid="increaseButton" className="btn-icon btn-icon--next" aria-label="увеличить количество товара" disabled={currentCount === 99} onClick={handleAddItemClick}>
           <svg width="7" height="12" aria-hidden="true">
             <use xlinkHref="#icon-arrow" />
           </svg>
@@ -86,7 +86,7 @@ function BasketItem({ camera, count }: BasketItemProps): JSX.Element {
       <div className="basket-item__total-price">
         <span className="visually-hidden">Общая цена:</span>{price * currentCount} ₽
       </div>
-      <button className="cross-btn" type="button" aria-label="Удалить товар" onClick={handleDeleteItemClick}>
+      <button data-testid="deleteButton" className="cross-btn" type="button" aria-label="Удалить товар" onClick={handleDeleteItemClick}>
         <svg width="10" height="10" aria-hidden="true">
           <use xlinkHref="#icon-close" />
         </svg>
