@@ -5,11 +5,13 @@ import { State } from '../types/state';
 import { configureMockStore } from '@jedmao/redux-mock-store';
 import thunk from 'redux-thunk';
 import { APIRoute, INITIAL_CATALOG_PAGE_URL_PARAMS } from '../const';
-import { fetchCameraAction, fetchCamerasAction, fetchCamerasByName, fetchInitialData, fetchPromoAction, fetchReviewsAction, fetchSimilarProductsAction, sendReviewAction } from './api-actions';
+import { fetchCameraAction, fetchCamerasAction, fetchCamerasByName, fetchInitialData, fetchPromoAction, fetchReviewsAction, fetchSimilarProductsAction, postCouponAction, postOrderAction, sendReviewAction } from './api-actions';
 import { makeFakeCamera, makeFakePromo, makeFakeReview, makeFakeReviewPost } from '../mocks/mocks';
 import { datatype } from 'faker';
 import { Review } from '../types/review';
 import { getExtraQueryURL, getExtraQueryURLForFilters } from '../utils';
+import { CouponPost } from '../types/coupon-post';
+import { OrderPost } from '../types/order-post';
 
 describe('Testing async actions', () => {
   const api = createAPI();
@@ -161,7 +163,7 @@ describe('Testing async actions', () => {
     });
 
     describe('Testing fetchSimilarProductsAction', () => {
-      it('should trigger .pending and .fulfilled types of fetchReviewsAction when server returns 200', async () => {
+      it('should trigger .pending and .fulfilled types of fetchSimilarProductsAction when server returns 200', async () => {
         const store = mockStore();
         const mockCamera = makeFakeCamera();
         const mockCamerasResponse = Array.from({ length: 10 }, () => makeFakeCamera());
@@ -184,7 +186,7 @@ describe('Testing async actions', () => {
     });
 
     describe('Testing sendReviewAction', () => {
-      it('should trigger .pending and .fulfilled types of fetchReviewsAction when server returns 200', async () => {
+      it('should trigger .pending and .fulfilled types of sendReviewAction when server returns 200', async () => {
         const store = mockStore();
         const mockReviewPost = makeFakeReviewPost();
         const mockReviewResponse: Review = { ...mockReviewPost, createAt: String(datatype.datetime()), id: String(datatype.number()) };
@@ -202,6 +204,51 @@ describe('Testing async actions', () => {
         expect(actions).toEqual([
           sendReviewAction.pending.type,
           sendReviewAction.fulfilled.type
+        ]);
+      });
+    });
+
+    describe('Testing postCouponAction', () => {
+      it('should trigger .pending and .fulfilled types of postCouponAction when server returns 200', async () => {
+        const store = mockStore();
+        const mockCouponPost: CouponPost = { coupon: 'camera-333' };
+        const mockCouponResponse = 10;
+
+        mockAPI
+          .onPost(APIRoute.Coupons, mockCouponPost)
+          .reply(200, mockCouponResponse);
+
+        expect(store.getActions()).toEqual([]);
+
+        await store.dispatch(postCouponAction(mockCouponPost));
+
+        const actions = store.getActions().map(({ type }) => type);
+
+        expect(actions).toEqual([
+          postCouponAction.pending.type,
+          postCouponAction.fulfilled.type
+        ]);
+      });
+    });
+
+    describe('Testing postOrderAction', () => {
+      it('should trigger .pending and .fulfilled types of postOrderAction when server returns 200', async () => {
+        const store = mockStore();
+        const mockOrderPost: OrderPost = { camerasIds: [1, 2, 3], coupon: 'camera-333' };
+
+        mockAPI
+          .onPost(APIRoute.Orders, mockOrderPost)
+          .reply(200);
+
+        expect(store.getActions()).toEqual([]);
+
+        await store.dispatch(postOrderAction(mockOrderPost));
+
+        const actions = store.getActions().map(({ type }) => type);
+
+        expect(actions).toEqual([
+          postOrderAction.pending.type,
+          postOrderAction.fulfilled.type
         ]);
       });
     });
